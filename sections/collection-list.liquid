@@ -1,0 +1,439 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+  assign desktop_layout = section.settings.desktop_layout
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+  if desktop_layout == 'two_columns'
+    assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
+  else
+    assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign half_width_mobile_sizes = '75vw'
+  else
+    assign half_width_mobile_sizes = '100vw'
+  endif
+
+  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign full_width_sizes = '80vw'
+  else
+    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign eager_loading_limit = 4
+  else
+    assign eager_loading_limit = 2
+  endif
+
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+-%}
+
+<section
+  class="relative {% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    {% if section.settings.title != blank %}
+      {%- render 'cascade-heading',
+        title: section.settings.title,
+        overlay_heading: section.settings.overlay_heading,
+        mobile_text_scale: section.settings.heading_mobile_text_scale,
+        desktop_text_scale: section.settings.heading_desktop_text_scale,
+        cta_link: section.settings.overlay_cta_link,
+        cta_label: section.settings.overlay_cta_label,
+        cta_style: section.settings.overlay_cta_style,
+        blend_mode: section.settings.blend_mode,
+        blend_mode_color_scheme: section.settings.blend_mode_color_scheme
+      -%}
+    {% endif %}
+    <div class="relative">
+      {% liquid
+        capture collection_items
+          assign placeholder_index = 0
+
+          assign text_display = section.settings.text_display
+          assign overlay_text_size = section.settings.overlay_text_size
+
+          for block in section.blocks
+            assign collection = block.settings.collection
+
+            if section.settings.feature_full_width_collections
+              cycle full_width_item_header, '', ''
+
+              capture sizes
+                cycle full_width_sizes, half_width_sizes, half_width_sizes
+              endcapture
+            else
+              assign sizes = half_width_sizes
+            endif
+
+            assign image = collection.image | default: collection.products.first.featured_image
+            assign placeholder_title = 'sections.onboarding.collection_title' | t
+            assign placeholder_index = placeholder_index | modulo: 6 | plus: 1
+            assign placeholder_name = 'collection-' | append: placeholder_index
+            assign text = collection.title | default: placeholder_title
+            assign text_scheme = section.settings.color_scheme
+
+            if block.settings.enable_overlay_text_color_override
+              assign text_scheme = block.settings.overlay_text_scheme
+            endif
+
+            assign link = collection.url
+
+            assign preload = false
+            assign loading = 'lazy'
+
+            if section.index == 1 and forloop.first
+              assign preload = true
+            endif
+
+            if section.index <= 2 and forloop.index <= eager_loading_limit
+              assign loading = 'eager'
+            endif
+
+            echo '<div data-media-item>'
+            render 'image-or-collection-item', image: image, sizes: sizes, preload: preload, loading: loading, text: text, link: link, text_scheme: text_scheme, placeholder_key: placeholder_name, overlay_text_size: overlay_text_size, text_display: text_display
+            echo '</div>'
+            echo item_separator
+          endfor
+        endcapture
+      %}
+      {% render 'cascade',
+        section_id: section.id,
+        content_items: collection_items,
+        alternate_first_block_position: true,
+        enable_cascade_on_mobile: enable_cascade_on_mobile,
+        desktop_layout: desktop_layout,
+        level_of_media_size_variation: section.settings.level_of_media_size_variation,
+        sequence: section.settings.sequence,
+        alignment_variation: section.settings.alignment_variation,
+        spacing: section.settings.spacing,
+        first_block_position: section.settings.start_position,
+        use_global_settings: section.settings.use_global_settings
+      %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_full_width_collections",
+      "label": "Feature full width collections",
+      "info": "Enable this setting to showcase a mix of collections at half width and full width. [Learn more](https://help.switchthemes.co)",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_display",
+      "label": "Text display",
+      "default": "overlay",
+      "options": [
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "under_image",
+          "label": "Under image"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "overlay_text_size",
+      "label": "Overlay text size",
+      "options": [
+        {
+          "value": "text-heading-standard",
+          "label": "Standard"
+        },
+        {
+          "value": "text-heading-feature",
+          "label": "Feature"
+        }
+      ],
+      "default": "text-heading-standard"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Heading overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_heading",
+      "label": "Overlay heading",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Heading mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "heading_desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Heading desktop font size scale",
+      "default": 7
+    },
+    {
+      "type": "url",
+      "id": "overlay_cta_link",
+      "label": "Call to action link"
+    },
+    {
+      "type": "text",
+      "id": "overlay_cta_label",
+      "label": "Call to action label"
+    },
+    {
+      "type": "select",
+      "id": "overlay_cta_style",
+      "label": "Call to action style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "border-only",
+          "label": "Border"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "info": "Some blend modes work better when the text color is dark, others when it is light",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        },
+        {
+          "value": "exclusion",
+          "label": "Exclusion"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "soft-light",
+          "label": "Soft light"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "blend_mode_color_scheme",
+      "label": "Blend mode color scheme",
+      "info": "Only used if “Blend mode” is not “Normal”"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Choose collection:"
+        },
+        {
+          "type": "header",
+          "content": "Overlay text color"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_overlay_text_color_override",
+          "label": "Override section color scheme"
+        },
+        {
+          "type": "color_scheme",
+          "id": "overlay_text_scheme",
+          "label": "Text color override",
+          "default": "scheme1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

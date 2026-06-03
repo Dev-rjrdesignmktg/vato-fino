@@ -1,0 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "sidebar": {
+      "type": "sidebar",
+      "settings": {
+        "linklist": "main-menu",
+        "auto_expand": true,
+        "showcase_second_level_links": "none",
+        "collection_image_crop": "landscape",
+        "secondary_linklist": "",
+        "show_search": true,
+        "show_social_icons": true
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_max_width": 4,
+        "linklist": "main-menu",
+        "detached_header_color": "scheme4",
+        "sticky_header": true,
+        "transparent_when_sticky": false,
+        "enable_overlay_on_homepage": false,
+        "enable_overlay_on_collection_template": false,
+        "enable_overlay_on_product_template": false,
+        "enable_overlay_on_cascade_product_template": false,
+        "enable_overlay_on_split_product_template": false,
+        "overlay_header_text_color": "scheme4",
+        "header_layout_mobile": "n_l_m",
+        "header_layout_desktop": "nl__m",
+        "enable_sidebar_nav_on_desktop": false,
+        "show_search": true,
+        "menu_items_display": "icons",
+        "section_padding": "py-8",
+        "showcase_second_level_links": "scroll",
+        "collection_image_crop": "landscape"
+      }
+    },
+    "hero-logo": {
+      "type": "hero-logo",
+      "settings": {
+        "home_page_only": true,
+        "mobile_text_scale": 4,
+        "desktop_text_scale": 10,
+        "alignment": "center",
+        "logo_max_width": 100,
+        "enable_overlay": true,
+        "overlay_offset": 0,
+        "position_underneath": false,
+        "color_scheme": "",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    }
+  },
+  "order": [
+    "sidebar",
+    "header",
+    "hero-logo"
+  ]
+}

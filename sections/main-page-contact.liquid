@@ -1,0 +1,141 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+
+  if section.settings.layout == 'default'
+    assign wrapper_class = 'md:w-7/8 mx-auto'
+    assign grid_class = 'md:grid md:grid-cols-5'
+    assign page_content_class = 'md:col-span-2'
+    assign form_class = 'mt-5 md:mt-0 md:col-span-3'
+  else
+    assign wrapper_class = 'md:w-1/2 mx-auto'
+    assign grid_class = ''
+    assign page_content_class = ''
+    assign form_class = 'mt-5'
+  endif
+
+  assign form_id = 'ContactForm'
+-%}
+<section
+  class="bg-scheme-background py-section text-scheme-text"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    <div class="{{ wrapper_class }}">
+      <div class="{{ grid_class }}">
+        <div class="{{ page_content_class }}">
+          <h1 class="font-heading break-word text-2xl">
+            {{ page.title }}
+          </h1>
+          <div
+            class="rte mt-5 text-theme-basic"
+            x-data="ThemeUtil_RTE"
+          >
+            {{ page.content | replace: '<meta charset="utf-8">', '' }}
+          </div>
+        </div>
+        <div class="{{ form_class }}">
+          {% form 'contact', id: form_id %}
+            {%
+              render 'form-status',
+              form: form,
+              form_id: form_id,
+            %}
+
+            <label class="block" for="{{ form_id }}-name">
+              {{- 'contact.form.name' | t -}}
+            </label>
+            <input
+              type="text"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              name="contact[name]"
+              id="{{ form_id }}-name"
+              placeholder="{{ 'contact.form.name' | t }}"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+            >
+
+            <label class="mt-5 block" for="{{ form_id }}-email">
+              {{- 'contact.form.email' | t -}}
+            </label>
+            <input
+              type="email"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              name="contact[email]"
+              id="{{ form_id }}-email"
+              placeholder="{{ 'contact.form.email' | t }}"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              spellcheck="false"
+              autocomplete="off"
+              autocapitalize="off"
+            >
+
+            <label class="mt-5 block" for="{{ form_id }}-phone">
+              {{- 'contact.form.phone' | t -}}
+            </label>
+            <input
+              type="tel"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              name="contact[phone]"
+              id="{{ form_id }}-phone"
+              placeholder="{{ 'contact.form.phone' | t }}"
+              value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+              pattern="[0-9\-]*"
+            >
+
+            <label class="mt-5 block" for="{{ form_id }}-message">
+              {{- 'contact.form.message' | t -}}
+            </label>
+            <textarea
+              rows="10"
+              class="mt-3 block w-full  border-scheme-text bg-transparent px-5 py-3"
+              name="contact[body]"
+              id="{{ form_id }}-message"
+              placeholder="{{ 'contact.form.message' | t }}"
+            >{%- if form.body -%}{{ form.body }}{%- endif -%}</textarea>
+
+            <div class="mt-5 max-w-sm">
+              <button
+                type="submit"
+                class="theme-button theme-button--solid block w-full"
+              >
+                <span>{{ 'contact.form.send' | t }}</span>
+              </button>
+            </div>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Contact",
+  "settings": [
+    {
+      "id": "layout",
+      "type": "select",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "centered",
+          "label": "Centered"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    }
+  ]
+}
+{% endschema %}

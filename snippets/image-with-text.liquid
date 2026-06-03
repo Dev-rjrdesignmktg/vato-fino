@@ -1,0 +1,59 @@
+{%- liquid
+  unless preload
+    assign preload = false
+  endunless
+
+  unless loading
+    assign loading = null
+  endunless
+-%}
+
+<div class="lg:relative">
+  <div
+    {% if aspect_ratio %}
+      class="image-wrapper-aspect-ratio"
+    {% endif %}
+  >
+    {% if image != blank %}
+      {{
+        image
+        | image_url: width: 2000
+        | image_tag: sizes: '100vw', preload: preload, loading: loading
+      }}
+    {% else %}
+      <div
+        class="bg-scheme-placeholder-background p-12"
+        {{ block.shopify_attributes }}
+      >
+        {{
+          'lifestyle-1'
+          | placeholder_svg_tag: 'block text-scheme-placeholder-foreground fill-current'
+        }}
+      </div>
+    {% endif %}
+  </div>
+  <div
+    class="z-10 mt-10 text-scheme-text lg:absolute lg:inset-0 lg:mt-0 lg:grid lg:h-full lg:w-full lg:p-20 xl:p-28 {{ place_content }} {{ text_align }}"
+    data-color-scheme="{{ color_scheme }}"
+  >
+    {% if title != blank %}
+      <h2 class="font-heading break-word m-0 text-heading-standard">
+        {{ title | escape }}
+      </h2>
+    {% endif %}
+    {% if richtext != blank %}
+      <div class="rte rte--content-only rte--compact break-word mt-5 text-base">
+        {{ richtext }}
+      </div>
+    {% endif %}
+
+    {% if cta_url != blank and cta_text != blank %}
+      <a
+        class="theme-cta break-word mb-1 mt-5 inline-block text-base text-current"
+        href="{{ cta_url }}"
+      >
+        {{ cta_text }}
+      </a>
+    {% endif %}
+  </div>
+</div>

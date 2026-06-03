@@ -1,0 +1,79 @@
+{% comment %}
+  Renders a set of links for paginated results. Must be used within paginate tags.
+
+  Usage:
+  {% paginate results by 2 %}
+    {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
+  {% endpaginate %}
+
+  Accepts:
+  - paginate: {Object}
+  - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
+{% endcomment %}
+
+{%- if paginate.parts.size > 0 -%}
+  <div class="mt-10">
+    <nav
+      class="pagination relative -mx-2 grid grid-cols-12"
+      role="navigation"
+      aria-label="{{ 'general.pagination.label' | t }}"
+    >
+      <div class="relative z-10 col-span-2 text-left">
+        {%- if paginate.previous -%}
+          <a
+            href="{{ paginate.previous.url }}{{ anchor }}"
+            class="pagination__item push-btn mr-auto inline-block p-2"
+            aria-label="{{ 'general.pagination.previous' | t }}"
+          >
+            <span class="block h-6 w-6">{% render 'icon-previous' %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+      <div class="col-span-8">
+        <ul
+          class="pagination__list absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center"
+          role="list"
+        >
+          {%- for part in paginate.parts -%}
+            <li class="mx-2">
+              {%- if part.is_link -%}
+                <a
+                  href="{{ part.url }}{{ anchor }}"
+                  class="pagination__item inline-block py-1 lg:px-1"
+                  aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                >
+                  {{- part.title -}}
+                </a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span
+                    class="pagination__item inline-block border-b border-b-scheme-text  py-1 lg:px-1"
+                    aria-current="page"
+                    aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                  >
+                    {{- part.title -}}
+                  </span>
+                {%- else -%}
+                  <span class="pagination__item inline-block border-b border-b-transparent py-1 lg:px-1 ">
+                    {{- part.title -}}
+                  </span>
+                {%- endif -%}
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+      <div class="relative z-10 col-span-2 text-right">
+        {%- if paginate.next -%}
+          <a
+            href="{{ paginate.next.url }}{{ anchor }}"
+            class="pagination__item ml-auto inline-block p-2"
+            aria-label="{{ 'general.pagination.next' | t }}"
+          >
+            <span class="block h-6 w-6">{% render 'icon-next' %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </nav>
+  </div>
+{%- endif -%}

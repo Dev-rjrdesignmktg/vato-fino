@@ -1,0 +1,485 @@
+{%- liquid
+  assign main_font = settings.type_main_font
+  assign main_font_bold = main_font | font_modify: 'weight', 'bold'
+  assign heading_font = settings.type_heading_font
+
+  assign heading_letterspacing = settings.heading_letterspacing | divided_by: 1000.0
+  unless heading_letterspacing == 0
+    assign heading_letterspacing = heading_letterspacing | append: 'em'
+  endunless
+
+  assign button_wrapper_padding = 0
+  if button_style != 'default'
+    assign button_wrapper_padding = '0.25rem'
+  endif
+
+  case settings.vertical_spacing_between_sections
+    when 'extra_small'
+      assign spacing_section = '--space-1'
+      assign lg_spacing_section = '--space-2'
+    when 'small'
+      assign spacing_section = '--space-2'
+      assign lg_spacing_section = '--space-3'
+    when 'medium'
+      assign spacing_section = '--space-3'
+      assign lg_spacing_section = '--space-4'
+    when 'large'
+      assign spacing_section = '--space-4'
+      assign lg_spacing_section = '--space-5'
+  endcase
+-%}
+<style>
+  :root {
+    font-size: {{ settings.base_font_size | times: 6.25 }}%;
+
+    --base-font-size-from-settings: {{ settings.base_font_size }};
+
+    --space-1: 0.625rem; /* .py-3 */
+    --space-2: 1.25rem; /* .py-5 */
+    --space-3: 2.5rem; /* .py-10 */
+    --space-4: 5rem; /* .py-20 */
+    --space-5: 7rem; /* .py-28 */
+
+    --font-size-ratio-xs: 0.8408965;
+    --font-size-ratio-sm: 0.8908985;
+    --font-size-ratio-base: 1;
+    --font-size-ratio-md: 1.189207;
+    --font-size-ratio-lg: 1.33484;
+    --font-size-ratio-xl: 1.498307;
+    --font-size-ratio-2xl: 1.781797;
+    --font-size-ratio-3xl: 2.244924;
+    --font-size-ratio-4xl: 2.519842;
+    --font-size-ratio-5xl: 2.828428;
+    --font-size-ratio-6xl: 3.563594;
+    --font-size-ratio-7xl: 4;
+    --font-size-ratio-8xl: 5.993228;
+    --font-size-ratio-9xl: 7.550996;
+
+    --font-size-xs: calc(var(--font-size-ratio-xs) * 1rem);
+    --font-size-sm: calc(var(--font-size-ratio-sm) * 1rem);
+    --font-size-base: calc(var(--font-size-ratio-base) * 1rem);
+    --font-size-md: calc(var(--font-size-ratio-md) * 1rem);
+    --font-size-lg: calc(var(--font-size-ratio-lg) * 1rem);
+    --font-size-xl: calc(var(--font-size-ratio-xl) * 1rem);
+    --font-size-2xl: calc(var(--font-size-ratio-2xl) * 1rem);
+    --font-size-3xl: calc(var(--font-size-ratio-3xl) * 1rem);
+    --font-size-4xl: calc(var(--font-size-ratio-4xl) * 1rem);
+    --font-size-5xl: calc(var(--font-size-ratio-5xl) * 1rem);
+    --font-size-6xl: calc(var(--font-size-ratio-6xl) * 1rem);
+    --font-size-7xl: calc(var(--font-size-ratio-7xl) * 1rem);
+    --font-size-8xl: calc(var(--font-size-ratio-8xl) * 1rem);
+    --font-size-9xl: calc(var(--font-size-ratio-9xl) * 1rem);
+
+    --type-scale-n-2: var(--font-size-xs);
+    --type-scale-n-1: var(--font-size-sm);
+    --type-scale-n0: var(--font-size-base);
+    --type-scale-n1: var(--font-size-lg);
+    --type-scale-n2: var(--font-size-xl);
+    --type-scale-n3: var(--font-size-2xl);
+    --type-scale-n4: var(--font-size-3xl);
+    --type-scale-n5: var(--font-size-4xl);
+    --type-scale-n6: var(--font-size-5xl);
+    --type-scale-n7: var(--font-size-6xl);
+    --type-scale-n8: var(--font-size-7xl);
+    --type-scale-n9: var(--font-size-8xl);
+    --type-scale-n10: var(--font-size-9xl);
+
+    --base-line-height: {{ settings.base_line_height }};
+    --body-text-uppercase: {% if settings.body_text_uppercase %}uppercase{% else %}unset{% endif %};
+    --text-underline-thickness: {{ settings.underline_thickness }};
+
+    --font-size-theme-basic: var(--font-size-base);
+    --line-height-theme-basic: var(--base-line-height);
+
+    --font-size-heading: var(--font-size-3xl);
+    --heading-letterspacing:  {{ heading_letterspacing }};
+    --heading-line-height: {{ settings.heading_line_height }};
+
+    --accent-text-transform: {{  settings.accent_text_transform }};
+
+    --gutter: 30px;
+    --grid-gutter: 60px;
+
+    --spacing-section: var({{ spacing_section }});
+    --max-site-width: 1820px;
+
+    --cascade-spacing-1: clamp(13px, 2vw, 20px);
+    --cascade-spacing-2: clamp(32px, 5vw, 50px);
+    --cascade-spacing-3: clamp(77px, 12vw, 119px);
+    --cascade-spacing-4: clamp(102px, 16vw, 158px);
+    --cascade-spacing-5: clamp(154px, 24vw, 238px);
+    --cascade-spacing-6: clamp(205px, 32vw, 317px);
+    --cascade-spacing-7: clamp(256px, 40vw, 396px);
+    --cascade-spacing-8: clamp(307px, 48vw, 476px);
+
+    --section-carousel-padding: 2.5rem;
+
+    --icon-thickness: {{ settings.icon_thickness }};
+
+    --timing-func-energetic: cubic-bezier(1,0,0.4,1);
+    --timing-func-gentle: cubic-bezier(0.5,0,0.4,1);
+    --timing-func-neutral: cubic-bezier(0.46,0.03,0.52,0.96);
+
+    --button-border-radius: {{ settings.button_border_radius }};
+    --input-border-radius: {% if settings.button_border_radius == '9999px' %}1rem{% else %}{{ settings.button_border_radius }}{% endif %};
+    --swatches-border-radius: {% if settings.button_border_radius == '0' %}0{% else %}9999px{% endif %};
+    --button-wrapper-padding: {{ button_wrapper_padding }};
+
+    --global-scrolling-items-speed-multiplier: 1;
+
+    --add-to-cart-button-height: 44px;
+    --checkout-button-height: 44px;
+  }
+
+  :root {
+    text-decoration-thickness: 1px;
+  }
+
+  .text-dynamic-large {
+    --min-font-size: calc(
+      var(--font-size-ratio-xl) * {{ settings.base_font_size }}
+    );
+    --max-font-size: calc(
+      var(--font-size-ratio-5xl) * {{ settings.base_font_size }}
+    );
+    --min-threshold: 640;
+    --max-threshold: 1440;
+    --min-font-size-in-px: calc(var(--min-font-size) * 1px);
+    --max-font-size-in-px: calc(var(--max-font-size) * 1px);
+    --min-threshold-in-px: calc(var(--min-threshold) * 1px);
+    --dynamic-font-size: calc(
+      var(--min-font-size-in-px) + (var(--max-font-size) - var(--min-font-size)) *
+        (100vw - var(--min-threshold-in-px)) /
+        (var(--max-threshold) - var(--min-threshold))
+    );
+    font-size: clamp(
+      var(--min-font-size-in-px),
+      var(--dynamic-font-size),
+      var(--max-font-size-in-px)
+    );
+    line-height: var(--heading-line-height);
+  }
+
+  .text-dynamic-xlarge {
+    --min-font-size: calc(
+      var(--font-size-ratio-3xl) * {{ settings.base_font_size }}
+    );
+    --max-font-size: calc(
+      var(--font-size-ratio-7xl) * {{ settings.base_font_size }}
+    );
+    --min-threshold: 640;
+    --max-threshold: 1440;
+    --min-font-size-in-px: calc(var(--min-font-size) * 1px);
+    --max-font-size-in-px: calc(var(--max-font-size) * 1px);
+    --min-threshold-in-px: calc(var(--min-threshold) * 1px);
+    --dynamic-font-size: calc(
+      var(--min-font-size-in-px) + (var(--max-font-size) - var(--min-font-size)) *
+        (100vw - var(--min-threshold-in-px)) /
+        (var(--max-threshold) - var(--min-threshold))
+    );
+    font-size: clamp(
+      var(--min-font-size-in-px),
+      var(--dynamic-font-size),
+      var(--max-font-size-in-px)
+    );
+    line-height: var(--heading-line-height);
+  }
+
+  @media (min-width: 990px) {
+    :root {
+      --spacing-section: var({{ lg_spacing_section }});
+    }
+  }
+
+  @media (min-width: 1400px) {
+    :root {
+      --grid-gutter: 80px;
+
+      --font-size-theme-basic: var(--font-size-base);
+      /*--line-height-theme-basic: var(--base-line-height);*/
+
+      --font-size-heading: var(--font-size-4xl);
+    }
+  }
+</style>
+{% style %}
+  {{ main_font | font_face: font_display: 'swap' }}
+  {{ heading_font | font_face: font_display: 'swap' }}
+
+  {%- liquid
+    assign main_font_bolder = main_font | font_modify: 'weight', 'bolder'
+    assign main_font_italic = main_font | font_modify: 'style', 'italic'
+    assign main_font_bold_italic = main_font_bold | font_modify: 'style', 'italic'
+  -%}
+
+  {% if main_font_bold %}
+    {{ main_font_bold | font_face: font_display: 'swap' }}
+  {% endif %}
+
+  {% if main_font_italic %}
+    {{ main_font_italic | font_face: font_display: 'swap' }}
+  {% endif %}
+
+  {% if main_font_bold_italic %}
+    {{ main_font_bold_italic | font_face: font_display: 'swap' }}
+  {% endif %}
+
+  {% if main_font_bolder %}
+    {{ main_font_bolder | font_face: font_display: 'swap' }}
+  {% endif %}
+
+  :root {
+    --main-font-stack: {{ main_font.family }}, {{ main_font.fallback_families }};
+    --main-font-weight: {{ main_font.weight }};
+    --main-font-style: {{ main_font.style }};
+    --heading-font-stack: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --heading-font-weight: {{ heading_font.weight }};
+    --heading-font-style: {{ heading_font.style }};
+    --heading-text-transform: {{ settings.heading_text_transform }};
+  }
+
+  /*
+  Typography sizes
+  */
+
+  :root {
+    --standard-heading-size: var(--type-scale-n{{ settings.standard_heading_mobile_text_scale }});
+    --feature-heading-size: var(--type-scale-n{{ settings.feature_heading_mobile_text_scale }});
+    --secondary-heading-size: var(--type-scale-n{{ settings.secondary_heading_mobile_text_scale }});
+  }
+
+  @media (min-width: 990px) {
+    :root {
+      --standard-heading-size: var(--type-scale-n{{ settings.standard_heading_desktop_text_scale }});
+      --feature-heading-size: var(--type-scale-n{{ settings.feature_heading_desktop_text_scale }});
+      --secondary-heading-size: var(--type-scale-n{{ settings.secondary_heading_desktop_text_scale }});
+    }
+  }
+
+  .heading-standard {
+    font-size: var(--standard-heading-size);
+  }
+
+  .heading-feature {
+    font-size: var(--feature-heading-size);
+  }
+
+  .heading-secondary {
+    font-size: var(--secondary-heading-size);
+  }
+
+  {% for scheme in settings.color_schemes -%}
+    {%-  liquid
+      case settings.button_color
+        when 'text'
+          assign button_background_color = 'var(--color-scheme-text)'
+          assign button_text_color = 'var(--color-scheme-background)'
+          assign button_background_color_hover = 'var(--color-scheme-accent)'
+        assign button_text_color_hover = 'var(--color-scheme-accent-contrast)'
+        when 'accent'
+        assign button_background_color = 'var(--color-scheme-accent)'
+        assign button_text_color = 'var(--color-scheme-accent-contrast)'
+        assign button_background_color_hover = 'var(--color-scheme-text)'
+        assign button_text_color_hover = 'var(--color-scheme-background)'
+      endcase
+    -%}
+
+    {%- capture color_scheme_select_svg -%}url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='{{ scheme.settings.text | url_encode}}' fill-rule='evenodd' d='M18.6678221,5 L20,6.33217793 L12.0069324,14.3252455 L12,14.319 L11.9930676,14.3252455 L4,6.33217793 L5.33217793,5 L12,11.668 L18.6678221,5 Z'/%3E%3C/svg%3E%0A");{%- endcapture -%}
+
+    {%- capture color_scheme_icon_arrow_right -%}url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'%3E%3Cpath fill='{{ scheme.settings.text | url_encode}}' d='M76.81 47.425H12.586V52.425H76.81L53.504 75.731L56.885 79.111L86.072 49.925L56.885 20.739L53.505 24.119L76.81 47.425Z'/%3E%3C/svg%3E%0A");{%- endcapture -%}
+
+    {% if forloop.index == 1 -%}
+      :root,
+    {% endif %}
+    [data-color-scheme="{{ scheme.id }}"] {
+      --color-scheme-text: {{ scheme.settings.text.red }} {{ scheme.settings.text.green }} {{ scheme.settings.text.blue }};
+      --color-scheme-background: {{ scheme.settings.background.red }} {{ scheme.settings.background.green }} {{ scheme.settings.background.blue }};
+      --color-scheme-accent: {{ scheme.settings.accent.red }} {{ scheme.settings.accent.green }} {{ scheme.settings.accent.blue }};
+      --color-scheme-accent-contrast:  {{ scheme.settings.accent_contrast.red }} {{ scheme.settings.accent_contrast.green }} {{ scheme.settings.accent_contrast.blue }};
+      --color-scheme-secondary: {{ scheme.settings.secondary.red }} {{ scheme.settings.secondary.green }} {{ scheme.settings.secondary.blue }};
+      --color-scheme-solid-button-background: {{ button_background_color }};
+      --color-scheme-solid-button-text: {{ button_text_color }};
+      --color-scheme-solid-button-background-hover: {{ button_background_color_hover }};
+      --color-scheme-solid-button-text-hover: {{ button_text_color_hover }};
+      --icon-svg-select: {{ color_scheme_select_svg }}
+      --icon-svg-arrow-right: {{ color_scheme_icon_arrow_right }}
+    }
+
+    /* unique values for each scheme */
+    :root {
+      --color-scheme-{{ scheme.id }}-text: {{ scheme.settings.text.red }} {{ scheme.settings.text.green }} {{ scheme.settings.text.blue }};
+      --color-scheme-{{ scheme.id }}-background: {{ scheme.settings.background.red }} {{ scheme.settings.background.green }} {{ scheme.settings.background.blue }};
+      --color-scheme-{{ scheme.id }}-accent: {{ scheme.settings.accent.red }} {{ scheme.settings.accent.green }} {{ scheme.settings.accent.blue }};
+      --color-scheme-{{ scheme.id }}-accent-contrast:  {{ scheme.settings.accent_contrast.red }} {{ scheme.settings.accent_contrast.green }} {{ scheme.settings.accent_contrast.blue }};
+      --color-scheme-{{ scheme.id }}-secondary: {{ scheme.settings.secondary.red }} {{ scheme.settings.secondary.green }} {{ scheme.settings.secondary.blue }};
+      --color-scheme-{{ scheme.id }}-solid-button-background: {{ button_background_color }};
+      --color-scheme-{{ scheme.id }}-solid-button-text: {{ button_text_color }};
+      --color-scheme-{{ scheme.id }}-solid-button-background-hover: {{ button_background_color_hover }};
+      --color-scheme-{{ scheme.id }}-solid-button-text-hover: {{ button_text_color_hover }};
+      --color-scheme-{{ scheme.id }}-icon-svg-select: {{ color_scheme_select_svg }}
+      --color-scheme-{{ scheme.id }}-icon-svg-arrow-right: {{ color_scheme_icon_arrow_right }}
+    }
+
+  {% endfor %}
+
+  {% if settings.round_images %}
+    :root {
+      --media-border-radius: 0.8rem;
+    }
+    img,
+    svg[class*="placeholder"],
+    model-viewer,
+    shopify-model-viewer-ui,
+    video,
+    iframe[src*="youtube"],
+    iframe[src*="vimeo"] {
+      border-radius: var(--media-border-radius);
+    }
+
+    .has-full-bleed-images img,
+    .has-full-bleed-images svg[class*="placeholder"],
+    .has-full-bleed-images model-viewer,
+    .has-full-bleed-images shopify-model-viewer-ui,
+    .has-full-bleed-images video,
+    .has-full-bleed-images iframe[src*="youtube"] {
+      border-radius: unset;
+    }
+  {% endif %}
+{% endstyle %}
+<style>
+  body {
+    background-color: rgb(var(--color-scheme-background));
+    color: rgb(var(--color-scheme-text));
+    font-family: var(--main-font-stack);
+    font-weight: var(--main-font-weight);
+    font-style: var(--main-font-style);
+    text-transform: var(--body-text-uppercase);
+    text-decoration-thickness: var(--underline-thickness);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  :root {
+    --color-scheme-error: 245, 0, 0;
+    --color-scheme-success: 0, 215, 0;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-os-background: 255, 255, 255;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-os-background: 0, 0, 0;
+    }
+  }
+
+  [data-color-scheme] {
+    --color-scheme-button-text-hover: var(--color-scheme-accent);
+    --color-scheme-button-background-hover: var(--color-scheme-background);
+  }
+
+  @keyframes scrolling-items {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+</style>
+
+{% if settings.enable_section_color_transitions %}
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      :root:root
+        section[data-color-scheme]:not(.disable-section-color-transition),
+      :root:root
+        [data-sticky-header][data-color-scheme]:not(
+          .disable-section-color-transition
+        ) {
+        --color-scheme-text: var(--color-scheme-text-override);
+        --color-scheme-background: var(--color-scheme-background-override);
+        --color-scheme-accent: var(--color-scheme-accent-override);
+        --color-scheme-accent-contrast: var(
+          --color-scheme-accent-contrast-override
+        );
+        --color-scheme-secondary: var(--color-scheme-secondary-override);
+        --color-scheme-solid-button-background: var(
+          --color-scheme-solid-button-background-override
+        );
+        --color-scheme-solid-button-text: var(
+          --color-scheme-solid-button-text-override
+        );
+        --color-scheme-solid-button-background-hover: var(
+          --color-scheme-solid-button-background-hover-override
+        );
+        --color-scheme-solid-button-text-hover: var(
+          --color-scheme-solid-button-text-hover-override
+        );
+        --icon-svg-select: var(--icon-svg-select-override);
+        --icon-svg-arrow-right: var(--icon-svg-arrow-right-override);
+      }
+  </style>
+  <script src="{{ 'section-color-transitions.js' | asset_url }}" defer></script>
+{% endif %}
+
+{% render 'critical-css' %}
+<style id="manual-critical-css">
+  [x-cloak] {
+    display: none;
+  }
+
+  html.no-js [x-cloak].no-js-undo-cloak {
+    display: initial;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+</style>
+{% comment %} theme-check-disable AssetPreload {% endcomment %}
+{% comment %}
+  preload_tag does not currently accept font_url but AssetPreload still flags this as an offense
+
+  https://github.com/Shopify/theme-check/issues/634
+{% endcomment %}
+{% unless heading_font.system? %}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ heading_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+  >
+{% endunless %}
+{% unless main_font.system? %}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ main_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+  >
+{% endunless %}
+{% comment %} theme-check-enable AssetPreload {% endcomment %}
+
+{% if settings.products_show_star_rating %}
+  {{ 'ratings.css' | asset_url | stylesheet_tag }}
+
+  {% style %}
+    .star-rating {
+      --star-rating-star-color: var(--color-scheme-{{ settings.products_star_rating_color }});
+      --star-rating-star-background-color: rgb(var(--color-scheme-text) / 0.1);
+      --star-rating-caption-color: rgb(var(--color-scheme-text));
+    }
+  {% endstyle %}
+{% endif %}
+
+{{ 'loading.css' | asset_url | stylesheet_tag }}

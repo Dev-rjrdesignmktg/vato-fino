@@ -1,0 +1,20 @@
+{% assign section_color = 'scheme1' %}
+
+<section
+  class="bg-scheme-background py-section text-scheme-text"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto my-10 flex min-h-[55vh] max-w-site px-5 text-center md:px-10">
+    <div class="m-auto">
+      <h1 class="font-heading mb-5 text-2xl">
+        {{ 'general.404.title' | t }}
+      </h1>
+      <p>
+        {{
+          'general.404.subtext_html'
+          | t: link_url: routes.all_products_collection_url
+        }}
+      </p>
+    </div>
+  </div>
+</section>

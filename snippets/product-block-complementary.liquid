@@ -1,0 +1,55 @@
+{% liquid
+  unless desktop_sizes_base
+    assign desktop_sizes_base = '50vw'
+  endunless
+
+  if recommendations.products_count == 1
+    assign grid_cols_class = 'grid-cols-1'
+
+    assign sizes = '(min-width: 768px) ' | append: desktop_sizes_base | append: ', 100vw'
+  else
+    assign remainder = recommendations.products_count | modulo: 2
+
+    case remainder
+      when 0
+        assign grid_cols_class = 'grid-cols-2'
+
+        assign sizes = '(min-width: 768px) calc(' | append: desktop_sizes_base | append: ' / 2), 50vw'
+      else
+        assign grid_cols_class = 'grid-cols-3'
+
+        assign sizes = '(min-width: 768px) calc(' | append: desktop_sizes_base | append: ' / 3), 33.4vw'
+    endcase
+  endif
+%}
+<div
+  class="my-8"
+  {{ block.shopify_attributes }}
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="product-recommendations">
+      {%- if block.settings.block_heading != blank -%}
+        <h2 class="font-heading break-word {{ block.settings.text_size }} mb-5">
+          {{ block.settings.block_heading }}
+        </h2>
+      {%- endif -%}
+      <ul class="mt-5 grid {{ grid_cols_class }} gap-5">
+        {%- for product in recommendations.products -%}
+          {%- render 'product-tile', product: product, sizes: sizes -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {% else %}
+    {% capture section_url %}{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary{% endcapture %}
+    <div
+      class="product-recommendations"
+      x-data
+      x-html="
+        $fetchedFragment(
+          '{{ section_url }}',
+          '.product-recommendations'
+        )
+      "
+    ></div>
+  {% endif %}
+</div>

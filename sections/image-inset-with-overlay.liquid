@@ -1,0 +1,448 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+
+  assign image = section.settings.image
+
+  assign image_position = section.settings.image_position
+
+  assign image_offset = section.settings.image_offset
+  assign heading_offset = section.settings.heading_offset
+
+  if image_position == 'left'
+    assign image_col_start = 1 | plus: image_offset
+    assign title_col_start = 9 | minus: heading_offset
+    assign text_col_start = 9 | plus: image_offset
+    assign image_margin_class = 'ml-auto'
+  else
+    assign image_col_start = 9 | minus: image_offset
+    assign title_col_start = 1 | plus: heading_offset
+    assign text_col_start = 1
+    assign image_margin_class = 'mr-auto'
+  endif
+
+  if section.settings.align_text_and_button_to_heading_offset
+    assign text_col_start = title_col_start
+  endif
+
+  assign text_align = section.settings.text_align
+
+  case text_align
+    when 'top'
+      assign flex_items_class = 'items-start'
+    when 'center'
+      assign flex_items_class = 'items-center'
+    when 'bottom'
+      assign flex_items_class = 'items-end'
+  endcase
+
+  assign image_max_width = section.settings.image_max_width
+  assign image_max_width_as_proportion = image_max_width | divided_by: 100.00
+
+  assign sizes = '(min-width: 768px) calc((100vw / 2) * ' | append: image_max_width_as_proportion | append: '), 100vw'
+
+  assign title = section.settings.title
+  assign richtext = section.settings.richtext
+  assign cta_label = section.settings.cta_label
+  assign cta_link = section.settings.cta_link
+
+  if section.index == 1
+    assign preload = true
+  else
+    assign preload = false
+  endif
+-%}
+
+<style>
+  #{{ section.id }} {
+    --image-col-start: {{ image_col_start }};
+    --title-col-start: {{ title_col_start }};
+    --text-col-start: {{ text_col_start }};
+    --image-max-width: {{ image_max_width }}%;
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="{% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="relative mx-auto max-w-site px-5 lg:px-10">
+    {% if cta_link != blank %}
+      <a class="absolute inset-0 z-10" href="{{ cta_link }}">
+        <span class="sr-only">
+          {%- if cta_label != blank -%}
+            {{- cta_label -}}
+          {%- else -%}
+            {{- title -}}
+          {%- endif -%}
+        </span>
+      </a>
+    {% endif %}
+    <div class="relative">
+      <div class="grid gap-5 lg:grid-cols-16">
+        <div class="lg:col-span-8 lg:col-start-[--image-col-start] lg:row-start-1{% if text_align == 'top' %} lg:pt-16{% endif %}{% if text_align == 'bottom' %} lg:pb-16{% endif %} flex {{ flex_items_class }} {%  if section.settings.mobile_image_style == 'full' %}-mx-5 lg:mx-0{%  endif %}">
+          <div
+            class="w-full lg:max-w-[--image-max-width]  {{ image_margin_class }}"
+            {% if section.settings.enable_parallax and settings.cascade_enable_parallax %}
+              data-parallax-container
+              data-parallax-speed="{{ section.settings.parallax_speed }}"
+              data-parallax-id="{{ section.id }}"
+            {% endif %}
+          >
+            <div
+              {% if section.settings.enable_parallax and settings.cascade_enable_parallax %}
+                data-parallax-element
+              {% endif %}
+            >
+              <div
+                class="image-wrapper image-wrapper-{{ section.settings.crop }}"
+              >
+                {% if image != blank %}
+                  {{
+                    image
+                    | image_url: width: 3000
+                    | image_tag: sizes: sizes, preload: preload
+                  }}
+                {% else %}
+                  {{
+                    'image'
+                    | placeholder_svg_tag: 'w-full h-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+                  }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex lg:col-span-16 lg:col-start-1 lg:row-start-1 {{ flex_items_class }}"
+        >
+          <div class="relative grid gap-x-5 lg:grid-cols-16 lg:gap-y-10">
+            <div
+              class="lg:col-span-8 lg:col-start-[--title-col-start] lg:row-start-1"
+              {% if section.settings.blend_mode != 'normal' %}
+                style="mix-blend-mode: {{ section.settings.blend_mode }};"
+                data-color-scheme="{{ section.settings.blend_mode_color_scheme }}"
+              {% endif %}
+            >
+              <h2
+                class="font-heading text-scheme-text {% render 'type-scale-classes', mobile_text_scale: section.settings.mobile_text_scale, desktop_text_scale: section.settings.desktop_text_scale %} break-word"
+              >
+                {{ title }}
+              </h2>
+            </div>
+            {% if richtext != blank
+              or cta_link != blank
+              and cta_label != blank
+            %}
+              <div class="lg:col-span-5 lg:col-start-[--text-col-start] {%  if title != blank %}mt-5{%  endif %} text-scheme-text lg:mt-0 ">
+                {% if richtext != blank %}
+                  <div class="rte rte--content-only rte--compact break-word text-base">
+                    {{ richtext }}
+                  </div>
+                {% endif %}
+                {% if cta_label != blank and cta_label != blank %}
+                  <div class="{% if richtext != blank %}mt-10{% endif %}">
+                    <div class="pb-button-wrapper">
+                      <a class="theme-cta" href="{{ cta_label }}">
+                        {{ cta_label }}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- unless request.design_mode -%}
+  {%- if section.settings.enable_parallax and settings.cascade_enable_parallax -%}
+    <script src="{{ 'cascade-animations.js' | asset_url }}" defer></script>
+  {%- endif -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Inset image with overlay",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position on desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "crop",
+      "label": "Crop image",
+      "options": [
+        {
+          "value": "none",
+          "label": "No crop"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_style",
+      "label": "Image width on mobile",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full"
+        },
+        {
+          "value": "contained",
+          "label": "Contained"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 75,
+      "max": 100,
+      "step": 5,
+      "label": "Image max width on desktop",
+      "default": 100,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Offsets"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust image and heading offsets to create an overlay effect on desktop."
+    },
+    {
+      "type": "range",
+      "id": "image_offset",
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "label": "Image",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "heading_offset",
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "label": "Heading",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "align_text_and_button_to_heading_offset",
+      "label": "Align text and button to heading offset",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Heading",
+      "default": "Inset image with text"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Overlay text alignment",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_scale",
+      "min": -2,
+      "max": 7,
+      "step": 1,
+      "label": "Mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Desktop font size scale",
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label"
+    },
+    {
+      "type": "header",
+      "content": "Heading blend mode"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "info": "Some blend modes work better when the text color is dark, others when it is light",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        },
+        {
+          "value": "exclusion",
+          "label": "Exclusion"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "soft-light",
+          "label": "Soft light"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "blend_mode_color_scheme",
+      "label": "Overlay color scheme",
+      "info": "Only used if “Blend mode” is not “Normal”",
+      "default": "scheme4"
+    },
+    {
+      "type": "header",
+      "content": "Parallax"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable parallax",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "parallax_speed",
+      "min": -6,
+      "max": 5,
+      "step": 1,
+      "label": "Parallax speed",
+      "default": -2
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inset image with overlay"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

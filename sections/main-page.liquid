@@ -1,0 +1,78 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+
+  if section.settings.layout == 'default'
+    assign wrapper_class = 'md:w-7/8 mx-auto'
+    assign grid_class = 'md:grid md:grid-cols-5'
+    assign title_class = 'md:col-span-2'
+    assign content_class = 'mt-5 md:mt-0 md:col-span-3'
+  else
+    assign wrapper_class = 'md:w-1/2 mx-auto'
+    assign grid_class = ''
+    assign title_class = ''
+    assign content_class = 'mt-5'
+  endif
+-%}
+
+<section
+  class="bg-scheme-background py-section text-scheme-text"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    <div class="{{ wrapper_class }}">
+      <div class="{{ grid_class }}">
+        <div class="{{ title_class }} mb-10 md:mb-0">
+          <h1 class="font-heading break-word mb-5 text-heading-standard">
+            {{ page.title | strip }}
+          </h1>
+        </div>
+        <div class="{{ content_class }}">
+          <div
+            class="rte"
+            x-data="ThemeUtil_RTE"
+          >
+            {{ page.content | replace: '<meta charset="utf-8">', '' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% unless request.design_mode %}
+  <script src="{{ 'rte.js' | asset_url }}" type="module"></script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [
+    {
+      "id": "layout",
+      "type": "select",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "centered",
+          "label": "Centered"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    }
+  ]
+}
+{% endschema %}

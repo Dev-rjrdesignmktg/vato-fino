@@ -1,0 +1,354 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign items = collections
+
+  assign block_collections = section.blocks | where: 'type', 'collection'
+
+  if block_collections.size > 0
+    assign using_blocks = true
+    assign items = block_collections
+  endif
+
+  assign show_description = section.settings.show_description
+
+  assign counter = 0
+-%}
+
+<section
+  class="overflow-hidden bg-scheme-background text-scheme-text"
+  data-color-scheme="{{ section_color }}"
+  x-data
+>
+  {% if section.settings.layout == 'grid' %}
+    {% for collection_item in items %}
+      {% liquid
+        if using_blocks
+          assign collection = collection_item.settings.collection
+          assign title = collection_item.settings.title
+
+          if title == blank
+            assign title = collection.title
+          endif
+
+          assign subheading = collection_item.settings.subheading
+
+          if section.settings.show_collection_link
+            assign cta_link = collection.url
+          endif
+
+          assign slideshow_id = section.id | append: '-' | append: collection_item.id
+        else
+          assign collection = collection_item
+          assign title = collection_item.title
+
+          if show_description == true
+            assign subheading = collection_item.description
+          else
+            assign subheading = ''
+          endif
+
+          if section.settings.show_collection_link
+            assign cta_link = collection_item.url
+          endif
+
+          assign collection_uid = collection.handle | append: '-' | append: counter
+          assign slideshow_id = section.id | append: '-' | append: collection_uid
+        endif
+
+        assign mod = counter | modulo: 2
+
+        if section.settings.enable_alternate_row_color_scheme
+          if mod > 0
+            assign color_scheme = section.settings.alternate_row_color_scheme
+          else
+            assign color_scheme = section_color
+          endif
+        else
+          assign color_scheme = section_color
+        endif
+
+        if title == blank
+          assign title = 'sections.onboarding.collection_title' | t
+        endif
+
+        if section.settings.show_collection_link
+          assign cta_label = 'collections.general.all_of_collection' | t
+        endif
+      %}
+
+      <div
+        class="bg-scheme-background text-scheme-text"
+        data-color-scheme="{{ color_scheme }}"
+      >
+        {%
+          render 'product-list-grid',
+          class: 'py-section',
+          title: title,
+          subheading: subheading,
+          cta_label: cta_label,
+          cta_link: cta_link,
+          product_list: collection.products,
+          enable_mobile_carousel: section.settings.enable_mobile_carousel,
+          enable_desktop_carousel: section.settings.enable_desktop_carousel,
+          max_products: section.settings.max_products_grid,
+          slideshow_id: slideshow_id,
+        %}
+      </div>
+      {% assign counter = counter | plus: 1 %}
+    {% endfor %}
+  {% elsif section.settings.layout == 'cascade' %}
+    {%
+      render 'list-collections-cascade',
+      section: section,
+      items: items,
+      using_blocks: using_blocks,
+      show_collection_link: section.settings.show_collection_link,
+      show_description: show_description,
+    %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "List with product tiles",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "grid",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "cascade",
+          "label": "Cascade"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_link",
+      "label": "Show link to collection",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection descriptions",
+      "default": true,
+      "info": "Does not apply if using blocks."
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply when layout is set to “Grid”."
+    },
+    {
+      "type": "select",
+      "id": "max_products_grid",
+      "default": "3",
+      "options": [
+        {
+          "value": "3",
+          "label": "3 Products"
+        },
+        {
+          "value": "4",
+          "label": "4 Products"
+        },
+        {
+          "value": "6",
+          "label": "6 Products"
+        },
+        {
+          "value": "8",
+          "label": "8 Products"
+        }
+      ],
+      "label": "Number of products"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_carousel",
+      "label": "Enable carousel on mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_desktop_carousel",
+      "label": "Enable carousel on desktop",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Cascade"
+    },
+    {
+      "type": "paragraph",
+      "content": "These settings only apply when layout is set to “Cascade”."
+    },
+    {
+      "type": "range",
+      "id": "max_products_cascade",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Number of products",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_full_width_products",
+      "label": "Feature full width products",
+      "info": "Enable this setting to showcase a mix of products at half width and full width. [Learn more](https://help.switchthemes.co)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_alternate_row_color_scheme",
+      "label": "Enable alternate row color scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "alternate_row_color_scheme",
+      "label": "Alternate color scheme",
+      "info": "Applies to every second collection.",
+      "default": "scheme2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Featured collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "id": "subheading",
+          "type": "richtext",
+          "label": "Subheading",
+          "default": "<p>Use this text to share information about your collection.</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

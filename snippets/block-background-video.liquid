@@ -1,0 +1,49 @@
+<div
+  class="background-video absolute inset-0 h-full w-full overflow-hidden"
+  id="video-{{ component_id }}"
+  x-data="Video('inline', 'autoplay')"
+  x-intersect:leave="pause"
+  x-intersect:enter="play"
+>
+  <div x-data="HTMLVideo" @play="play" @pause="pause">
+    {% if video %}
+      {{
+        video
+        | video_tag:
+          class: 'object-cover absolute inset-0 w-full h-full',
+          autoplay: true,
+          image_size: '2048x',
+          loop: true,
+          controls: false,
+          preload: 'none',
+          muted: true,
+          x-ref: 'video'
+      }}
+    {% else %}
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        x-ref="video"
+        autoplay
+        muted
+        loop
+      >
+        <source
+          src="{{ 'placeholder-video.mp4' | asset_url }}"
+          type="video/mp4"
+        >
+        Your browser does not support the video tag.
+      </video>
+    {% endif %}
+  </div>
+</div>
+
+{% unless request.design_mode %}
+  <script
+    src="{{ 'video.js' | asset_url }}"
+    type="module"
+  ></script>
+  <script
+    src="{{ 'html-video.js' | asset_url }}"
+    type="module"
+  ></script>
+{% endunless %}

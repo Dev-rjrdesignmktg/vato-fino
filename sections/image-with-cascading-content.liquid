@@ -1,0 +1,1416 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+
+  if section.index == 1
+    assign preload = true
+  else
+    assign preload = false
+  endif
+
+  if section.index <= 3
+    assign loading = 'eager'
+  else
+    assign loading = 'lazy'
+  endif
+
+  assign section_desktop_layout = section.settings.section_desktop_layout
+
+  assign image_width = section.settings.image_width | split: '|' | first | strip
+  assign content_width = section.settings.image_width | split: '|' | last | strip
+
+  assign image_height = section.settings.image_height
+
+  assign image_align_vertical = section.settings.image_align_vertical
+  assign image_align_horizontal = section.settings.image_align_horizontal
+
+  case section.settings.image_full_bleed
+    when 'none'
+      assign image_full_bleed_on_mobile = false
+      assign image_full_bleed_on_desktop = false
+    when 'mobile_only'
+      assign image_full_bleed_on_mobile = true
+      assign image_full_bleed_on_desktop = false
+    when 'mobile_and_desktop'
+      assign image_full_bleed_on_mobile = true
+      assign image_full_bleed_on_desktop = true
+  endcase
+
+  if image_full_bleed_on_desktop
+    assign image_top_class = 'lg:top-0'
+
+    if image_height == 'auto'
+      assign image_height_class = 'lg:max-h-screen'
+    else
+      assign image_height_class = 'lg:h-screen'
+    endif
+  else
+    assign image_top_class = 'lg:top-sticky-header-height'
+
+    if image_height == 'auto'
+      assign image_height_class = 'lg:max-h-screen-less-sticky-header'
+    else
+      assign image_height_class = 'lg:h-screen-less-sticky-header'
+    endif
+  endif
+
+  assign image_crop = section.settings.image_crop
+
+  if image_crop == 'none'
+    assign image_class = image_height_class | append: ' lg:object-cover'
+  else
+    assign image_class = ''
+  endif
+
+  if image_align_horizontal != 'full_width'
+    assign horizontal_alignment_class = ' lg:w-3/4'
+
+    case image_align_horizontal
+      when 'left'
+        assign horizontal_alignment_class = horizontal_alignment_class | append: ' lg:mr-auto'
+      when 'center'
+        assign horizontal_alignment_class = horizontal_alignment_class | append: ' lg:mx-auto'
+      when 'right'
+        assign horizontal_alignment_class = horizontal_alignment_class | append: ' lg:ml-auto'
+    endcase
+  endif
+
+  case image_align_vertical
+    when 'top'
+      assign vertical_alignment_class = ' lg:self-start'
+    when 'center'
+      assign vertical_alignment_class = ' lg:self-center'
+    when 'bottom'
+      assign vertical_alignment_class = ' lg:self-end'
+  endcase
+
+  case image_width
+    when 'lg:col-span-4'
+      # One third
+      assign image_sizes = '33.3vw'
+    when 'lg:col-span-5'
+      # Two fifths
+      assign image_sizes = '40vw'
+    when 'lg:col-span-4'
+      # One half
+      assign image_sizes = '50vw'
+    when 'lg:col-span-7'
+      # Three fifths
+      assign image_sizes = '60vw'
+  endcase
+
+  assign desktop_layout = section.settings.desktop_layout
+  assign alignment_variation = section.settings.alignment_variation
+  assign force_one_column_align_to_media = section.settings.force_one_column_align_to_media
+
+  if force_one_column_align_to_media
+    assign desktop_layout = 'single_column'
+    if section_desktop_layout == 'image_left'
+      assign alignment_variation = 'align_items_left'
+    else
+      assign alignment_variation = 'align_items_right'
+    endif
+  endif
+
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+  assign video_blocks = section.blocks | where: 'type', 'video'
+
+  assign multi_item_block_types = 'product_list,collection_list' | split: ','
+
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+
+  if desktop_layout == 'two_columns'
+    case content_width
+      when 'lg:col-span-8'
+        # Two thirds (“One third” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 35vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 55vw'
+      when 'lg:col-span-7'
+        # Three fifths (“Two fifths” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 30vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 50vw'
+      when 'lg:col-span-6'
+        # One half (“One half” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 25vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 40vw'
+      when 'lg:col-span-5'
+        # Two fifths (“Three fifths” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 20vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 33vw'
+    endcase
+  else
+    case content_width
+      when 'lg:col-span-8'
+        # Two thirds (“One third” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 40vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 55vw'
+      when 'lg:col-span-7'
+        # Three fifths (“Two fifths” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 45vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 50vw'
+      when 'lg:col-span-6'
+        # One half (“One half” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 37.5vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 40vw'
+      when 'lg:col-span-5'
+        # Two fifths (“Three fifths” image width)
+        assign content_half_width_desktop_sizes = '(min-width: 768px) 30vw'
+        assign content_full_width_desktop_sizes = '(min-width: 768px) 33vw'
+    endcase
+  endif
+
+  if enable_cascade_on_mobile
+    assign content_half_width_mobile_sizes = '75vw'
+  else
+    assign content_half_width_mobile_sizes = '100vw'
+  endif
+
+  assign content_half_width_sizes = content_half_width_desktop_sizes | append: ', ' | append: content_half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign content_full_width_mobile_sizes = '80vw'
+  else
+    assign content_full_width_mobile_sizes = '100vw'
+  endif
+
+  assign content_full_width_sizes = content_full_width_mobile_sizes | append: ', ' | append: content_full_width_desktop_sizes
+
+  if enable_cascade_on_mobile
+    assign content_eager_loading_limit = section.blocks.size | at_most: 4
+  else
+    assign content_eager_loading_limit = section.blocks.size | at_most: 2
+  endif
+
+  capture cascade_block_items
+    for block in section.blocks
+      assign content_loading = 'lazy'
+
+      if section.index <= 2 and forloop.index <= content_eager_loading_limit
+        assign content_loading = 'eager'
+      endif
+
+      unless multi_item_block_types contains block.type
+        if block.settings.block_width == 'full'
+          echo full_width_item_header
+          assign content_sizes = content_full_width_sizes
+        else
+          assign content_sizes = content_half_width_sizes
+        endif
+
+        render 'cascade-block-content' with block as block, enable_cascade_on_mobile: enable_cascade_on_mobile, index: forloop.index0, full_width_item_header: full_width_item_header, sizes: content_sizes, preload: false, loading: content_loading
+        echo item_separator
+      else
+        render 'cascade-multi-item-block-content' with block as block, enable_cascade_on_mobile: enable_cascade_on_mobile, index: forloop.index0, full_width_item_header: full_width_item_header, sizes: content_sizes, preload: false, loading: content_loading
+      endunless
+    endfor
+  endcapture
+
+  assign top_padding_class = ''
+  assign bottom_padding_class = ''
+
+  if image_full_bleed_on_mobile
+    if section.settings.remove_bottom_padding
+      assign bottom_padding_class = ''
+    else
+      assign bottom_padding_class = 'pb-section'
+    endif
+  else
+    unless section.settings.remove_top_padding
+      assign top_padding_class = 'pt-section'
+    endunless
+
+    unless section.settings.remove_bottom_padding
+      assign bottom_padding_class = 'pb-section'
+    endunless
+  endif
+
+  if image_full_bleed_on_desktop
+    assign top_padding_class = top_padding_class | append: ' lg:pt-0'
+
+    assign bottom_padding_class = bottom_padding_class | append: ' lg:pb-0'
+  else
+    unless section.settings.remove_top_padding
+      assign top_padding_class = top_padding_class | append: ' lg:pt-section'
+    endunless
+
+    unless section.settings.remove_bottom_padding
+      assign bottom_padding_class = bottom_padding_class | append: ' lg:pb-section'
+    endunless
+  endif
+-%}
+
+<section
+  class="{{ top_padding_class }} {{ bottom_padding_class }} bg-scheme-background px-5 text-scheme-text lg:px-10 {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+  x-data
+>
+  <div class="relative">
+    {% if section.settings.title != blank %}
+      {%- render 'cascade-heading',
+        title: section.settings.title,
+        overlay_heading: section.settings.overlay_heading,
+        mobile_text_scale: section.settings.heading_mobile_text_scale,
+        desktop_text_scale: section.settings.heading_desktop_text_scale,
+        cta_link: section.settings.overlay_cta_link,
+        cta_label: section.settings.overlay_cta_label,
+        cta_style: section.settings.overlay_cta_style,
+        blend_mode: section.settings.blend_mode,
+        blend_mode_color_scheme: section.settings.blend_mode_color_scheme
+      -%}
+    {% endif %}
+    <div class="lg:grid lg:grid-cols-12 max-lg:space-y-5 {% unless image_full_bleed_on_desktop %}lg:gap-10{% endunless %}">
+      <div
+        class="{{ image_width }} {% if image_crop == 'none' and image_height != 'auto' %}lg:h-fit{% else %}{{ image_height_class }}{% endif %} bg-scheme-background lg:sticky {{ image_top_class }} {% if image_full_bleed_on_mobile %}max-lg:-mx-5{% endif %} {% if image_full_bleed_on_desktop %}{% if section_desktop_layout == 'image_left' %} lg:-ml-10{% else %} lg:-mr-10{% endif %}{% endif %}{% if section_desktop_layout == 'image_right' %} order-2{% endif %} flex"
+      >
+        <div class="w-full {{ horizontal_alignment_class }} {{ vertical_alignment_class }}">
+          <div class="image-wrapper image-wrapper-{{ image_crop }}">
+            {% if section.settings.image != blank %}
+              {% assign image = section.settings.image %}
+              {{
+                image
+                | image_url: width: 2000
+                | image_tag:
+                  sizes: image_sizes,
+                  preload: preload,
+                  loading: loading,
+                  class: image_class
+              }}
+            {% else %}
+              {{
+                'image'
+                | placeholder_svg_tag: 'bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+              }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div
+        class="{{ content_width }} lg:my-auto lg:h-fit bg-scheme-background{% if image_full_bleed_on_desktop %} lg:pt-section lg:pb-section{% endif %}{% if section_desktop_layout == 'image_right' %} order-1{% endif %}{% if image_full_bleed_on_desktop %}{% if section_desktop_layout == 'image_left' %} lg:pl-10{% else %} lg:pr-10{% endif %}{% endif %}"
+      >
+        {% render 'cascade',
+          content_items: cascade_block_items,
+          alternate_first_block_position: true,
+          enable_cascade_on_mobile: enable_cascade_on_mobile,
+          desktop_layout: desktop_layout,
+          level_of_media_size_variation: section.settings.level_of_media_size_variation,
+          sequence: section.settings.sequence,
+          alignment_variation: alignment_variation,
+          spacing: section.settings.spacing,
+          first_block_position: section.settings.start_position,
+          use_global_settings: section.settings.use_global_settings
+        %}
+      </div>
+    </div>
+  </div>
+
+  {% liquid
+    for block in video_blocks
+      assign has_video_blocks = true
+
+      if block.settings.mode == 'preview' and block.settings.playback == 'modal'
+        assign video_modal_id = 'video-modal-' | append: section.id | append: '-' | append: block.id | replace: '_', '-' | handleize
+        assign video = block.settings.video
+
+        render 'video-modal', video: video, video_modal_id: video_modal_id
+      endif
+    endfor
+  %}
+
+  {% if has_video_blocks %}
+    {% unless request.design_mode %}
+      <script
+        src="{{ 'video.js' | asset_url }}"
+        type="module"
+      ></script>
+      <script
+        src="{{ 'html-video.js' | asset_url }}"
+        type="module"
+      ></script>
+    {% endunless %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Image with cascade",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "image_left",
+          "label": "Image on left"
+        },
+        {
+          "value": "image_right",
+          "label": "Image on right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "Width on desktop",
+      "default": "lg:col-span-6 | lg:col-span-6",
+      "options": [
+        {
+          "value": "lg:col-span-4 | lg:col-span-8",
+          "label": "One third"
+        },
+        {
+          "value": "lg:col-span-5 | lg:col-span-7",
+          "label": "Two fifths"
+        },
+        {
+          "value": "lg:col-span-6 | lg:col-span-6",
+          "label": "One half"
+        },
+        {
+          "value": "lg:col-span-7 | lg:col-span-5",
+          "label": "Three fifths"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Height on desktop",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "full_screen",
+          "label": "Full screen"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_full_bleed",
+      "label": "Full bleed",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "mobile_only",
+          "label": "Mobile only"
+        },
+        {
+          "value": "mobile_and_desktop",
+          "label": "Mobile and desktop"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "image_crop",
+      "label": "Crop",
+      "options": [
+        {
+          "value": "none",
+          "label": "No crop"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "image_align_vertical",
+      "label": "Vertical alignment on desktop",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_align_horizontal",
+      "label": "Horizontal alignment on desktop",
+      "options": [
+        {
+          "value": "full_width",
+          "label": "Full width"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cascading content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "force_one_column_align_to_media",
+      "label": "Force one column layout and align content to media",
+      "default": false,
+      "info": "Enable this to override the layout to one column with content aligned to the adjacent media."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Heading overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_heading",
+      "label": "Overlay heading",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Heading mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "heading_desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Heading desktop font size scale",
+      "default": 7
+    },
+    {
+      "type": "url",
+      "id": "overlay_cta_link",
+      "label": "Call to action link"
+    },
+    {
+      "type": "text",
+      "id": "overlay_cta_label",
+      "label": "Call to action label"
+    },
+    {
+      "type": "select",
+      "id": "overlay_cta_style",
+      "label": "Call to action style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "border-only",
+          "label": "Border"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "info": "Some blend modes work better when the text color is dark, others when it is light",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        },
+        {
+          "value": "exclusion",
+          "label": "Exclusion"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "soft-light",
+          "label": "Soft light"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "blend_mode_color_scheme",
+      "label": "Blend mode color scheme",
+      "info": "Only used if “Blend mode” is not “Normal”"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
+        {
+          "id": "caption",
+          "type": "richtext",
+          "label": "Caption"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "image_with_text_overlay",
+      "name": "Image with text overlay",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Image with text overlay"
+        },
+        {
+          "type": "select",
+          "id": "overlay_text_size",
+          "label": "Overlay text size",
+          "options": [
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            },
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            }
+          ],
+          "default": "text-heading-standard"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "color_scheme",
+          "id": "text_scheme",
+          "default": "scheme1",
+          "label": "Text color"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "select",
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            {
+              "value": "preview",
+              "label": "Preview"
+            },
+            {
+              "value": "autoplay",
+              "label": "Autoplay"
+            }
+          ],
+          "default": "preview",
+          "info": "Autoplay will not play sound or show controls."
+        },
+        {
+          "type": "select",
+          "id": "playback",
+          "label": "Playback",
+          "options": [
+            {
+              "value": "inline",
+              "label": "Inline"
+            },
+            {
+              "value": "modal",
+              "label": "Modal"
+            }
+          ],
+          "default": "inline",
+          "info": "Does not apply if mode is set to autoplay."
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Choose product:"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_image_only",
+          "label": "Show image only",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Choose collection:"
+        },
+        {
+          "type": "color_scheme",
+          "id": "text_scheme",
+          "default": "scheme1",
+          "label": "Text color"
+        },
+        {
+          "type": "select",
+          "id": "text_display",
+          "label": "Text display",
+          "default": "overlay",
+          "options": [
+            {
+              "value": "overlay",
+              "label": "Overlay"
+            },
+            {
+              "value": "under_image",
+              "label": "Under image"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "overlay_text_size",
+          "label": "Overlay text size",
+          "options": [
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            },
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            }
+          ],
+          "default": "text-heading-standard"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "article",
+      "name": "Blog post",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Blog post"
+        },
+        {
+          "type": "select",
+          "id": "article_style",
+          "label": "Format",
+          "default": "minimal",
+          "options": [
+            {
+              "value": "minimal",
+              "label": "Minimal"
+            },
+            {
+              "value": "detailed",
+              "label": "Detailed"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_excerpt",
+          "label": "Show excerpt",
+          "default": true,
+          "info": "Will show excerpt if blog post has one and format is set to “Detailed”."
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Text",
+          "default": "Heading or impact text goes here."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            },
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            }
+          ],
+          "default": "text-heading-feature"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "heading_with_text",
+      "name": "Heading with text",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading",
+          "default": "Heading or impact text goes here."
+        },
+        {
+          "id": "rich_text",
+          "type": "richtext",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Text",
+          "default": "Shop now"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "id": "rich_text",
+          "type": "richtext",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Text",
+          "default": "Shop now"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        },
+        {
+          "id": "image_style",
+          "type": "select",
+          "label": "Image style",
+          "options": [
+            {
+              "value": "photo",
+              "label": "Photo"
+            },
+            {
+              "value": "logo",
+              "label": "Logo"
+            }
+          ],
+          "default": "photo"
+        },
+        {
+          "type": "select",
+          "id": "rating",
+          "label": "Rating",
+          "options": [
+            {
+              "value": "none",
+              "label": "No rating"
+            },
+            {
+              "value": "5_stars",
+              "label": "5 stars"
+            },
+            {
+              "value": "4_stars",
+              "label": "4 stars"
+            },
+            {
+              "value": "3_stars",
+              "label": "3 stars"
+            },
+            {
+              "value": "2_stars",
+              "label": "2 stars"
+            },
+            {
+              "value": "1_stars",
+              "label": "1 star"
+            }
+          ],
+          "default": "5_stars"
+        },
+        {
+          "id": "quote",
+          "type": "richtext",
+          "label": "Testimonial",
+          "default": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>"
+        },
+        {
+          "id": "source",
+          "type": "text",
+          "label": "Source",
+          "default": "Source"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "id": "html",
+          "type": "html",
+          "label": "Custom HTML",
+          "default": "<p>Add your custom HTML here.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with cascading content",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

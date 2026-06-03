@@ -1,0 +1,132 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image-with-text-overlay": {
+      "type": "image-with-text-overlay",
+      "settings": {
+        "image": "shopify://shop_images/DSC7463.jpg",
+        "title": "",
+        "mobile_text_scale": 2,
+        "desktop_text_scale": 5,
+        "text": "",
+        "show_arrow": true,
+        "crop": "full-screen",
+        "crop_desktop": "widescreen",
+        "place_content": "place-content-center-center",
+        "text_align": "text-center",
+        "content_below_on_mobile": false,
+        "color_scheme": "scheme1",
+        "disable_color_transition": false
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "layout": "default",
+        "color_scheme": "scheme4"
+      }
+    },
+    "cascade_eYmt4H": {
+      "type": "cascade",
+      "blocks": {
+        "heading_with_text_k63mR3": {
+          "type": "heading_with_text",
+          "settings": {
+            "heading": "SOBRE NOSOTROS",
+            "rich_text": "<p>Si buscas moda sigue tu camino.</p><p>Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</p><p>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</p><p>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</p>",
+            "text_align": "text-left",
+            "cta_url": "",
+            "cta_text": "Shop now",
+            "block_width": "full"
+          }
+        },
+        "heading_with_text_G96BMm": {
+          "type": "heading_with_text",
+          "settings": {
+            "heading": "Nuestra forma de hacer las cosas",
+            "rich_text": "<p>No buscamos ser tendencia; buscamos permanencia. Creamos piezas de culto que conectan con la historia, el mensaje y la identidad de cada artista en colaboración.<br/>Mezclamos honor, lealtad y poder con una visión que no depende de un presupuesto, sino de criterio.</p>",
+            "text_align": "text-left",
+            "cta_url": "",
+            "cta_text": "Shop now",
+            "block_width": "half"
+          }
+        },
+        "image_jcXc8b": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/textil.png",
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "heading_with_text_AUTEUV": {
+          "type": "heading_with_text",
+          "settings": {
+            "heading": "Hacia donde vamos",
+            "rich_text": "<p>Ser el puente definitivo entre el rap y una forma más exclusiva de vivirlo.<br/>Trascender fronteras hasta convertirnos en el símbolo internacional del movimiento.<br/>Venimos a demostrar que lo independiente también puede ser impecable.</p>",
+            "text_align": "text-left",
+            "cta_url": "",
+            "cta_text": "Shop now",
+            "block_width": "half"
+          }
+        },
+        "image_9zmHTc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/imagenes_slide_1.png",
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        }
+      },
+      "block_order": [
+        "heading_with_text_k63mR3",
+        "heading_with_text_G96BMm",
+        "image_jcXc8b",
+        "heading_with_text_AUTEUV",
+        "image_9zmHTc"
+      ],
+      "name": "Cascading content",
+      "settings": {
+        "title": "",
+        "enable_cascade_on_mobile": true,
+        "desktop_layout": "two_columns",
+        "hide_margin": false,
+        "level_of_media_size_variation": 1,
+        "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1.5,
+        "start_position": "left",
+        "use_global_settings": false,
+        "overlay_heading": false,
+        "heading_mobile_text_scale": 2,
+        "heading_desktop_text_scale": 7,
+        "overlay_cta_link": "",
+        "overlay_cta_label": "",
+        "overlay_cta_style": "solid",
+        "blend_mode": "normal",
+        "blend_mode_color_scheme": "scheme4",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    }
+  },
+  "order": [
+    "image-with-text-overlay",
+    "main",
+    "cascade_eYmt4H"
+  ]
+}

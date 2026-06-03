@@ -1,0 +1,12 @@
+<div
+  class="my-3 group-first:mt-0"
+  {{ block.shopify_attributes }}
+>
+  <p class="break-word flex items-center text-theme-basic">
+    {% render 'product-icon',
+      icon: block.settings.icon,
+      classes: 'text-xs mr-3 w-4 h-4 shrink-0'
+    %}
+    {{- block.settings.text | escape | strip -}}
+  </p>
+</div>

@@ -1,0 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div[data-color-scheme=scheme1].bg-scheme-background.text-scheme-text",
+  "sections": {
+    "items": {
+      "type": "cart-items",
+      "settings": {}
+    },
+    "footer": {
+      "type": "cart-footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "items",
+    "footer"
+  ]
+}

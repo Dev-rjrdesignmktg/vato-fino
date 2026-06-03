@@ -1,0 +1,147 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "text_size": "text-heading-standard"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity-selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "hide_label": false
+          }
+        },
+        "variant-picker": {
+          "type": "variant_picker",
+          "settings": {
+            "option_style": "radio",
+            "hide_option_labels": true
+          }
+        },
+        "buy-buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "enable_payment_button": true,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "rich-text": {
+          "type": "rich_text",
+          "settings": {
+            "content": "<p><strong>\"DEJA QUE EL CORAZÓN SE DESANGRE.\"</strong></p><p>Para los antiguos, la <em>Musica, </em>no era un simple sonido; era una posesión divina. El artista no era un creador, sino un <strong>Recipiente (The Vessel)</strong>: un puente trágico entre lo humano y la Musa que susurra al oído.</p><p>En <strong>Vato Fino</strong>, entendemos que el amor es doloroso y el arte es un sacrificio. Traemos carne, huesos y sangre hasta que el corazón se desangre. Este drop de <strong>Bloody Valentine’s</strong> es un <strong>Réquiem</strong> para los devotos que dejan la vida en cada verso, en cada rima, en cada latido. Tú eres el envase; deja que la MVSA te consuma.</p><h3>El Ritual del Drop</h3><h3><strong>666 Corazones. 666 Recipientes.</strong>  <strong>Sin Restocks. Sin Piedad.</strong></h3><h3>Una vez que las 666 piezas encuentren su dueño y la sangre se seque, no habrá más. </h3><p><strong>Nota:</strong> Cada pieza se fabrica bajo pedido y puede tardar entre 3-5 días.</p>"
+          }
+        },
+        "icon-list": {
+          "type": "icon_list",
+          "settings": {
+            "heading": "",
+            "text_color": "text",
+            "text_1": "Sustainability printed",
+            "icon_1": "heart",
+            "text_2": "Designed in Detroit",
+            "icon_2": "map-pin",
+            "text_3": "Ships worldwide",
+            "icon_3": "globe",
+            "text_4": "",
+            "icon_4": "washing",
+            "text_5": "",
+            "icon_5": "truck"
+          }
+        },
+        "collapsible-tabs": {
+          "type": "collapsible_tabs",
+          "settings": {
+            "show_borders_above_and_below_tabs": false,
+            "heading_1": "Shipping",
+            "content_1": "<p>We delivery worldwide. Free shipping for all orders over 100 USD.</p>",
+            "page_1": "",
+            "icon_1": "none",
+            "enable_2": true,
+            "heading_2": "Returns",
+            "content_2": "<p>See our returns policy</p>",
+            "page_2": "",
+            "icon_2": "none",
+            "enable_3": false,
+            "heading_3": "Collapsible tab",
+            "content_3": "",
+            "page_3": "",
+            "icon_3": "none",
+            "enable_4": false,
+            "heading_4": "Collapsible tab",
+            "content_4": "",
+            "page_4": "",
+            "icon_4": "none",
+            "enable_5": false,
+            "heading_5": "Collapsible tab",
+            "content_5": "",
+            "page_5": "",
+            "icon_5": "none"
+          }
+        },
+        "complementary": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Pairs well with",
+            "text_size": "text-heading-scheme2",
+            "product_list_limit": 10
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity-selector",
+        "variant-picker",
+        "buy-buttons",
+        "rich-text",
+        "icon-list",
+        "collapsible-tabs",
+        "complementary"
+      ],
+      "settings": {
+        "media_position_on_desktop": "left",
+        "media_width_on_desktop": "8",
+        "enable_thumbnails_on_desktop": true,
+        "thumbnails_width_on_desktop": "grow",
+        "product_content_width_on_desktop": "full_width",
+        "product_content_alignment": "md:justify-start",
+        "enable_image_zoom": true,
+        "enable_video_looping": true,
+        "enable_video_autoplay": true,
+        "color_scheme": "scheme4"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "You may also like",
+        "max_products": "4",
+        "enable_mobile_carousel": true,
+        "enable_desktop_carousel": true,
+        "color_scheme": "scheme4"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

@@ -1,0 +1,39 @@
+<div
+  x-data="ThemeModule_ModalCart({openOnAddToCart: {{ settings.open_drawer_on_add_to_cart }}})"
+  x-cloak
+>
+  <div>
+    <template x-teleport="#right-drawer-slot">
+      <div
+        class="flex h-full flex-col"
+        :data-modal-label="`{{ 'cart.general.title' | t }} - ${$store.cart_count.countWithText()}`"
+        x-show="$store.modals.rightDrawer.contents === 'cart'"
+      >
+        <div class="sticky top-0 bg-scheme-background px-5 lg:px-10">
+          <div class="relative mt-5 flex items-center justify-between border-b border-scheme-text py-4">
+            <h2 class="text-theme-basic" class="" tabindex="-1">
+              {{ 'cart.general.title' | t }}
+            </h2>
+            <button
+              @click.prevent="$store.modals.close('cart')"
+              class="top-0 block"
+            >
+              <span class="sr-only">
+                {{- 'general.accessibility.close_modal' | t -}}
+              </span>
+              <span class="inline-block h-6 w-6">
+                {%- render 'icon-close' -%}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-auto flex-col px-5 lg:px-10 [&_.cart-items-list]:mb-5">
+          {% render 'cart-items' %}
+          {% render 'cart-footer' %}
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+<script src="{{ 'modal-cart.js' | asset_url }}" type="module"></script>

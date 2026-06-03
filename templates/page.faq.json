@@ -1,0 +1,58 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "question-0": {
+          "type": "question",
+          "settings": {
+            "question": "Frequently asked question",
+            "answer": "<p>Use this text to share the answer to the question with your customers.</p>"
+          }
+        },
+        "question-1": {
+          "type": "question",
+          "settings": {
+            "question": "Frequently asked question",
+            "answer": "<p>Use this text to share the answer to the question with your customers.</p>"
+          }
+        },
+        "question-2": {
+          "type": "question",
+          "settings": {
+            "question": "Frequently asked question",
+            "answer": "<p>Use this text to share the answer to the question with your customers.</p>"
+          }
+        },
+        "question-3": {
+          "type": "question",
+          "settings": {
+            "question": "Frequently asked question",
+            "answer": "<p>Use this text to share the answer to the question with your customers.</p>"
+          }
+        }
+      },
+      "block_order": ["question-0", "question-1", "question-2", "question-3"],
+      "settings": {
+        "heading": "FAQs",
+        "question_font": "font-body",
+        "question_size": "text-heading-standard",
+        "two_columns_desktop": true,
+        "color_scheme": "",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    }
+  },
+  "order": ["faq"]
+}

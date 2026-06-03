@@ -1,0 +1,9 @@
+{% if style == 'scroll' %}
+  <ul class="font-main flex snap-x flex-nowrap items-end overflow-x-auto text-base">
+    {{ content }}
+  </ul>
+{% elsif style == 'grid' %}
+  <ul class="font-main mt-4 grid grid-cols-3 gap-x-2 gap-y-6 text-base sm:gap-x-4">
+    {{ content }}
+  </ul>
+{% endif %}

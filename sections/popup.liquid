@@ -1,0 +1,265 @@
+{% if section.settings.enable or request.design_mode %}
+  {% liquid
+    assign content_wrapper_classes = 'py-10 px-10 md:py-10 md:px-10 lg:py-12 lg:px-20'
+
+    if section.settings.image != blank
+      assign has_image = true
+      assign content_wrapper_classes = 'py-8 px-10 md:py-10 md:px-10 lg:py-12 lg:px-16'
+
+      if section.settings.image_position == 'right'
+        assign content_wrapper_classes = content_wrapper_classes | append: ' md:order-first'
+      endif
+
+      if section.settings.show_image_on_mobile
+        assign image_class = 'block w-full md:h-full max-md:aspect-2.35 object-cover'
+      else
+        assign image_class = 'sw-hidden md:block w-full h-full object-cover'
+      endif
+    endif
+  %}
+  <div
+    x-data="
+      ThemeSection_PromoPopup({
+        delay: {{ section.settings.delay }},
+        frequency: {{ section.settings.frequency }},
+        enabled: {{ section.settings.enable }},
+        sectionId: '{{ section.id }}',
+      })
+    "
+    x-init="mounted"
+    data-section="promo-popup"
+  >
+    <div x-show="$store.modals.promo.open">
+      <template x-ref="teleported" data-should-teleport="#promo-slot">
+        <template x-if="$store.modals.promo.contents === 'promoPopup'">
+          <div
+            @click.outside="$store.modals.close('promo')"
+            data-modal-label="{{ section.settings.title | strip | escape }}"
+            class="bg-scheme-background text-scheme-text {% if has_image %} md:max-w-[70vw] {% else %} md:max-w-md {% endif %}"
+          >
+            <div class="absolute right-0 top-0 mr-5 mt-5">
+              <button
+                @click.prevent="$store.modals.close('promo')"
+                class="top-0 ml-auto block"
+              >
+                <span class="sr-only">
+                  {{- 'general.accessibility.close_modal' | t -}}
+                </span>
+                <span class="inline-block h-6 w-6 drop-shadow-[0.06rem_0.12rem_0_rgb(var(--color-scheme-background))]">
+                  {%- render 'icon-close' -%}
+                </span>
+              </button>
+            </div>
+            <div
+              {% if has_image %}
+                class="md:grid md:grid-cols-2"
+              {% endif %}
+            >
+              {% if has_image %}
+                {{
+                  section.settings.image
+                  | image_url: width: 2000
+                  | image_tag:
+                    sizes: '33vw',
+                    class: image_class,
+                    loading: 'eager'
+                }}
+              {% endif %}
+              <div class="{{ content_wrapper_classes }}">
+                {% if section.settings.title != blank %}
+                  <h2
+                    class="font-heading break-word text-2xl"
+                    class=""
+                    tabindex="-1"
+                  >
+                    {{ section.settings.title | strip }}
+                  </h2>
+                {% endif %}
+
+                {% if section.settings.text != blank %}
+                  <div class="rte rte--content-only rte--compact mt-5 text-theme-basic">
+                    {{ section.settings.text }}
+                  </div>
+                {% endif %}
+
+                {% if section.settings.call_to_action == 'newsletter' %}
+                  <div class="mt-10">
+                    {% form 'customer' %}
+                      {% if form.errors %}
+                        <div class="needs-attention mb-2">
+                          {{ form.errors | default_errors }}
+                        </div>
+                      {% endif %}
+
+                      {% if form.posted_successfully? %}
+                        <p class="form-message mb-5">
+                          {{ 'general.newsletter_form.confirmation' | t }}
+                        </p>
+                      {% else %}
+                        <input
+                          type="hidden"
+                          name="contact[tags]"
+                          value="newsletter"
+                        >
+                        <label for="Email" class="sr-only">
+                          {{ 'general.newsletter_form.newsletter_email' | t }}
+                        </label>
+                        <input
+                          type="email"
+                          name="contact[email]"
+                          id="Email"
+                          class="w-full"
+                          value="{% if customer %}{{ customer.email }}{% endif %}"
+                          placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}"
+                          autocorrect="off"
+                          autocapitalize="off"
+                        >
+                        <div class="mt-5">
+                          <button
+                            type="submit"
+                            class="theme-button theme-button--solid"
+                          >
+                            {{ 'general.newsletter_form.submit' | t }}
+                          </button>
+                        </div>
+                      {% endif %}
+                    {% endform %}
+                  </div>
+                {% else %}
+                  <div class="mt-10">
+                    {% liquid
+                      assign cta_text = section.settings.cta_text
+                      assign cta_url = section.settings.cta_url
+                    %}
+                    {% if cta_url != blank %}
+                      <a
+                        class="theme-button theme-button--solid break-word"
+                        href="{{ cta_url }}"
+                      >
+                        {{ cta_text | strip }}
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+    </div>
+  </div>
+{% else %}
+  {% if request.design_mode %}
+    <div x-data x-init="$store.modals.close('promo')"></div>
+  {% endif %}
+{% endif %}
+
+{% unless request.design_mode %}
+  <script
+    src="{{ 'sections-promo-popup.bundle.min.js' | asset_url }}"
+    type="module"
+  ></script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Popup",
+  "class": "contents",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable popup",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "label": "Delay",
+      "unit": "s",
+      "default": 4,
+      "info": "Delay won't be applied when inside theme editor."
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "label": "Frequency",
+      "unit": "d",
+      "default": 30,
+      "info": "Number of days before a closed popup reappears."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Image will not display on mobile."
+    },
+    {
+      "id": "image_position",
+      "type": "select",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Receive special offers and first look at new products.</p>"
+    },
+    {
+      "type": "select",
+      "id": "call_to_action",
+      "label": "Call to action",
+      "options": [
+        {
+          "value": "newsletter",
+          "label": "Newsletter"
+        },
+        {
+          "value": "button",
+          "label": "Button"
+        }
+      ],
+      "default": "newsletter",
+      "info": "Customers who subscribe will have their email address added to the “accepts marketing” [customer list](/admin/customers?query=&accepts_marketing=1)."
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    }
+  ]
+}
+{% endschema %}

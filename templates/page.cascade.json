@@ -1,0 +1,78 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "cascade": {
+      "type": "cascade",
+      "blocks": {
+        "166059462751f0a6b8-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading or impact text goes here.",
+            "text_size": "text-heading-feature",
+            "text_align": "text-left",
+            "block_width": "half"
+          }
+        },
+        "166059462751f0a6b8-1": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "block_width": "half"
+          }
+        },
+        "166059462751f0a6b8-2": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "block_width": "half"
+          }
+        },
+        "166059462751f0a6b8-3": {
+          "type": "text",
+          "settings": {
+            "rich_text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
+            "cta_url": "",
+            "cta_text": "Shop now",
+            "text_align": "text-left",
+            "block_width": "half"
+          }
+        }
+      },
+      "block_order": [
+        "166059462751f0a6b8-0",
+        "166059462751f0a6b8-1",
+        "166059462751f0a6b8-2",
+        "166059462751f0a6b8-3"
+      ],
+      "settings": {
+        "title": "",
+        "enable_cascade_on_mobile": true,
+        "desktop_layout": "two_columns",
+        "hide_margin": false,
+        "sequence": 1,
+        "use_global_settings": true,
+        "overlay_heading": false,
+        "color_scheme": "scheme1",
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cascade"
+  ]
+}

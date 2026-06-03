@@ -1,0 +1,12 @@
+<div
+  class="my-3 group-first:mt-0"
+  {{ block.shopify_attributes }}
+>
+  <div class="flex items-center text-theme-basic">
+    {% render 'page-share',
+      share_title: product.title,
+      share_permalink: product.url,
+      share_image: product
+    %}
+  </div>
+</div>

@@ -1,0 +1,97 @@
+{% capture stepper %}
+  <div x-data="QuantityStepper">
+    <label class="{{ label_class }} mr-8" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}:</label>
+    <div class="flex max-w-32 flex-nowrap items-center justify-center rounded-input">
+      <button
+        class="self-stretch rounded-bl-input rounded-tl-input border border-r-0 border-scheme-text px-3 focus:z-10 focus-visible:border-r"
+        aria-label="&minus;"
+        @click.prevent.stop="decreaseQuantity"
+      >
+        <div class="m-auto h-4 w-4">{% render 'icon-minus' %}</div>
+      </button>
+      <input
+        type="number"
+        x-ref="quantityInput"
+        class="block w-full appearance-none rounded-none border-x-0 border-y border-scheme-text text-center focus:z-10 focus:border-x"
+        form="{{ product_form_id }}"
+        {% if settings.quantity_style == 'dropdown' %}
+          :id="enableNumberInput ? 'Quantity-{{ section.id }}' : false"
+          :name="enableNumberInput ? 'quantity' : false"
+          :disabled="!enableNumberInput"
+        {% else %}
+          id="Quantity-{{ section.id }}"
+          name="quantity"
+        {% endif %}
+        x-model="quantity"
+        size="4"
+      >
+      <button
+        class="self-stretch rounded-br-input rounded-tr-input border border-l-0 border-scheme-text px-3 focus:z-10 focus-visible:border-l"
+        aria-label="&plus;"
+        @click.prevent.stop="increaseQuantity"
+      >
+        <div class="m-auto h-4 w-4">{% render 'icon-plus' %}</div>
+      </button>
+    </div>
+  </div>
+{% endcapture %}
+
+{% if settings.quantity_style == 'dropdown' %}
+  <div
+    x-data="QuantityDropdown"
+    class="js-enabled my-8 group-first:mt-0"
+    {{ block.shopify_attributes }}
+  >
+    <div x-show="!enableNumberInput" class="max-w-32">
+      <div>
+        <label class="{{ label_class }}" for="Quantity-{{ section.id }}">
+          {{- 'products.product.quantity' | t }}:</label
+        >
+        <select
+          form="{{ product_form_id }}"
+          :id="!enableNumberInput ? 'Quantity-{{ section.id }}' : false"
+          :name="!enableNumberInput ? 'quantity' : false"
+          :disabled="enableNumberInput"
+          x-model="dropdownQuantity"
+          class="font-main w-full text-left text-base"
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10+">10+</option>
+        </select>
+      </div>
+    </div>
+
+    <div x-show="enableNumberInput" style="display: none;">
+      {{ stepper }}
+    </div>
+  </div>
+{% else %}
+  <div
+    class="js-enabled my-8 group-first:mt-0"
+    {{ block.shopify_attributes }}
+  >
+    {{ stepper }}
+  </div>
+{% endif %}
+
+<noscript>
+  <div class="my-8 group-first:mt-0">
+    <input
+      type="number"
+      class="block w-full appearance-none text-center"
+      form="{{ product_form_id }}"
+      id="Quantity-{{ section.id }}"
+      name="quantity"
+      size="4"
+      value="1"
+    >
+  </div>
+</noscript>

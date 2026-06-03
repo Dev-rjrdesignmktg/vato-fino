@@ -1,0 +1,30 @@
+<div
+  class="my-8 w-full group-first:mt-0"
+  {{ block.shopify_attributes }}
+>
+  <ul class="space-y-4">
+    {%- for i in (1..5) -%}
+      {%- capture heading %}heading_{{ i }}{%- endcapture -%}
+      {%- capture content %}content_{{ i }}{%- endcapture -%}
+      {%- liquid
+        assign heading = block.settings[heading]
+        assign content = block.settings[content]
+        if block.settings.heading_position == 'left'
+          assign grid_class = 'grid-cols-3 gap-5'
+        else
+          assign grid_class = 'grid-cols-1 gap-1'
+        endif
+      -%}
+      {%- if content != '' -%}
+        <li class="grid {{  grid_class }}">
+          <div class="break-word col-span-1 min-w-0 {{  block.settings.heading_text_color }}">
+            {{- heading | escape | strip -}}
+          </div>
+          <div class="break-word col-span-2 min-w-0">
+            {{- content -}}
+          </div>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>

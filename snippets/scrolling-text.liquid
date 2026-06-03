@@ -1,0 +1,67 @@
+{%- liquid
+  comment
+    The minimum speed possible is 20s, the maximum speed is 1s
+  endcomment
+
+  assign min_speed_setting = 20
+  assign max_speed_setting = 400
+
+  assign speed_number = min_speed_setting | plus: max_speed_setting | minus: speed_setting
+
+  assign speed_number = speed_number | divided_by: 2 | divided_by: 10
+
+  if repeat_text
+    # \2005 is a 4-per-em space
+    assign content_class = "grow-0 shrink-0 before:content-['\2005'] after:content-['\2005']"
+  else
+    assign content_class = 'shrink-0 pl-[100vw]'
+  endif
+-%}
+
+{% capture content %}
+  <scrolling-items-container class="block">
+    <scrolling-items
+      style="
+        --base-scrolling-items-speed: {{ speed_number }}s;
+        --local-scrolling-items-speed-multiplier: 1;
+        --scrolling-items-speed: calc(
+            var(--base-scrolling-items-speed) * var(--global-scrolling-items-speed-multiplier) *
+              var(--local-scrolling-items-speed-multiplier)
+          );
+        --scrolling-items-direction: {{ direction }};"
+      class="block w-max whitespace-nowrap motion-safe:animate-[scrolling-items_var(--scrolling-items-speed)_linear_infinite_var(--scrolling-items-direction)] motion-safe:focus-within:[animation-play-state:paused] motion-safe:hover:[animation-play-state:paused] font-{{ font }} {{ text_size_class }} motion-reduce:px-section-horizontal-spacing motion-reduce:block motion-reduce:whitespace-normal motion-reduce:text-center {% if repeat_text %} motion-reduce:-translate-x-1/4{% endif %}"
+    >
+      <scrolling-items-surface class="flex flex-nowrap items-center">
+        <scrolling-items-content class="{{ content_class }}">{{ text }}</scrolling-items-content>
+          <noscript>
+            {% liquid
+              if repeat_text
+                assign fallback_repeat_limit = 11
+              else
+                assign fallback_repeat_limit = 1
+              endif
+            %}
+            {% for i in (1..fallback_repeat_limit) %}
+              <span class="motion-reduce:hidden {{ content_class }}">{{ text }}</span>
+            {% endfor %}
+          </noscript>
+      </scrolling-items-surface>
+    </scrolling-items>
+  </scrolling-items-container>
+{% endcapture %}
+
+<div
+  class="{% if text_size_class contains 'xl' %}py-4{% else %}py-2{% endif %} overflow-hidden"
+>
+  {%- if link != blank -%}
+    <a href="{{ link }}" class="text-scheme-text hover:text-scheme-accent">
+      {{ content }}
+    </a>
+  {% else %}
+    {{ content }}
+  {% endif %}
+</div>
+
+{% unless request.design_mode %}
+  <script src="{{ 'scrolling-items.js' | asset_url }}" type="module"></script>
+{% endunless %}

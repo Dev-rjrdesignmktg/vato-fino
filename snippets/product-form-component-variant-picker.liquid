@@ -1,0 +1,237 @@
+{% unless product.has_only_default_variant %}
+  <div
+    data-product-form-variant-container
+    class="{{ class }} space-y-4"
+    {% if block %}
+      {{ block.shopify_attributes }}
+    {% endif %}
+  >
+    {% for option in product.options_with_values %}
+      {% liquid
+        assign option_style = block.settings.option_style
+        assign is_color = false
+        if settings.enable_color_swatches
+          assign swatch_trigger = 'products.product.color_swatch_trigger' | t | downcase
+          assign option_downcase = option.name | downcase
+          if option_downcase contains swatch_trigger
+            assign is_color = true
+          elsif swatch_trigger == 'color' and option_downcase contains 'colour'
+            assign is_color = true
+          endif
+        endif
+        assign swatches_count = option.values | map: 'swatch' | compact | size
+        if is_color or swatches_count > 0
+          assign option_style = 'buttons'
+        endif
+      %}
+      {% assign option_array_index = forloop.index0 %}
+      <fieldset
+        aria-labelledby="options[{{ forloop.index0 }}"
+        class="product-variant-picker-block m-0 p-0 {% if is_color or swatches_count > 0 %}-mx-color-fieldset-offset {% endif %} js-enabled"
+      >
+        {%- if option_style != 'drop_down'
+          or is_color == true
+          or swatches_count > 0
+        -%}
+          <span
+            id="options[{{ forloop.index0 }}]"
+            class="{{ label_class }} m-0 p-0"
+          >
+            {{ option.name }}: <span x-text="options[{{ forloop.index0 }}]"></span>
+          </span>
+        {%- endif -%}
+
+        {%- case option_style -%}
+          {%- when 'drop_down' -%}
+            <div>
+              <label
+                class="{{ label_class }}"
+                for="Option{{ option.position }}"
+              >
+                {{ option.name }}:
+              </label>
+              <select
+                id="Option{{ option.position }}-{{ section.id }}"
+                name="options[{{ option.name | escape }}]"
+                @change="optionChange()"
+                class="single-option-selector font-main text-base focus:border-current"
+                data-single-option-selector
+                x-model="currentOption{{ forloop.index }}"
+              >
+                {% for value in option.values %}
+                  <option
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    {% if option.selected_value == value %}
+                      selected="selected"
+                    {% endif %}
+                  >
+                    {{ value }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {%- when 'buttons' -%}
+            <div class="-mx-1 flex flex-wrap gap-2">
+              {% for value in option.values %}
+                {%- liquid
+                  assign unavailable = true
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign unavailable = false
+                    endunless
+                  endif
+                -%}
+                <div class="variant-input custom-radio-button relative mx-1 inline-block">
+                  <input
+                    form="{{ product_form_id }}"
+                    class="{% if is_color or swatches_count > 0 %}color-swatch{% endif %} peer absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %}
+                      checked
+                    {% endif %}
+                    data-single-option-selector
+                  >
+                  <label
+                    class="
+                      break-word relative block text-center
+                      {% if is_color or swatches_count > 0 %}
+                        p-1 border-scheme-text/10 peer-checked:border-scheme-text rounded-swatches
+                      {% else %}
+                        p-2 min-w-[2.5rem] border-scheme-text peer-checked:bg-scheme-text peer-checked:text-scheme-background rounded-button
+                      {% endif %}
+                      border-1 cursor-pointer border
+                      {% unless unavailable %}
+                        line-through
+                      {% endunless %}
+                      cursor-pointer
+                    "
+                    for="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    title="{{ option.value }}"
+                  >
+                    {%- if is_color or swatches_count > 0 %}
+                      {%- unless unavailable -%}
+                        <span
+                          class="absolute bottom-0 left-0 top-1/2 z-10 h-1 w-full -translate-y-1/2 -rotate-45 bg-scheme-text"
+                        ></span>
+                      {%- endunless -%}
+                      {%- if swatches_count > 0 -%}
+                        {%- liquid
+                          assign swatch = value.swatch
+                          assign swatch_image = swatch.image
+                          assign swatch_color = swatch.color
+                        -%}
+                        <span
+                          class="rounded-swatches block size-8 bg-cover"
+                          style="background-position: {{ swatch_image.presentation.focal_point | default: 'center' }};{% if swatch_image != blank %} background-image: url({{ swatch_image | image_url: width: 160 }});{% else %}{% endif %}{% if swatch_color != blank %} background-color: rgb({{ swatch_color.rgb }});{% endif %}"
+                        ></span>
+                      {%- elsif is_color -%}
+                        {%- liquid
+                          assign color_image = value | handle | append: '.' | append: 'png' | file_img_url: '160x' | prepend: 'https:'
+                          assign color_swatch_fallback = value | split: ' ' | last | handle
+                        -%}
+                        <span
+                          class="rounded-swatches block size-8 bg-cover"
+                          style="background-image: url({{ color_image }}); background-color: {{ color_swatch_fallback }};"
+                        ></span>
+                      {%- endif -%}
+                    {%- endif -%}
+                    <span
+                      {% if is_color or swatches_count > 0 %}
+                        class="sr-only"
+                      {% endif %}
+                    >
+                      {{- value -}}
+                    </span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          {%- when 'text_underline' -%}
+            <div class="flex flex-wrap items-center justify-start gap-x-4 gap-y-2">
+              {% for value in option.values %}
+                {%- liquid
+                  assign unavailable = true
+
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign unavailable = false
+                    endunless
+                  endif
+                -%}
+                <div class="custom-radio-text variant-input relative">
+                  <input
+                    class="custom-input absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %}
+                      checked
+                    {% endif %}
+                    data-single-option-selector
+                  >
+                  <label
+                    class="{% unless unavailable %}text-scheme-secondary line-through{% else %}cursor-pointer{% endunless %}"
+                    for="Option{{ option.position }}-{{ value | escape }}"
+                  >
+                    <span :class="{ 'underline underline-offset-basic': optionHandles[{{ option_array_index }}] === '{{ value | handleize }}' }">
+                      {{- value -}}
+                    </span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          {%- when 'radio' -%}
+            <div>
+              {% for value in option.values %}
+                {%- liquid
+                  assign unavailable = true
+
+                  if product.options.size == 1
+                    unless product.variants[forloop.index0].available
+                      assign unavailable = false
+                    endunless
+                  endif
+                -%}
+                <div class="variant-input custom-radio relative mb-2 flex justify-start">
+                  <input
+                    class="sr-only absolute"
+                    @change="optionChange()"
+                    type="radio"
+                    id="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                    name="options[{{ option.name }}]"
+                    value="{{ value | escape }}"
+                    data-handle="{{ value | handleize }}"
+                    x-model="currentOption{{ option_array_index | plus: 1 }}"
+                    {% if option.selected_value == value %}
+                      checked
+                    {% endif %}
+                    data-single-option-selector
+                  >
+                  <label
+                    class="{% unless unavailable %}text-scheme-secondary line-through{% else %}cursor-pointer{% endunless %} flex items-center"
+                    for="{{ product_form_id }}-Option{{ option.position }}-{{ value | escape }}"
+                  >
+                    <span class="custom-radio__input"></span>
+                    <span>
+                      <span class="mr-1">{{ value }}</span>
+                    </span>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+        {%- endcase -%}
+      </fieldset>
+    {% endfor %}
+  </div>
+{% endunless %}

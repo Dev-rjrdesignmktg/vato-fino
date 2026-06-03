@@ -1,0 +1,1085 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme
+  assign desktop_layout = section.settings.desktop_layout
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+  assign video_blocks = section.blocks | where: 'type', 'video'
+  assign multi_item_block_types = 'product_list,collection_list' | split: ','
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+
+  if desktop_layout == 'two_columns'
+    assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
+  else
+    assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign half_width_mobile_sizes = '75vw'
+  else
+    assign half_width_mobile_sizes = '100vw'
+  endif
+
+  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign full_width_sizes = '80vw'
+  else
+    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign eager_loading_limit = 4
+  else
+    assign eager_loading_limit = 2
+  endif
+
+  capture cascade_block_items
+    for block in section.blocks
+      assign preload = false
+      assign loading = 'lazy'
+
+      if section.index == 1 and forloop.first
+        assign preload = true
+      endif
+
+      if section.index <= 2 and forloop.index <= eager_loading_limit
+        assign loading = 'eager'
+      endif
+
+      unless multi_item_block_types contains block.type
+        if block.settings.block_width == 'full'
+          echo full_width_item_header
+          assign sizes = full_width_sizes
+        else
+          assign sizes = half_width_sizes
+        endif
+
+        render 'cascade-block-content', block: block, enable_cascade_on_mobile: enable_cascade_on_mobile, index: forloop.index0, full_width_item_header: full_width_item_header, sizes: sizes, preload: preload, loading: loading
+        echo item_separator
+      else
+        render 'cascade-multi-item-block-content', block: block, enable_cascade_on_mobile: enable_cascade_on_mobile, index: forloop.index0, full_width_item_header: full_width_item_header, sizes: sizes, first_item_preload: preload, loading: loading
+      endunless
+    endfor
+  endcapture
+-%}
+
+<section
+  class="relative {% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text  {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+  x-data
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    {% if section.settings.title != blank %}
+      {%- render 'cascade-heading',
+        title: section.settings.title,
+        overlay_heading: section.settings.overlay_heading,
+        mobile_text_scale: section.settings.heading_mobile_text_scale,
+        desktop_text_scale: section.settings.heading_desktop_text_scale,
+        cta_link: section.settings.overlay_cta_link,
+        cta_label: section.settings.overlay_cta_label,
+        cta_style: section.settings.overlay_cta_style,
+        blend_mode: section.settings.blend_mode,
+        blend_mode_color_scheme: section.settings.blend_mode_color_scheme
+      -%}
+    {% endif %}
+  </div>
+
+  <div class="relative z-0 {% unless section.settings.hide_margin %}px-5 lg:px-10{% endunless %}">
+    {%- render 'cascade',
+      section_id: section.id,
+      content_items: cascade_block_items,
+      enable_cascade_on_mobile: enable_cascade_on_mobile,
+      desktop_layout: desktop_layout,
+      hide_margin: section.settings.hide_margin,
+      level_of_media_size_variation: section.settings.level_of_media_size_variation,
+      sequence: section.settings.sequence,
+      alignment_variation: section.settings.alignment_variation,
+      spacing: section.settings.spacing,
+      first_block_position: section.settings.start_position,
+      use_global_settings: section.settings.use_global_settings
+    -%}
+  </div>
+
+  {% liquid
+    for block in video_blocks
+      assign has_video_blocks = true
+
+      if block.settings.mode == 'preview' and block.settings.playback == 'modal'
+        assign video_modal_id = 'video-modal-' | append: section.id | append: '-' | append: block.id | replace: '_', '-' | handleize
+        assign video = block.settings.video
+
+        render 'video-modal', video: video, video_modal_id: video_modal_id
+      endif
+    endfor
+  %}
+
+  {% if has_video_blocks %}
+    {% unless request.design_mode %}
+      <script
+        src="{{ 'video.js' | asset_url }}"
+        type="module"
+      ></script>
+      <script
+        src="{{ 'html-video.js' | asset_url }}"
+        type="module"
+      ></script>
+    {% endunless %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Cascading content",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_margin",
+      "label": "Hide left and right margin",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Heading overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_heading",
+      "label": "Overlay heading",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Heading mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "heading_desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Heading desktop font size scale",
+      "default": 7
+    },
+    {
+      "type": "url",
+      "id": "overlay_cta_link",
+      "label": "Call to action link"
+    },
+    {
+      "type": "text",
+      "id": "overlay_cta_label",
+      "label": "Call to action label"
+    },
+    {
+      "type": "select",
+      "id": "overlay_cta_style",
+      "label": "Call to action style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "border-only",
+          "label": "Border"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "info": "Some blend modes work better when the text color is dark, others when it is light",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        },
+        {
+          "value": "exclusion",
+          "label": "Exclusion"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "soft-light",
+          "label": "Soft light"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "blend_mode_color_scheme",
+      "label": "Blend mode color scheme",
+      "info": "Only used if “Blend mode” is not “Normal”"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
+        {
+          "id": "caption",
+          "type": "richtext",
+          "label": "Caption"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "image_with_text_overlay",
+      "name": "Image with text overlay",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Image with text overlay"
+        },
+        {
+          "type": "select",
+          "id": "overlay_text_size",
+          "label": "Overlay text size",
+          "options": [
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            },
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            }
+          ],
+          "default": "text-heading-standard"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "color_scheme",
+          "id": "text_scheme",
+          "default": "scheme1",
+          "label": "Text color"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "name": "Video",
+      "type": "video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "select",
+          "id": "mode",
+          "label": "Mode",
+          "options": [
+            {
+              "value": "preview",
+              "label": "Preview"
+            },
+            {
+              "value": "autoplay",
+              "label": "Autoplay"
+            }
+          ],
+          "default": "preview",
+          "info": "Autoplay will not play sound or show controls."
+        },
+        {
+          "type": "select",
+          "id": "playback",
+          "label": "Playback",
+          "options": [
+            {
+              "value": "inline",
+              "label": "Inline"
+            },
+            {
+              "value": "modal",
+              "label": "Modal"
+            }
+          ],
+          "default": "inline",
+          "info": "Does not apply if mode is set to autoplay."
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Choose product:"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_image_only",
+          "label": "Show image only",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Choose collection:"
+        },
+        {
+          "type": "color_scheme",
+          "id": "text_scheme",
+          "default": "scheme1",
+          "label": "Text color"
+        },
+        {
+          "type": "select",
+          "id": "text_display",
+          "label": "Text display",
+          "default": "overlay",
+          "options": [
+            {
+              "value": "overlay",
+              "label": "Overlay"
+            },
+            {
+              "value": "under_image",
+              "label": "Under image"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "overlay_text_size",
+          "label": "Overlay text size",
+          "options": [
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            },
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            }
+          ],
+          "default": "text-heading-standard"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "article",
+      "name": "Blog post",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Blog post"
+        },
+        {
+          "type": "select",
+          "id": "article_style",
+          "label": "Format",
+          "default": "minimal",
+          "options": [
+            {
+              "value": "minimal",
+              "label": "Minimal"
+            },
+            {
+              "value": "detailed",
+              "label": "Detailed"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_excerpt",
+          "label": "Show excerpt",
+          "default": true,
+          "info": "Will show excerpt if blog post has one and format is set to “Detailed”."
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Text",
+          "default": "Heading or impact text goes here."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            {
+              "value": "text-heading-feature",
+              "label": "Feature"
+            },
+            {
+              "value": "text-heading-standard",
+              "label": "Standard"
+            }
+          ],
+          "default": "text-heading-feature"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "heading_with_text",
+      "name": "Heading with text",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading",
+          "default": "Heading or impact text goes here."
+        },
+        {
+          "id": "rich_text",
+          "type": "richtext",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Text",
+          "default": "Shop now"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "id": "rich_text",
+          "type": "richtext",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Text",
+          "default": "Shop now"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        },
+        {
+          "id": "image_style",
+          "type": "select",
+          "label": "Image style",
+          "options": [
+            {
+              "value": "photo",
+              "label": "Photo"
+            },
+            {
+              "value": "logo",
+              "label": "Logo"
+            }
+          ],
+          "default": "photo"
+        },
+        {
+          "type": "select",
+          "id": "rating",
+          "label": "Rating",
+          "options": [
+            {
+              "value": "none",
+              "label": "No rating"
+            },
+            {
+              "value": "5_stars",
+              "label": "5 stars"
+            },
+            {
+              "value": "4_stars",
+              "label": "4 stars"
+            },
+            {
+              "value": "3_stars",
+              "label": "3 stars"
+            },
+            {
+              "value": "2_stars",
+              "label": "2 stars"
+            },
+            {
+              "value": "1_stars",
+              "label": "1 star"
+            }
+          ],
+          "default": "5_stars"
+        },
+        {
+          "id": "quote",
+          "type": "richtext",
+          "label": "Testimonial",
+          "default": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>"
+        },
+        {
+          "id": "source",
+          "type": "text",
+          "label": "Source",
+          "default": "Source"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    },
+    {
+      "type": "custom_html",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "id": "html",
+          "type": "html",
+          "label": "Custom HTML",
+          "default": "<p>Add your custom HTML here.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Size"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "options": [
+            {
+              "value": "half",
+              "label": "Half"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "label": "Width"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cascading content",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "Cascading gallery",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

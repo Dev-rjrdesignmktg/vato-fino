@@ -1,0 +1,403 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "modal_color_scheme": "scheme4",
+    "enable_section_color_transitions": false,
+    "base_font_size": 15,
+    "base_line_height": 1.4,
+    "type_heading_font": "bricolage_grotesque_n4",
+    "heading_text_transform": "none",
+    "heading_letterspacing": -50,
+    "heading_line_height": 0.9,
+    "standard_heading_mobile_text_scale": 3,
+    "standard_heading_desktop_text_scale": 5,
+    "feature_heading_mobile_text_scale": 4,
+    "feature_heading_desktop_text_scale": 9,
+    "type_main_font": "space_mono_n4",
+    "header_font": "font-main",
+    "header_text_transform": "uppercase",
+    "accent_text_transform": "uppercase",
+    "product_tiles_text_transform": "uppercase",
+    "body_text_uppercase": true,
+    "button_border_radius": "0.375rem",
+    "button_style": "2",
+    "button_color": "text",
+    "cta_style": "theme-button",
+    "icon_thickness": 1.2,
+    "round_images": true,
+    "product_tiles_aspect_ratio": "natural",
+    "products_show_badges": true,
+    "products_show_second_image_on_hover": true,
+    "products_show_vendor": true,
+    "products_show_star_rating": true,
+    "quantity_style": "stepper",
+    "currency_code_enable": true,
+    "cart_icon": "cart",
+    "cart_type": "drawer",
+    "social_instagram_link": "https://instagram.com/shopify",
+    "social_facebook_link": "https://www.facebook.com/shopify",
+    "social_tiktok_link": "https://www.tiktok.com/@shopify",
+    "variance": "high",
+    "cascade_item_spacing": "large",
+    "enable_sidebar_nav_animation": true,
+    "content_for_index": [],
+    "color_schemes": {
+      "scheme1": {
+        "settings": {
+          "background": "#171717",
+          "text": "#e9decd",
+          "accent": "#ff6c3d",
+          "accent_contrast": "#171717",
+          "secondary": "#e9decd"
+        }
+      },
+      "scheme2": {
+        "settings": {
+          "background": "#e9decd",
+          "text": "#171717",
+          "accent": "#ff6c3d",
+          "accent_contrast": "#171717",
+          "secondary": "#171717"
+        }
+      },
+      "scheme3": {
+        "settings": {
+          "background": "#171717",
+          "text": "#ff6c3d",
+          "accent": "#e9decd",
+          "accent_contrast": "#000000",
+          "secondary": "#ff6c3d"
+        }
+      },
+      "scheme4": {
+        "settings": {
+          "background": "#000000",
+          "text": "#ffffff",
+          "accent": "#ffffff",
+          "accent_contrast": "#000000",
+          "secondary": "#ffffff"
+        }
+      },
+      "scheme5": {
+        "settings": {
+          "background": "#ffffff",
+          "text": "#000000",
+          "accent": "#000000",
+          "accent_contrast": "#ffffff",
+          "secondary": "#000000"
+        }
+      }
+    }
+  },
+  "installed_preset_name": "Phase",
+  "presets": {
+    "Cascade": {
+      "enable_section_color_transitions": false,
+      "base_font_size": 16,
+      "base_line_height": 1.4,
+      "type_heading_font": "inter_n4",
+      "heading_letterspacing": -50,
+      "heading_line_height": 1,
+      "standard_heading_mobile_text_scale": 2,
+      "standard_heading_desktop_text_scale": 5,
+      "feature_heading_desktop_text_scale": 7,
+      "type_main_font": "inter_n4",
+      "button_border_radius": "9999px",
+      "button_style": "default",
+      "button_color": "text",
+      "cta_style": "theme-button",
+      "icon_thickness": 1.2,
+      "products_show_badges": false,
+      "products_show_second_image_on_hover": true,
+      "quantity_style": "dropdown",
+      "variance": "high",
+      "cascade_item_spacing": "large",
+      "enable_sidebar_nav_animation": true,
+      "social_instagram_link": "https://instagram.com/shopify",
+      "social_facebook_link": "https://www.facebook.com/shopify",
+      "social_tiktok_link": "https://www.tiktok.com/@shopify",
+      "color_schemes": {
+        "scheme1": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "accent": "#0041d9",
+            "accent_contrast": "#ffffff",
+            "secondary": "#080808"
+          }
+        },
+        "scheme2": {
+          "settings": {
+            "background": "#f8f7f5",
+            "text": "#000000",
+            "accent": "#0041d9",
+            "accent_contrast": "#ffffff",
+            "secondary": "#fffaf2"
+          }
+        },
+        "scheme3": {
+          "settings": {
+            "background": "#0041d9",
+            "text": "#f8f7f5",
+            "accent": "#f8f7f5",
+            "accent_contrast": "#ffffff",
+            "secondary": "#fcfcfc"
+          }
+        },
+        "scheme4": {
+          "settings": {
+            "background": "#000000",
+            "text": "#ffffff",
+            "accent": "#ffffff",
+            "accent_contrast": "#000000",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme5": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "accent": "#000000",
+            "accent_contrast": "#ffffff",
+            "secondary": "#000000"
+          }
+        }
+      }
+    },
+    "Swell": {
+      "enable_section_color_transitions": true,
+      "base_font_size": 16,
+      "type_heading_font": "besley_n4",
+      "heading_letterspacing": -25,
+      "standard_heading_mobile_text_scale": 3,
+      "standard_heading_desktop_text_scale": 5,
+      "feature_heading_desktop_text_scale": 7,
+      "type_main_font": "instrument_sans_n4",
+      "cascade_fade_in_items": false,
+      "button_border_radius": "0.5rem",
+      "button_style": "default",
+      "cta_style": "theme-button",
+      "icon_thickness": 1.1,
+      "round_images": true,
+      "products_show_second_image_on_hover": true,
+      "standard_heading_size": "2xl:3xl",
+      "feature_heading_size": "3xl:6xl",
+      "social_instagram_link": "https://instagram.com/shopify",
+      "social_facebook_link": "https://www.facebook.com/shopify",
+      "social_tiktok_link": "https://www.tiktok.com/@shopify",
+      "color_schemes": {
+        "scheme1": {
+          "settings": {
+            "background": "#eef5e9",
+            "text": "#363833",
+            "accent": "#f05d5e",
+            "accent_contrast": "#ffffff",
+            "secondary": "#909489"
+          }
+        },
+        "scheme2": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#1a2513",
+            "accent": "#f05d5e",
+            "accent_contrast": "#ffffff",
+            "secondary": "#909489"
+          }
+        },
+        "scheme3": {
+          "settings": {
+            "background": "#363833",
+            "text": "#eef5e9",
+            "accent": "#f05d5e",
+            "accent_contrast": "#ffffff",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme4": {
+          "settings": {
+            "background": "#000000",
+            "text": "#ffffff",
+            "accent": "#ffffff",
+            "accent_contrast": "#000000",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme5": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "accent": "#000000",
+            "accent_contrast": "#ffffff",
+            "secondary": "#000000"
+          }
+        }
+      }
+    },
+    "Phase": {
+      "enable_section_color_transitions": false,
+      "base_font_size": 15,
+      "base_line_height": 1.4,
+      "type_heading_font": "bricolage_grotesque_n4",
+      "heading_text_transform": "none",
+      "heading_letterspacing": -50,
+      "heading_line_height": 0.9,
+      "standard_heading_mobile_text_scale": 3,
+      "standard_heading_desktop_text_scale": 5,
+      "feature_heading_mobile_text_scale": 4,
+      "feature_heading_desktop_text_scale": 9,
+      "type_main_font": "space_mono_n4",
+      "header_font": "font-main",
+      "header_text_transform": "uppercase",
+      "accent_text_transform": "uppercase",
+      "product_tiles_text_transform": "uppercase",
+      "body_text_uppercase": true,
+      "button_border_radius": "0.375rem",
+      "button_style": "2",
+      "button_color": "text",
+      "cta_style": "theme-button",
+      "icon_thickness": 1.2,
+      "round_images": true,
+      "products_show_badges": false,
+      "products_show_second_image_on_hover": true,
+      "quantity_style": "stepper",
+      "variance": "high",
+      "cascade_item_spacing": "large",
+      "enable_sidebar_nav_animation": true,
+      "social_instagram_link": "https://instagram.com/shopify",
+      "social_facebook_link": "https://www.facebook.com/shopify",
+      "social_tiktok_link": "https://www.tiktok.com/@shopify",
+      "color_schemes": {
+        "scheme1": {
+          "settings": {
+            "background": "#171717",
+            "text": "#e9decd",
+            "accent": "#ff6c3d",
+            "accent_contrast": "#171717",
+            "secondary": "#e9decd"
+          }
+        },
+        "scheme2": {
+          "settings": {
+            "background": "#e9decd",
+            "text": "#171717",
+            "accent": "#ff6c3d",
+            "accent_contrast": "#171717",
+            "secondary": "#171717"
+          }
+        },
+        "scheme3": {
+          "settings": {
+            "background": "#171717",
+            "text": "#ff6c3d",
+            "accent": "#e9decd",
+            "accent_contrast": "#000000",
+            "secondary": "#ff6c3d"
+          }
+        },
+        "scheme4": {
+          "settings": {
+            "background": "#000000",
+            "text": "#ffffff",
+            "accent": "#ffffff",
+            "accent_contrast": "#000000",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme5": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "accent": "#000000",
+            "accent_contrast": "#ffffff",
+            "secondary": "#000000"
+          }
+        }
+      }
+    },
+    "Sequence": {
+      "enable_section_color_transitions": true,
+      "base_font_size": 16,
+      "base_line_height": 1.2,
+      "type_heading_font": "biz_udpmincho_n4",
+      "heading_letterspacing": 0,
+      "heading_line_height": 0.9,
+      "standard_heading_desktop_text_scale": 4,
+      "feature_heading_desktop_text_scale": 8,
+      "secondary_heading_mobile_text_scale": 1,
+      "secondary_heading_desktop_text_scale": 1,
+      "type_main_font": "instrument_sans_n4",
+      "header_font": "font-main",
+      "header_text_transform": "normal-case",
+      "accent_text_transform": "normal-case",
+      "product_tiles_text_transform": "normal-case",
+      "cascade_parallax_intensity": 72,
+      "button_border_radius": "9999px",
+      "button_color": "accent",
+      "cta_style": "theme-button",
+      "icon_thickness": 1,
+      "round_images": true,
+      "products_show_second_image_on_hover": true,
+      "standard_heading_size": "2xl:2xl",
+      "feature_heading_size": "3xl:6xl",
+      "enable_sidebar_nav_animation": true,
+      "social_instagram_link": "https://instagram.com/shopify",
+      "social_facebook_link": "https://www.facebook.com/shopify",
+      "social_tiktok_link": "https://www.tiktok.com/@shopify",
+      "color_schemes": {
+        "scheme1": {
+          "settings": {
+            "background": "#f2f2f2",
+            "text": "#1b1b1b",
+            "accent": "#aa6da3",
+            "accent_contrast": "#ffffff",
+            "secondary": "#8f8f8f"
+          }
+        },
+        "scheme2": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#1b1b1b",
+            "accent": "#aa6da3",
+            "accent_contrast": "#ffffff",
+            "secondary": "#8f8f8f"
+          }
+        },
+        "scheme3": {
+          "settings": {
+            "background": "#1b1b1b",
+            "text": "#f2f2f2",
+            "accent": "#aa6da3",
+            "accent_contrast": "#ffffff",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme4": {
+          "settings": {
+            "background": "#000000",
+            "text": "#ffffff",
+            "accent": "#ffffff",
+            "accent_contrast": "#000000",
+            "secondary": "#ffffff"
+          }
+        },
+        "scheme5": {
+          "settings": {
+            "background": "#ffffff",
+            "text": "#000000",
+            "accent": "#000000",
+            "accent_contrast": "#ffffff",
+            "secondary": "#000000"
+          }
+        }
+      }
+    }
+  }
+}

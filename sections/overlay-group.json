@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "aside",
+  "name": "Overlay",
+  "sections": {
+    "popup": {
+      "type": "popup",
+      "settings": {
+        "enable": false,
+        "delay": 4,
+        "frequency": 30,
+        "image_position": "left",
+        "title": "Registrate",
+        "text": "<p>Acceso a conciertos privados, drops limitados, música no oficial y adelantos inéditos.</p>",
+        "call_to_action": "button",
+        "cta_url": "shopify://policies/contact-information",
+        "cta_text": "Registrate"
+      }
+    },
+    "age-check": {
+      "type": "age-check",
+      "settings": {
+        "enable": false,
+        "logo_max_width": 100,
+        "title": "Age verification",
+        "text": "<p>Are you over 21 years of age?</p>",
+        "mode": "buttons",
+        "yes_button_text": "Yes",
+        "no_button_text": "No",
+        "date_format": "mm-dd-yyyy",
+        "minimum_age": 18,
+        "redirect_link": "",
+        "color_scheme": "scheme1"
+      }
+    },
+    "cookies-banner": {
+      "type": "cookies-banner",
+      "settings": {
+        "enabled": true
+      }
+    }
+  },
+  "order": [
+    "popup",
+    "age-check",
+    "cookies-banner"
+  ]
+}

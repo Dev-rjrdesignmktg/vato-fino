@@ -1,0 +1,42 @@
+/*
+custom.css
+
+Use this file to add custom CSS to your theme.
+Make sure to uncomment out the line in theme.liquid so that this css file is loaded.
+
+For more information check out this help guide:
+https://help.switchthemes.co/cascade/advanced/custom-css.html
+*/
+
+
+:root {
+    --font-heading: "Ancient Medium", sans-serif;
+    --font-body: "Source Sans Pro", sans-serif;
+    --size-base: 1rem;
+    --size-lg: 1.25rem;
+    --size-xl: 1.5rem;
+    --size-2xl: 2rem;
+    --size-3xl: 2.5rem;
+
+}
+
+body {
+    font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+}
+
+h1{
+    font-size: var(--size-3xl);
+}
+
+h2{
+    font-size: var(--size-2xl);
+}

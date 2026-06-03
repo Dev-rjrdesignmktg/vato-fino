@@ -1,0 +1,29 @@
+{%- if overlay_heading -%}
+  <div
+    class="pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-10 w-full"
+    {% if blend_mode != 'normal' %}
+      style="mix-blend-mode: {{ blend_mode }};"
+      data-color-scheme="{{ blend_mode_color_scheme }}"
+    {% endif %}
+  >
+    <div class="sticky top-0 flex h-full max-h-screen w-full flex-col items-center justify-center gap-5 px-5 motion-reduce:relative lg:p-10 lg:px-10">
+      <h2
+        class="font-heading text-scheme-text {% render 'type-scale-classes', mobile_text_scale: mobile_text_scale, desktop_text_scale: desktop_text_scale %} break-word text-center lg:max-w-3/4"
+      >
+        {{ title | strip }}
+      </h2>
+      {% if cta_link != blank and cta_label != blank %}
+        <a
+          class="theme-button {% if cta_style == 'solid' or blend_mode != 'normal' %}theme-button--solid theme-button--solid-overlay {% endif %}{% if blend_mode != 'normal' %}theme-button--no-hover {% endif %}pointer-events-auto"
+          href="{{ cta_link }}"
+        >
+          {{ cta_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+{%- else -%}
+  <h2 class="font-heading mb-10 text-heading-standard {{ title_text_align }} break-word">
+    {{ title | strip }}
+  </h2>
+{%- endif -%}

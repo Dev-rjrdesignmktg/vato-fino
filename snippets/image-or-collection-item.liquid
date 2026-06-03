@@ -1,0 +1,79 @@
+{%- liquid
+  assign overlay_text_size = overlay_text_size | default: 'text-heading-standard'
+
+  unless preload
+    assign preload = false
+  endunless
+
+  unless loading
+    assign loading = null
+  endunless
+-%}
+{% capture image_content %}
+  {% unless image == blank %}
+    {{ image | image_url: width: 2000 | image_tag: preload: preload, loading: loading, sizes: sizes, decoding: 'async' }}
+  {% else %}
+    {{ placeholder_key | placeholder_svg_tag: 'bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+  {% endunless %}
+{% endcapture %}
+<div
+  class="mx-auto"
+  {% if attributes %}
+    {{- attributes -}}
+  {% endif %}
+>
+  <div class="relative">
+    {% if link != blank %}
+      <a class="absolute inset-0 z-20" href="{{ link }}">
+        <span class="sr-only">
+          {% if text != blank %}
+            {{ text }}
+          {% elsif image != blank and image.alt != blank %}
+            {{ image.alt }}
+          {% endif %}
+        </span>
+      </a>
+    {% endif %}
+
+    {%- unless text_display == 'under_image' -%}
+      <div
+        class="place-content-center absolute inset-0 z-10 grid text-center {% if link != blank %} cursor-pointer {% endif %}"
+        data-color-scheme="{{ text_scheme }}"
+      >
+        <div class="text-scheme-text">
+          <p class="font-heading {{ overlay_text_size }} break-word">
+            {{ text }}
+          </p>
+          {% if subheading %}
+            <div class="rte rte--content-only rte--compact mt-5 text-theme-basic lg:mx-auto lg:max-w-2xl">
+              {{ subheading }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {%- endunless -%}
+
+    <div
+      class="z-0"
+      data-scale-reveal
+      {% if settings.zoom_media_links_on_hover and link != blank %}
+        data-zoom-on-hover
+      {% endif %}
+    >
+      {{ image_content }}
+    </div>
+
+    {%- if text_display == 'under_image' -%}
+      <div class="break-word mt-5 space-y-2" aria-hidden="true">
+        <p class="break-word">
+          {{ text }}
+        </p>
+        {% if subheading %}
+          <div class="rte rte--content-only rte--compact text-theme-basic">
+            {{ subheading }}
+          </div>
+        {% endif %}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,144 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "text_size": "text-heading-standard"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity-selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "hide_label": false
+          }
+        },
+        "variant-picker": {
+          "type": "variant_picker",
+          "settings": {
+            "option_style": "drop_down",
+            "hide_option_labels": true
+          }
+        },
+        "buy-buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "enable_payment_button": true,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "truncate_description": true
+          }
+        },
+        "icon-list": {
+          "type": "icon_list",
+          "settings": {
+            "heading": "",
+            "text_color": "text",
+            "text_1": "Crafted with recycled materials",
+            "icon_1": "heart",
+            "text_2": "Made in Melbourne",
+            "icon_2": "map-pin",
+            "text_3": "One tree planted for every piece",
+            "icon_3": "leaf",
+            "text_4": "Insured worldwide",
+            "icon_4": "globe",
+            "text_5": "",
+            "icon_5": "none"
+          }
+        },
+        "collapsible-tabs": {
+          "type": "collapsible_tabs",
+          "settings": {
+            "show_borders_above_and_below_tabs": false,
+            "heading_1": "Size guide",
+            "content_1": "<p>Please contact us to discuss sizing requirements.</p>",
+            "page_1": "",
+            "icon_1": "ruler",
+            "enable_2": true,
+            "heading_2": "Shipping information",
+            "content_2": "<p>This piece is available now.  Ready to ship. We ship internationally. Free postage to Australia. </p>",
+            "page_2": "",
+            "icon_2": "truck",
+            "enable_3": false,
+            "heading_3": "Collapsible tab",
+            "content_3": "",
+            "page_3": "",
+            "icon_3": "none",
+            "enable_4": false,
+            "heading_4": "Collapsible tab",
+            "content_4": "",
+            "page_4": "",
+            "icon_4": "none",
+            "enable_5": false,
+            "heading_5": "Collapsible tab",
+            "content_5": "",
+            "page_5": "",
+            "icon_5": "none"
+          }
+        },
+        "rich-text": {
+          "type": "rich_text",
+          "settings": {
+            "content": "<p>This is a demo store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity-selector",
+        "variant-picker",
+        "buy-buttons",
+        "description",
+        "icon-list",
+        "collapsible-tabs",
+        "rich-text"
+      ],
+      "settings": {
+        "media_position_on_desktop": "left",
+        "media_width_on_desktop": "6",
+        "enable_thumbnails_on_desktop": true,
+        "thumbnails_width_on_desktop": "small",
+        "product_content_width_on_desktop": "full_width",
+        "product_content_alignment": "md:justify-start",
+        "enable_image_zoom": false,
+        "enable_video_looping": true,
+        "color_scheme": "scheme1"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "You may also like",
+        "max_products": "3",
+        "enable_mobile_carousel": true,
+        "enable_desktop_carousel": false,
+        "color_scheme": "scheme1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

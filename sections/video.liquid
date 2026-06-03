@@ -1,0 +1,316 @@
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+
+  assign show_section_title = false
+  if section.settings.title != blank or section.settings.subheading != blank
+    assign show_section_title = true
+  elsif section.settings.cta_link != blank and section.settings.cta_label != blank
+    assign show_section_title = true
+  endif
+
+  if show_section_title and settings.section_titles_position == 'left_of_content'
+    assign container_classes = 'lg:grid lg:gap-x-grid-gutter lg:grid-cols-4'
+    assign content_area_classes = 'lg:col-span-3 lg:col-end-last'
+    assign sizes = '(min-width: 768px) 75vw, 100vw'
+  else
+    assign sizes = '100vw'
+  endif
+
+  if section.settings.subheading == blank
+    assign alt_text = section.settings.alt_text
+  else
+    assign alt_text = section.settins.subheading
+  endif
+
+  assign video_modal_id = 'video-modal-' | append: section.id | replace: '_', '-' | handleize
+  assign video = section.settings.video
+-%}
+
+<section
+  class="{% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    <div class="{{ container_classes }}">
+      {%- if show_section_title -%}
+        {%- render 'section-title',
+          title: section.settings.title,
+          subheading: section.settings.subheading,
+          cta_link: section.settings.cta_link,
+          cta_label: section.settings.cta_label
+        -%}
+      {%- endif -%}
+
+      <div class="{{ content_area_classes }}">
+        {% if section.settings.mode == 'preview' %}
+          {% capture video_preview %}
+            {% if video %}
+              {{
+                video.preview_image
+                | image_url: width: 2000
+                | image_tag: sizes: sizes, alt: alt_text
+              }}
+            {% else %}
+              {{
+                'lifestyle-2'
+                | placeholder_svg_tag: 'aspect-w-16 aspect-h-9 bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+              }}
+            {% endif %}
+            <div class="absolute inset-0 flex h-full w-full items-center justify-center">
+              <div class="scale-95 transition delay-150 duration-300 group-hover:scale-100">
+                <div class="h-16 w-16 rounded-full bg-scheme-background p-4">
+                  {% render 'icon-play' %}
+                </div>
+              </div>
+            </div>
+          {% endcapture %}
+          {% if section.settings.playback == 'modal' %}
+            <button
+              x-data
+              class="relative block w-full cursor-pointer"
+              type="button"
+              title="{{ 'general.video.play' | t }}{% if video.alt %}, {{ video.alt | escape }}{% endif %}"
+              @click="$store.modals.open('{{ video_modal_id }}')"
+            >
+              {{ video_preview }}
+            </button>
+          {% else %}
+            <div
+              id="video-{{ section.id }}"
+              x-data="Video('inline')"
+              class="relative w-full"
+              {% if video %}
+                style="padding-top: {{ 100.00 | divided_by: video.aspect_ratio }}%;"
+              {% else %}
+                {% # placeholder video is 16 : 9 %}
+                style="padding-top: {{ 100.00 | divided_by: 1.77777778 }}%;"
+              {% endif %}
+              x-intersect:leave="pause"
+            >
+              <template x-if="enabled">
+                <div
+                  class="opacity-0 transition-opacity duration-500"
+                  :class="{ 'opacity-0': !shown, 'pointer-events-none': !shown }"
+                >
+                  <div x-data="HTMLVideo" @play="play" @pause="pause">
+                    {% if video %}
+                      {{
+                        video
+                        | video_tag:
+                          class: 'absolute inset-0 w-full h-full',
+                          autoplay: true,
+                          controls: true,
+                          muted: false,
+                          x-ref: 'video'
+                      }}
+                    {% else %}
+                      <video
+                        x-ref="video"
+                        autoplay
+                        controls
+                        class="absolute inset-0 h-full w-full"
+                      >
+                        <source
+                          src="{{ 'placeholder-video.mp4' | asset_url }}"
+                          type="video/mp4"
+                        >
+                        Your browser does not support the video tag.
+                      </video>
+                    {% endif %}
+                  </div>
+                </div>
+              </template>
+              <div
+                class="absolute inset-0 h-full w-full transition-opacity duration-300"
+                :class="{ 'opacity-0' : shown, 'pointer-events-none': shown }"
+              >
+                <button
+                  class="relative block w-full cursor-pointer"
+                  type="button"
+                  title="{{ 'general.video.play' | t }}{% if video.alt %}, {{ video.alt | escape }}{% endif %}"
+                  @click="enabled = true"
+                >
+                  {{ video_preview }}
+                </button>
+              </div>
+            </div>
+          {% endif %}
+        {% else %}
+          <div
+            id="video-{{ section.id }}"
+            x-data="Video('inline', 'autoplay')"
+            class="relative"
+            {% if video %}
+              style="padding-top: {{ 100.00 | divided_by: video.aspect_ratio }}%;"
+            {% else %}
+              {% # placeholder video is 16 : 9 %}
+              style="padding-top: {{ 100.00 | divided_by: 1.77777778 }}%;"
+            {% endif %}
+            x-intersect:leave="pause"
+            x-intersect:enter="play"
+          >
+            <div x-data="HTMLVideo" @play="play" @pause="pause">
+              {% if video %}
+                {{
+                  video
+                  | video_tag:
+                    class: 'absolute inset-0 w-full h-full',
+                    autoplay: true,
+                    image_size: '2048x',
+                    loop: true,
+                    controls: false,
+                    preload: 'none',
+                    muted: true,
+                    x-ref: 'video'
+                }}
+              {% else %}
+                <video
+                  class="absolute inset-0 h-full w-full"
+                  x-ref="video"
+                  autoplay
+                  muted
+                  loop
+                >
+                  <source
+                    src="{{ 'placeholder-video.mp4' | asset_url }}"
+                    type="video/mp4"
+                  >
+                  Your browser does not support the video tag.
+                </video>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- liquid
+  if section.settings.mode == 'preview' and section.settings.playback == 'modal'
+    render 'video-modal', video: video, video_modal_id: video_modal_id
+  endif
+-%}
+
+{% unless request.design_mode %}
+  <script src="{{ 'video.js' | asset_url }}" type="module"></script>
+  <script src="{{ 'html-video.js' | asset_url }}" type="module"></script>
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Video"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subheading goes here"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "Mode",
+      "options": [
+        {
+          "value": "preview",
+          "label": "Preview"
+        },
+        {
+          "value": "autoplay",
+          "label": "Autoplay"
+        }
+      ],
+      "default": "preview",
+      "info": "Autoplay will not play sound or show controls."
+    },
+    {
+      "type": "select",
+      "id": "playback",
+      "label": "Playback",
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline"
+        },
+        {
+          "value": "modal",
+          "label": "Modal"
+        }
+      ],
+      "default": "inline",
+      "info": "Does not apply if mode is set to autoplay."
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,32 @@
+<div
+  x-init="$store.modals.register('#Popup-{{ section_id }}-{{ block.id }}', 'popup'); initTeleport($root);"
+  x-data
+>
+  <div x-cloak>
+    <template data-should-teleport="#popup-slot">
+      <template x-if="$store.modals.popup.contents === '#Popup-{{ section_id }}-{{ block.id }}'">
+        <div data-modal-label="{{ block.settings.page.title | escape }}">
+          <div class="relative mt-5 flex items-center justify-between py-4">
+            <h1 class="font-heading break-word text-2xl" class="" tabindex="-1">
+              {{ block.settings.page.title }}
+            </h1>
+            <button
+              @click.prevent="$store.modals.close('popup')"
+              class="top-0 ml-auto block"
+            >
+              <span class="sr-only">
+                {{- 'general.accessibility.close_modal' | t -}}
+              </span>
+              <span class="inline-block h-6 w-6">
+                {%- render 'icon-close' -%}
+              </span>
+            </button>
+          </div>
+          <div class="h-full w-full">
+            {{ block.settings.page.content }}
+          </div>
+        </div>
+      </template>
+    </template>
+  </div>
+</div>

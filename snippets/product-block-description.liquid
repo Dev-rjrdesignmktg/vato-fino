@@ -1,0 +1,66 @@
+{%- if block.settings.truncate_description
+  and product.description.size > 100
+-%}
+  <div
+    class="js-enabled my-8 group-first:mt-0"
+    x-data="
+      {
+        open: false,
+        readMore() {
+          const sectionId = this.productRoot.id;
+          const fullWDescriptionEl =
+            document.querySelector('[data-product-full-width-description]');
+
+          if (fullWDescriptionEl) {
+            fullWDescriptionEl.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            this.open = ! this.open;
+          }
+        }
+      }
+    "
+    x-cloak
+    {{ block.shopify_attributes }}
+  >
+    <div
+      class="rte rte--content-only rte--compact text-theme-basic"
+      x-show="!open"
+      x-data="ThemeUtil_RTE"
+    >
+      {{ product.description | truncatewords: 25 }}
+    </div>
+    <button
+      @click="readMore()"
+      x-show="!open"
+      :aria-expanded="open ? true : 'false'"
+      class="font-secondary theme-link mt-4 cursor-pointer text-sm"
+    >
+      {{ 'products.product.read_more' | t }}
+    </button>
+    <div
+      class="rte rte--content-only rte--compact text-theme-basic"
+      x-show="open"
+      x-data="ThemeUtil_RTE"
+    >
+      {{ product.description | replace: '<meta charset="utf-8">', '' }}
+    </div>
+  </div>
+  <noscript>
+    <div class="rte rte--content-only rte--compact group-first:mt-0text-theme-basic my-8">
+      {{ product.description | replace: '<meta charset="utf-8">', '' }}
+    </div>
+  </noscript>
+{%- else -%}
+  <div
+    class="my-8 group-first:mt-0"
+    x-data="ThemeUtil_RTE"
+    {{ block.shopify_attributes }}
+  >
+    <div class="rte rte--content-only rte--compact text-theme-basic">
+      {{ product.description | replace: '<meta charset="utf-8">', '' }}
+    </div>
+  </div>
+{%- endif -%}
+{% unless request.design_mode %}
+  <script src="{{ 'rte.js' | asset_url }}" type="module"></script>
+{% endunless %}

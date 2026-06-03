@@ -1,0 +1,72 @@
+
+<section
+  class="
+    {% unless section.settings.remove_top_padding %}pt-section{% endunless %}
+    {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %}
+    bg-scheme-background
+    text-scheme-text
+  "
+  data-color-scheme="{{ section.settings.color_scheme }}"
+>
+  <div class="spotify-player__container">
+
+    {% if section.settings.heading != blank %}
+      <h2 class="spotify-player__heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="spotify-player__wrapper">
+      <iframe
+        class="spotify-player__embed"
+        src="{{ section.settings.spotify_url }}"
+        loading="lazy"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+      </iframe>
+
+    </div>
+  </div>
+  {{ 'spotify-section.css' | asset_url | stylesheet_tag }}
+</section>
+
+{% schema %}
+{
+  "name": "Spotify Player",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Listen on Spotify"
+    },
+    {
+      "type": "text",
+      "id": "spotify_url",
+      "label": "Spotify Embed URL"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spotify Player"
+    }
+  ]
+}
+{% endschema %}

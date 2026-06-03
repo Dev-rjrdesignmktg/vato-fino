@@ -1,0 +1,71 @@
+{% liquid
+  assign item_separator = '||__cascade-item-end__||'
+
+  unless sizes
+    assign sizes = '(min-width: 768px) 75vw, 50vw'
+  endunless
+
+  unless first_item_preload
+    assign first_item_preload = false
+  endunless
+
+  unless loading
+    assign loading = null
+  endunless
+
+  case block.type
+    when 'product_list'
+      assign product_list = block.settings.product_list
+
+      if product_list != blank
+        for product in product_list
+          if forloop.first
+            assign attributes = shopify.block_attributes
+            assign preload = first_item_preload
+          else
+            assign attributes = ''
+            assign preload = false
+          endif
+
+          render 'product-tile', product: product, tag: 'div', attributes: attributes, preload: preload, loading: loading
+
+          unless forloop.last
+            echo item_separator
+          endunless
+        endfor
+      endif
+    when 'collection_list'
+      assign placeholder_key = 'collection-1'
+      assign text_scheme = block.settings.text_scheme
+
+      if block.settings.show_collection_link
+        assign cta_text = block.settings.cta_text
+      else
+        assign cta_text = ''
+      endif
+
+      assign collection_list = block.settings.collection_list
+
+      if collection_list != blank
+        for collection in collection_list
+          if forloop.first
+            assign attributes = shopify.block_attributes
+            assign preload = first_item_preload
+          else
+            assign attributes = ''
+            assign preload = false
+          endif
+
+          assign image = collection.image
+          assign text = collection.title
+          assign cta_url = collection.url
+
+          render 'image-or-collection-item', attributes: attributes, sizes: sizes, placeholder_key: placeholder_key, image: image, text: text, cta_url: cta_url, cta_text: cta_text, text_scheme: text_scheme, preload: preload, loading: loading
+
+          unless forloop.last
+            echo item_separator
+          endunless
+        endfor
+      endif
+  endcase
+%}

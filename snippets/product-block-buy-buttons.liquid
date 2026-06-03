@@ -1,0 +1,195 @@
+<link rel="stylesheet" href="{{ 'payment-terms.css' | asset_url }}">
+<div
+  class="product-block-buy-buttons my-3"
+  {{ block.shopify_attributes }}
+>
+  {% if product != blank %}
+    {% liquid
+      assign gift_card_recipient_feature_active = false
+
+      if block.settings.show_gift_card_recipient and product.gift_card?
+        assign gift_card_recipient_feature_active = true
+      endif
+    %}
+    {% form 'product',
+      product,
+      name: product_form_id,
+      id: product_form_id,
+      data-product-form: '',
+      data-product-handle: product.handle,
+      data-enable-history-state: 'true',
+      data-product-form: '',
+      x-ref: 'productForm',
+      class: 'product-form my-8 group-first:mt-0'
+    %}
+      {{ form | payment_terms }}
+
+      <div class="{% if product.has_only_default_variant %} hidden {% else %} no-js my-4 {% endif %}">
+        <label
+          class="{{ label_class }}"
+          for="fallback-selector-{{ section.id }}"
+          >Variant</label
+        >
+        <select
+          x-ref="singleVariantSelector"
+          name="id"
+          id="fallback-selector-{{ section.id }}"
+          class="font-secondary text-sm"
+        >
+          {% for variant in product.variants %}
+            <option
+              {% if variant == current_variant %}
+                selected="selected"
+              {% endif %}
+              {% unless variant.available %}
+                disabled="disabled"
+              {% endunless %}
+              x-bind:selected="currentVariantId === {{ variant.id }}"
+              value="{{ variant.id }}"
+            >
+              {{ variant.title }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {%- liquid
+        assign enable_payment_buttons = block.settings.enable_payment_button
+        assign button_text = 'products.product.add_to_cart' | t
+
+        if template == 'product.preorder'
+          assign enable_payment_buttons = false
+          assign button_text = 'products.product.preorder' | t
+        endif
+
+        if gift_card_recipient_feature_active == true
+          assign enable_payment_buttons = false
+        endif
+      -%}
+
+      {% if enable_payment_buttons %}
+        {% capture add_to_cart_class %}theme-button--secondary{% endcapture %}
+      {% else %}
+        {% capture add_to_cart_class %}theme-button--solid{% endcapture %}
+      {% endif %}
+
+      {% if gift_card_recipient_feature_active %}
+        <div class="my-5">
+          {% render 'gift-card-recipient-form',
+            product: product,
+            form: form,
+            section: section
+          %}
+        </div>
+      {% endif %}
+
+      <div
+        class="mb-8 text-scheme-accent empty:hidden"
+        x-text="cartAddErrorMessage"
+      ></div>
+
+      <div>
+        <div class="w-full">
+          {%
+            render 'add-to-cart-button',
+            current_variant: current_variant,
+            add_to_cart_class: add_to_cart_class,
+            button_text: button_text,
+          %}
+        </div>
+
+        {% if enable_payment_buttons %}
+          <script>
+            const addToCartBtnEl = document.querySelector('.add-to-cart-btn');
+
+            if (addToCartBtnEl) {
+              document.documentElement.style.setProperty(
+                '--add-to-cart-button-height',
+                `${addToCartBtnEl.getBoundingClientRect().height}px`
+              );
+            }
+          </script>
+          <div class="dynamic-payment-buttons mt-4">
+            {{ form | payment_button }}
+          </div>
+        {% endif %}
+      </div>
+
+      {%- if settings.cart_type == 'page'
+        or settings.open_drawer_on_add_to_cart == false
+      -%}
+        <div
+          class="mb-8 mt-4 text-theme-basic"
+          tabindex="-1"
+          x-ref="added"
+          x-show="addedToCart"
+          x-cloak
+          x-transition:enter="transition ease duration-300"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease duration-300"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+        >
+          {{ 'products.product.added_to_cart' | t }}!
+          {{
+            'products.product.add_to_cart_confirm_html'
+            | t:
+              cart_url: routes.cart_url,
+              link_url: routes.all_products_collection_url
+          -}}
+          .
+        </div>
+      {%- endif -%}
+    {% endform %}
+
+    {% if block and block.settings.show_pickup_availability %}
+      <div
+        class="empty:hidden"
+        x-html-if-set.use-empty="
+          variantChanged &&
+          $fetchedFragment(
+            `{{ routes.root_url }}variants/${currentVariantId}/?section_id=pickup-availability`,
+            '.pickup-availability',
+            'opacity-50'
+          )
+        "
+      >
+        {%- render 'pickup-availability',
+          variant: current_variant,
+          inline: true
+        -%}
+      </div>
+    {% endif %}
+  {% else %}
+    {% comment %}
+      Onboarding state if no product
+    {% endcomment %}
+    {%- liquid
+      assign enable_payment_buttons = block.settings.enable_payment_button
+      assign button_text = 'products.product.add_to_cart' | t
+
+      if template == 'product.preorder'
+        assign enable_payment_buttons = false
+        assign button_text = 'products.product.preorder' | t
+      endif
+    -%}
+
+    {% if enable_payment_buttons %}
+      {% capture add_to_cart_class %}theme-button--secondary{% endcapture %}
+    {% else %}
+      {% capture add_to_cart_class %}{% endcapture %}
+    {% endif %}
+
+    <div class="my-8">
+      <div class="w-full">
+        {%
+          render 'add-to-cart-button',
+          current_variant: current_variant,
+          add_to_cart_class: add_to_cart_class,
+          button_text: button_text,
+        %}
+      </div>
+    </div>
+  {% endif %}
+</div>

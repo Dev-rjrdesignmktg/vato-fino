@@ -1,0 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "hero-logo": {
+      "type": "hero-logo",
+      "settings": {
+        "home_page_only": false,
+        "mobile_text_scale": 4,
+        "desktop_text_scale": 10,
+        "alignment": "center",
+        "logo_max_width": 100,
+        "enable_overlay": false,
+        "overlay_offset": 100,
+        "position_underneath": false,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "tagline-0": {
+          "type": "tagline",
+          "settings": {
+            "text": "<p><strong>• HONOR  • LEALTAD  • PODER</strong></p><p></p><p>Sacramento, CA</p>",
+            "show_social_icons": true
+          }
+        },
+        "menus-0": {
+          "type": "menus",
+          "settings": {
+            "main_linklist": "main-menu",
+            "second_linklist": "footer"
+          }
+        },
+        "newsletter-0": {
+          "type": "newsletter",
+          "settings": {
+            "text": "<p>Acceso a conciertos privados, drops limitados, música no oficial y adelantos inéditos.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "tagline-0",
+        "menus-0",
+        "newsletter-0"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/VATO_FINO_LOGO.png",
+        "show_payment_icons": true,
+        "show_locale_selector": true,
+        "show_country_selector": true,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false
+      }
+    }
+  },
+  "order": [
+    "hero-logo",
+    "footer"
+  ]
+}

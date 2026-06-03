@@ -1,0 +1,513 @@
+{% liquid
+  assign section_color = section.settings.color_scheme
+
+  assign desktop_layout = section.settings.desktop_layout
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+  assign models = product.media | where: 'media_type', 'model'
+
+  assign enable_image_zoom = section.settings.enable_image_zoom
+
+  if desktop_layout == 'two_columns'
+    assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
+  else
+    assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign half_width_mobile_sizes = '75vw'
+  else
+    assign half_width_mobile_sizes = '100vw'
+  endif
+
+  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign full_width_sizes = '80vw'
+  else
+    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign eager_loading_limit = 4
+  else
+    assign eager_loading_limit = 2
+  endif
+
+  if section.settings.skip_featured_media
+    assign featured_media = product.featured_media
+    assign slice_point = featured_media.position | minus: 1
+    assign first_part = product.media | slice: 0, slice_point
+    assign second_part = product.media | slice: featured_media.position, product.media.size
+    assign media_array = first_part | concat: second_part
+  else
+    assign media_array = product.media
+  endif
+
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+
+  capture cascade_items
+    assign first_media_index = 0
+    assign last_media_index = media_array.size | minus: 1
+
+    for i in (first_media_index..last_media_index)
+      if media_array[i]
+        if section.settings.feature_full_width_media
+          cycle full_width_item_header, '', ''
+
+          capture sizes
+            cycle full_width_sizes, half_width_sizes, half_width_sizes
+          endcapture
+        else
+          assign sizes = half_width_sizes
+        endif
+
+        if section.index == 1 and forloop.first
+          assign preload = true
+        else
+          assign preload = false
+        endif
+
+        if section.index <= 2 and forloop.index <= eager_loading_limit
+          assign loading = 'eager'
+        else
+          assign loading = 'lazy'
+        endif
+
+        assign media = media_array[i]
+
+        echo '<div'
+        echo ' data-cascade-single-product-media>'
+        if enable_image_zoom and media.media_type == 'image'
+          echo '<a'
+          echo ' href="' | append: media.url | append: '"'
+          echo ' role="button"'
+          echo ' class="block cursor-zoom-in"'
+          echo ' @click.prevent="openZoom(' | append: media.id | append: ')"'
+          echo '>'
+        endif
+        echo '<div data-scale-reveal>'
+        render 'media', media: media, sizes: sizes, shown: true, scroll_to: false, always_shown: true, preload: preload, loading: loading, decoding: 'async', media_item: true, outside_product_component: true, enable_video_autoplay: section.settings.enable_video_autoplay
+        echo '</div>'
+        if enable_image_zoom and media.media_type == 'image'
+          echo '</a>'
+        endif
+        echo '</div>'
+        echo item_separator
+      else
+        break
+      endif
+    endfor
+  endcapture
+%}
+
+<section
+  class="{% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% unless section.settings.hide_margin %}px-5 lg:px-10{% endunless %} {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  id="{{ section.id }}"
+  data-color-scheme="{{ section_color }}"
+  {% if enable_image_zoom %}
+    x-data="ZoomHost"
+  {% else %}
+    x-data
+  {% endif %}
+>
+  <div class="relative">
+    {% if section.settings.title != blank %}
+      {%- render 'cascade-heading',
+        title: section.settings.title,
+        overlay_heading: section.settings.overlay_heading,
+        mobile_text_scale: section.settings.heading_mobile_text_scale,
+        desktop_text_scale: section.settings.heading_desktop_text_scale,
+        cta_link: section.settings.overlay_cta_link,
+        cta_label: section.settings.overlay_cta_label,
+        cta_style: section.settings.overlay_cta_style,
+        blend_mode: section.settings.blend_mode,
+        blend_mode_color_scheme: section.settings.blend_mode_color_scheme
+      -%}
+    {% endif %}
+    <div class="relative z-0">
+      {% render 'cascade',
+        section_id: section.id,
+        content_items: cascade_items,
+        alternate_first_block_position: true,
+        enable_cascade_on_mobile: enable_cascade_on_mobile,
+        desktop_layout: desktop_layout,
+        level_of_media_size_variation: section.settings.level_of_media_size_variation,
+        sequence: section.settings.sequence,
+        alignment_variation: section.settings.alignment_variation,
+        spacing: section.settings.spacing,
+        first_block_position: section.settings.start_position,
+        use_global_settings: section.settings.use_global_settings
+      %}
+    </div>
+  </div>
+</section>
+
+{% if models.size %}
+  <script type="application/json" id="ModelJson-{{ section.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+  </script>
+  <script>
+    window.ProductModel = {
+      loadShopifyXR() {
+        Shopify.loadFeatures([
+          {
+            name: 'shopify-xr',
+            version: '1.0',
+            onLoad: this.setupShopifyXR.bind(this),
+          },
+        ]);
+      },
+      setupShopifyXR(errors) {
+        if (errors) return;
+        if (!window.ShopifyXR) {
+          document.addEventListener('shopify_xr_initialized', () =>
+            this.setupShopifyXR()
+          );
+          return;
+        }
+        document.querySelectorAll('[id^="ModelJson-"]').forEach((modelJSON) => {
+          window.ShopifyXR.addModels(JSON.parse(modelJSON.textContent));
+          modelJSON.remove();
+        });
+        window.ShopifyXR.setupXRElements();
+      },
+    };
+    window.addEventListener('DOMContentLoaded', () => {
+      if (Shopify.designMode) {
+        document
+          .querySelectorAll('[data-shopify-xr-hidden]')
+          .forEach((element) => element.classList.add('hidden'));
+      }
+      if (window.ProductModel) window.ProductModel.loadShopifyXR();
+    });
+  </script>
+{% endif %}
+
+{% if enable_image_zoom %}
+  {% liquid
+    assign modal_id = 'image-zoom-' | append: section.id
+    assign zoom_section_url = product.url | append: '?section_id=main-product-zoom'
+  %}
+  <div
+    x-data
+    x-init="initTeleport($root)"
+    x-cloak
+  >
+    <template data-should-teleport="#modal-slot">
+      <template x-if="$store.modals.modal.contents === '{{ modal_id }}'">
+        <div class="bg-scheme-background text-scheme-text">
+          <button
+            @click.prevent="$store.modals.close('{{ modal_id }}')"
+            class="fixed right-10 ml-auto mt-5 block pt-4"
+          >
+            <span class="sr-only">
+              {{- 'general.accessibility.close_modal' | t -}}
+            </span>
+            <span class="inline-block h-6 w-6 drop-shadow-[0.06rem_0.12rem_0_rgb(var(--color-scheme-background))]">
+              {%- render 'icon-close' -%}
+            </span>
+          </button>
+          <div
+            id="{{ modal_id }}"
+            data-modal-label="{{ product.title }}, {{ 'products.media.media' | t }}"
+            x-html="
+              $fetchedFragment(
+                '{{ zoom_section_url }}',
+                '.product-zoom'
+              )
+            "
+          ></div>
+        </div>
+      </template>
+    </template>
+  </div>
+  {% unless request.design_mode %}
+    <script src="{{ 'zoom-host.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'zoom.js' | asset_url }}" type="module"></script>
+  {% endunless %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cascading product media",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Featured media"
+    },
+    {
+      "type": "checkbox",
+      "id": "skip_featured_media",
+      "label": "Skip featured media",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_full_width_media",
+      "label": "Feature full width media",
+      "info": "Enable this setting to showcase a mix of products at half width and full width. [Learn more](https://help.switchthemes.co)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_margin",
+      "label": "Hide left and right margin",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Heading overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_heading",
+      "label": "Overlay heading",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Heading mobile font size scale",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "heading_desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Heading desktop font size scale",
+      "default": 7
+    },
+    {
+      "type": "url",
+      "id": "overlay_cta_link",
+      "label": "Call to action link"
+    },
+    {
+      "type": "text",
+      "id": "overlay_cta_label",
+      "label": "Call to action label"
+    },
+    {
+      "type": "select",
+      "id": "overlay_cta_style",
+      "label": "Call to action style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "border-only",
+          "label": "Border"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "info": "Some blend modes work better when the text color is dark, others when it is light",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        },
+        {
+          "value": "exclusion",
+          "label": "Exclusion"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "soft-light",
+          "label": "Soft light"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "blend_mode_color_scheme",
+      "label": "Blend mode color scheme",
+      "info": "Only used if “Blend mode” is not “Normal”"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_zoom",
+      "label": "Enable image zoom"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "Enable video looping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_autoplay",
+      "label": "Enable video autoplay",
+      "default": true,
+      "info": "Video will be muted. Does not support YouTube or Vimeo."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cascading product media"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
+}
+{% endschema %}

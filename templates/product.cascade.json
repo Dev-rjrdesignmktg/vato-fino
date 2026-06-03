@@ -1,0 +1,113 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product-cascade",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "text_size": "text-heading-standard"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "hide_label": false
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "option_style": "drop_down",
+            "hide_option_labels": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "enable_payment_button": true,
+            "show_pickup_availability": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "truncate_description": false
+          }
+        },
+        "icon_list": {
+          "type": "icon_list",
+          "settings": {
+            "heading": "",
+            "text_color": "text"
+          }
+        },
+        "collapsible_tabs": {
+          "type": "collapsible_tabs",
+          "settings": {
+            "enable_2": true,
+            "enable_3": true
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity_selector",
+        "variant_picker",
+        "buy_buttons",
+        "description",
+        "icon_list",
+        "collapsible_tabs"
+      ],
+      "settings": {
+        "media_position_on_desktop": "left",
+        "media_width_on_desktop": "8",
+        "product_content_width_on_desktop": "full_width",
+        "product_content_alignment": "md:justify-start",
+        "desktop_featured_media_width": "half",
+        "enable_slideshow": true,
+        "skip_featured_media": true,
+        "enable_cascade_on_mobile": true,
+        "cascade_desktop_layout": "single_column",
+        "level_of_media_size_variation": 2,
+        "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1,
+        "start_position": "left",
+        "use_global_settings": false,
+        "enable_image_zoom": true,
+        "enable_video_looping": true,
+        "enable_video_autoplay": true,
+        "color_scheme": "scheme1"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "You may also like",
+        "max_products": "4",
+        "enable_mobile_carousel": true,
+        "enable_desktop_carousel": true,
+        "color_scheme": "scheme1"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

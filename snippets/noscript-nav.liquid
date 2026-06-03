@@ -1,0 +1,72 @@
+<noscript class="w-full">
+  {% if section.settings.enable_sidebar_nav_on_desktop %}
+    <button class="no-js-menu-trigger block" type="button">
+      {{ menu_button_content }}
+    </button>
+    <div
+      class="no-js-menu fixed left-0 top-0 hidden h-screen w-11/12 overflow-y-auto bg-scheme-background px-5 text-scheme-text md:w-7/12 lg:w-5/12 lg:px-10"
+      data-color-scheme="{{ settings.modal_color_scheme | default: 'tertiary' }}"
+    >
+      {% render 'sidebar-nav-mobile' %}
+    </div>
+  {% else %}
+    <nav class="w-full">
+      <ul class="-m-2 flex max-w-full flex-wrap items-center justify-start {% if use_separate_desktop_layout and header_layout_desktop == 'l__nm' %} md:justify-end md:mr-0 {% endif %}">
+        {% for link in section.settings.linklist.links %}
+          <li class="break-word relative">
+            {% if link.links.size > 0 %}
+              <div data-color-scheme="{{ settings.modal_color_scheme | default: 'tertiary' }}">
+                <button
+                  type="button"
+                  class="no-js-menu-trigger p-2 text-left focus:bg-scheme-background focus:text-scheme-text"
+                >
+                  <div class="flex items-center">
+                    {{- link.title -}}
+                    <div class="ml-1 h-4 w-4">
+                      {% render 'icon-chevron-down' %}
+                    </div>
+                  </div>
+                </button>
+                <div class="no-js-menu absolute left-0 top-full hidden min-w-[24rem] overflow-y-auto bg-scheme-background px-2 py-4 text-scheme-text">
+                  <ul>
+                    {% for link in link.links %}
+                      <li class="break-word">
+                        {% if link.links.size > 0 %}
+                          <div class="font-heading mb-1 text-lg">
+                            {{- link.title -}}
+                          </div>
+                          <ul class="mb-5">
+                            {% for link in link.links %}
+                              <li class="break-word">
+                                <a class="block py-2" href="{{ link.url }}">
+                                  &ndash; {{ link.title -}}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% else %}
+                          <a class="block py-2" href="{{ link.url }}">
+                            {{- link.title -}}
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              <a class="block p-2" href="{{ link.url }}">
+                {{- link.title -}}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+  <style>
+    .no-js-menu-trigger:focus-within + .no-js-menu {
+      display: block;
+    }
+  </style>
+</noscript>

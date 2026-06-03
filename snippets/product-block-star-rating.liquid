@@ -1,0 +1,9 @@
+{{ 'ratings.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="my-6 empty:hidden group-first:mt-0"
+  style="--star-rating-star-color: var(--color-scheme-{{ block.settings.star_color }}); --star-rating-star-background-color: rgb(var(--color-scheme-text) / 0.1); --star-rating-caption-color: rgb(var(--color-scheme-text));"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'star-rating', type: block.settings.type, product: product -%}
+</div>

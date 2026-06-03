@@ -1,0 +1,130 @@
+{% liquid
+  assign has_additional_checkout_buttons = false
+
+  if additional_checkout_buttons and settings.cart_accelerated_checkout
+    assign has_additional_checkout_buttons = true
+  endif
+%}
+<div
+  x-data="ThemeModule_CartFooter"
+  class="contents"
+  data-cart-footer
+>
+  {% if cart != empty %}
+    <div class="{% if template == 'cart' %}pb-section max-w-5xl mx-auto{% else %} sticky bottom-0{% endif %}">
+      {% unless template == 'cart' %}
+        <div
+          class="h-10 bg-gradient-to-t from-scheme-background to-transparent"
+        ></div>
+      {% endunless %}
+      <div class="bg-scheme-background {% if has_additional_checkout_buttons %}pb-5{% else %}pb-[calc(theme(spacing[2.5])_+_(env(safe-area-inset-bottom)_*_1.5))]{% endif %}">
+        <div class="border-t border-scheme-text pt-5 {% if template == 'cart' %}lg:pt-10{% endif %}">
+          <div
+            class="mb-5 text-scheme-accent empty:hidden"
+            id="cart-errors"
+          ></div>
+          <div class="grid grid-cols-14 gap-2">
+            {% if settings.cart_notes_enable %}
+              <div class="row-start-2 {% if template == 'cart' %} md:row-auto {% endif %} col-span-14 {% if template == 'cart' %} md:col-span-8 {% endif %} my-2 {% if template == 'cart' %} md:my-0 {% endif %}">
+                <label class="block" for="CartSpecialInstructions">
+                  {{- 'cart.general.note' | t -}}
+                </label>
+                <textarea
+                  name="note"
+                  id="CartSpecialInstructions"
+                  class="mb-2 mt-1 block w-full border border-scheme-text bg-scheme-background p-2 text-scheme-text transition-opacity"
+                  :class="{ 'opacity-50 cursor-progress' : updating }"
+                  :readonly="updating"
+                  x-data="ThemeModule_CartNote"
+                  @change="updateNote"
+                  @keyup.debounce.750ms="$dispatch('change')"
+                >
+                {{- cart.note -}}
+              </textarea>
+              </div>
+            {% endif %}
+            <div class="col-span-14 {% if template == 'cart' %} md:col-span-6 md:col-end-last {% endif %}">
+              <dl class="grid grid-cols-2 {% if template == 'cart' %} md:grid-cols-5 {% endif %} items-center text-right">
+                {%- for discount_application in cart.cart_level_discount_applications -%}
+                  <dt class="text-scheme-accent {% if template == 'cart' %} md:col-span-3 {% endif %}">
+                  <span class="sr-only">
+                    {{- 'customer.order.discount' | t }}:</span
+                  ><span>{{- discount_application.title -}}</span>
+                  </dt>
+                  <dd class="text-scheme-accent {% if template == 'cart' %} md:col-span-2 {% endif %}">
+                    -{{ discount_application.total_allocated_amount | money }}
+                  </dd>
+                {%- endfor -%}
+                <dt class="{% if template == 'cart' %} md:col-span-3 {% endif %} text-left">
+                  {{ 'cart.general.subtotal' | t }}
+                </dt>
+                <dd class="{% if template == 'cart' %} md:col-span-2 {% endif %}">
+                  {{ cart.total_price | money }}
+                </dd>
+              </dl>
+              <p class="mt-4 text-right text-sm">
+                {%- if cart.taxes_included -%}
+                  {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+                {%- else -%}
+                  {{ 'cart.general.shipping_at_checkout' | t }}
+                {%- endif -%}
+              </p>
+            </div>
+            <div class="col-span-14 row-start-3 {% if template == 'cart' %} md:row-start-2 md:col-span-6 md:col-end-last {% endif %}">
+              <div class="ml-auto">
+                <div class="-mx-3 flex justify-end">
+                  <button
+                    class="no-js theme-button mx-3 block"
+                    type="submit"
+                    name="update"
+                    form="cart"
+                  >
+                    {{ 'cart.general.update' | t }}
+                  </button>
+                  <button
+                    class="theme-button theme-button--solid mx-3 block {% unless template == 'cart' %}grow{% endunless %}"
+                    type="submit"
+                    name="checkout"
+                    form="cart"
+                  >
+                    {{ 'cart.general.checkout' | t }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if has_additional_checkout_buttons %}
+          <script>
+            const setCheckoutButtonHeight = () => {
+              const submitBtnEl = document.querySelector(
+                'button[type="submit"][name="checkout"][form="cart"]'
+              );
+
+              if (submitBtnEl) {
+                document.documentElement.style.setProperty(
+                  '--checkout-button-height',
+                  `${submitBtnEl.getBoundingClientRect().height}px`
+                );
+              }
+            };
+            {% unless template == 'cart' %}
+              document.addEventListener(
+                'cart-is-open',
+                () => {
+                  setCheckoutButtonHeight();
+                },
+                { once: true }
+              );
+            {% else %}
+              setCheckoutButtonHeight();
+            {% endunless %}
+          </script>
+          <div class="additional-checkout-buttons bg-scheme-background {% unless template == 'cart' %}additional-checkout-buttons--vertical {% endunless %}[&_[data-shopify-buttoncontainer]]:justify-end mt-4">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>

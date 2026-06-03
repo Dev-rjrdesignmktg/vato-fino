@@ -1,0 +1,160 @@
+{% liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+
+  assign show_section_title = false
+  if section.settings.title != blank
+    assign show_section_title = true
+  endif
+
+  if show_section_title and settings.section_titles_position == 'left_of_content'
+    assign container_classes = 'lg:grid lg:gap-x-grid-gutter lg:grid-cols-4'
+    assign content_area_classes = 'lg:col-span-3 lg:col-end-last'
+  endif
+%}
+
+<section
+  class="{% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site lg:px-10">
+    <div class="{{ container_classes }}">
+      {%- if show_section_title -%}
+        {%- render 'section-title', title: section.settings.title -%}
+      {%- endif -%}
+
+      <div class="{{ content_area_classes }} {% if section.settings.richtext != blank %} lg:grid lg:grid-cols-3 gap-x-10 {% endif %}">
+        {% if section.settings.richtext != blank %}
+          <div class="rte rte--content-only rte--compact break-word mb-5 px-5 text-theme-basic lg:col-span-1 lg:mb-0 lg:px-0">
+            {{ section.settings.richtext }}
+          </div>
+        {% endif %}
+        <div class="px-5 lg:px-0 {% if section.settings.richtext != blank %} lg:col-span-2 {% endif %}">
+          {% assign form_id = 'customer-form-' | append: section.id %}
+          {% form 'customer', id: form_id %}
+            {% if form.posted_successfully? %}
+              <p
+                class="text-theme-basic"
+                id="Newsletter-success--{{ section.id }}"
+              >
+                {{ 'general.newsletter_form.confirmation' | t }}
+              </p>
+            {% endif %}
+            {% if form.errors %}
+              <p
+                class="mb-2 text-theme-basic text-scheme-error"
+                id="Newsletter-error--{{ section.id }}"
+              >
+                {{ form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email }}
+              </p>
+            {% endif %}
+            <div class="input-group">
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label for="NewsletterForm-{{ section.id }}" class="sr-only">
+                {{ 'general.newsletter_form.newsletter_email' | t }}
+              </label>
+              <input
+                id="NewsletterForm-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                class="input-group-field border bg-transparent text-scheme-text {% if form.errors %} border-scheme-error {% else %} border-scheme-text {% endif %}"
+                value="{{ form.email }}"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                  aria-describedby="Newsletter-error--{{ section.id }}"
+                {% elsif form.posted_successfully? %}
+                  aria-describedby="Newsletter-success--{{ section.id }}"
+                {% endif %}
+                placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                required
+              >
+              <div class="input-group-button">
+                <button
+                  type="submit"
+                  class="theme-button theme-button--solid"
+                  name="commit"
+                  id="Subscribe-{{ section.id }}"
+                >
+                  {{ 'general.newsletter_form.submit' | t }}
+                </button>
+              </div>
+            </div>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text",
+      "default": "<p>Receive special offers and first look at new products.</p>"
+    },
+    {
+      "type": "paragraph",
+      "content": "Customers who subscribe will have their email address added to the “accepts marketing” [customer list](/admin/customers?query=&accepts_marketing=1)."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing",
+      "info": "Adjust vertical spacing to visually connect this section to adjacent sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

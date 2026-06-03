@@ -1,0 +1,49 @@
+{%- liquid
+  unless loading
+    assign loading = null
+  endunless
+
+  unless sizes
+    assign sizes = '10vw'
+  endunless
+-%}
+{%- capture media_tag_output -%}
+  {{ media | image_url: width: 600 | image_tag: sizes: sizes, preload: false,loading: loading }}
+{%- endcapture -%}
+<li
+  class="{{ class }} relative mb-4"
+  {% if first %}
+    x-intersect:enter.full="firstVisible = true"
+    x-intersect:leave.full="firstVisible = false"
+  {% endif %}
+  {% if last %}
+    x-intersect:enter.full="lastVisible = true"
+    x-intersect:leave.full="lastVisible = false"
+  {% endif %}
+>
+  <a
+    class="custom-focus custom-focus--thumbnail block"
+    href="{{ media | image_url }}"
+    @click.prevent
+    @keyup.space.prevent="lastClickedThumbnail = {{ media.id }}"
+    @keyup.enter.prevent="lastClickedThumbnail = {{ media.id }}"
+    :role="`button`"
+  >
+    {% if media.media_type != 'image' %}
+      <div class="place-content-center absolute right-1 top-1 grid h-6 w-6 border border-scheme-text/5 bg-scheme-background/90">
+        <div class="opacity-70">
+          {% if media.media_type == 'model' %}
+            {% render 'icon-model' %}
+          {% elsif media.media_type contains 'video' %}
+            {% render 'icon-video' %}
+          {% endif %}
+        </div>
+      </div>
+      <div>
+        {{ media_tag_output }}
+      </div>
+    {% else %}
+      {{ media_tag_output }}
+    {% endif %}
+  </a>
+</li>

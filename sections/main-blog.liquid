@@ -1,0 +1,392 @@
+{% paginate blog.articles by section.settings.max_posts %}
+  {% liquid
+    assign section_color = section.settings.color_scheme
+    assign desktop_layout = section.settings.desktop_layout
+    assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+    assign desktop_tags_layout = section.settings.desktop_tags_layout
+
+    if desktop_layout == 'two_columns'
+      assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
+    else
+      assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
+    endif
+
+    if enable_cascade_on_mobile
+      assign half_width_mobile_sizes = '75vw'
+    else
+      assign half_width_mobile_sizes = '100vw'
+    endif
+
+    assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+    if enable_cascade_on_mobile
+      assign full_width_sizes = '80vw'
+    else
+      assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+    endif
+
+    if enable_cascade_on_mobile
+      assign eager_loading_limit = 4
+    else
+      assign eager_loading_limit = 2
+    endif
+
+    assign full_width_item_header = '||__cascade-item:full__||'
+    assign item_separator = '||__cascade-item-end__||'
+
+    capture blog_article_items
+      for article in blog.articles
+        if section.settings.feature_full_width_blog_posts
+          cycle full_width_item_header, '', ''
+
+          capture sizes
+            cycle full_width_sizes, half_width_sizes, half_width_sizes
+          endcapture
+        else
+          assign sizes = half_width_sizes
+        endif
+
+        assign preload = false
+        assign loading = 'lazy'
+
+        if section.index == 1 and forloop.first
+          assign preload = true
+        endif
+
+        if section.index <= 2 and forloop.index <= eager_loading_limit
+          assign loading = 'eager'
+        endif
+
+        echo '<div data-media-item>'
+        render 'article-tile', article: article, tag: 'div', sizes: sizes, show_author: section.settings.show_author, show_date: section.settings.show_date, show_excerpt: section.settings.show_excerpt, show_comment_count: section.settings.show_comment_count, show_tags: section.settings.show_tags, show_link_text: section.settings.show_link_text, preload: preload, loading: loading, style: section.settings.articles_style
+        echo '</div>'
+        echo item_separator
+      endfor
+    endcapture
+  %}
+
+  {% capture blog_posts %}
+    <div class="mx-auto max-w-site">
+      {% render 'cascade',
+        section_id: section.id,
+        content_items: blog_article_items,
+        alternate_first_block_position: true,
+        enable_cascade_on_mobile: enable_cascade_on_mobile,
+        desktop_layout: desktop_layout,
+        level_of_media_size_variation: section.settings.level_of_media_size_variation,
+        sequence: section.settings.sequence,
+        alignment_variation: section.settings.alignment_variation,
+        spacing: section.settings.spacing,
+        first_block_position: section.settings.start_position,
+        use_global_settings: section.settings.use_global_settings
+      %}
+    </div>
+    {% if paginate.pages > 1 %}
+      <div class="my-10">
+        {% render 'pagination',
+          paginate: paginate,
+        %}
+      </div>
+    {% endif %}
+  {% endcapture %}
+
+  <section
+    class="bg-scheme-background px-5 py-section text-scheme-text lg:px-10"
+    data-color-scheme="{{ section_color }}"
+  >
+    <div>
+      <h1 class="font-heading break-word flex text-heading-standard">
+        {{ blog.title | escape }}
+        {% if section.settings.show_subscribe_link %}
+          <a
+            href="{{ shop.url }}{{ blogs[blog.handle].url }}.atom"
+            class="ml-3 block h-4 w-4"
+            title="{{ 'blogs.sidebar.rss' | t }}"
+          >
+            {% render 'icon-rss' %}
+          </a>
+        {% endif %}
+      </h1>
+    </div>
+    <div class="pt-section lg:pt-half-section">
+      {% if section.settings.enable_tag_filter %}
+        <div class="grid gap-5 {% if desktop_tags_layout == 'sidebar' %}lg:grid-cols-7{% endif %}">
+          <div class="{% if desktop_tags_layout == 'sidebar' %}lg:col-span-1{% endif %}">
+            <div x-data="{ expanded: false }">
+              <div
+                class="text-theme-basic lg:hidden"
+              >
+                <button
+                  class="flex flex-row items-center justify-between"
+                  @click="expanded = ! expanded"
+                  :aria-expanded="expanded"
+                >
+                  <span>{{ 'facets.sorting.filter' | t }}</span>
+                  <div class="ml-2">
+                    <span class="block h-4 w-4" x-show="!expanded">
+                      {%- render 'icon-chevron-down' -%}
+                    </span>
+                    <span
+                      class="block h-4 w-4"
+                      x-show="expanded"
+                      style="display: none;"
+                    >
+                      {%- render 'icon-chevron-up' -%}
+                    </span>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="lg:block"
+                :class="{ 'hidden' : ! expanded }"
+              >
+                <ul class="mt-5 text-theme-basic lg:mt-0 {% if desktop_tags_layout == 'horizontal' %}flex items-center justify-start w-full -mx-2{% endif %}">
+                  <li class="mb-3">
+                    <a
+                      href="{{ blog.url }}"
+                      class="underline-offset-basic {% unless current_tags %} underline {% else %} hover:underline {% endunless %} {% if desktop_tags_layout == 'horizontal' %}px-2{% endif %}"
+                    >
+                      {{ 'blogs.sidebar.all_tags' | t }}
+                    </a>
+                  </li>
+                  {% for tag in blog.all_tags %}
+                    <li class="break-word mb-3">
+                      <a
+                        href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                        class="underline-offset-basic {% if current_tags contains tag %} underline {% else %} hover:underline {% endif %} {% if desktop_tags_layout == 'horizontal' %}px-2{% endif %}"
+                      >
+                        {{ tag }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="{% if desktop_tags_layout == 'sidebar' %}lg:col-span-6{% endif %}">
+            {{ blog_posts }}
+          </div>
+        </div>
+      {% else %}
+        {{ blog_posts }}
+      {% endif %}
+    </div>
+  </section>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_posts",
+      "min": 2,
+      "max": 24,
+      "step": 2,
+      "label": "Maximum number of posts per page",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tag_filter",
+      "label": "Enable filtering by tag",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_tags_layout",
+      "label": "Desktop tags layout",
+      "default": "sidebar",
+      "options": [
+        {
+          "value": "sidebar",
+          "label": "Sidebar"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscribe_link",
+      "label": "Show RSS link",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Articles"
+    },
+    {
+      "type": "select",
+      "id": "articles_style",
+      "label": "Tiles format",
+      "default": "minimal",
+      "options": [
+        {
+          "value": "minimal",
+          "label": "Minimal"
+        },
+        {
+          "value": "detailed",
+          "label": "Detailed"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "The following settings only apply if the tiles format is set to \"Detailed\"."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comment_count",
+      "label": "Show comment count",
+      "info": "Comment count will only show if the blog has comments enabled and the article has comments",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link_text",
+      "label": "Show “Read more” text",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_full_width_blog_posts",
+      "label": "Feature full width blog posts",
+      "info": "Enable this setting to showcase a mix of blog posts at half width and full width. [Learn more](https://help.switchthemes.co)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Enable cascade layout on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "default": "two_columns",
+      "options": [
+        {
+          "value": "single_column",
+          "label": "One column"
+        },
+        {
+          "value": "two_columns",
+          "label": "Two columns"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Adjust variation, sequence and alignment of media sizes to create unique layouts. [Learn more](https://help.switchthemes.co/)"
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Level of media size variation",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Sequence",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Alignment variation",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Vertical space between items",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Start position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Top left"
+        },
+        {
+          "value": "right",
+          "label": "Top right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Use global settings",
+      "default": false,
+      "info": "This will override all cascade effect settings above. Set up global settings in [theme settings](/editor?context=theme&category=cascading%20content)."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Color scheme"
+    }
+  ]
+}
+{% endschema %}

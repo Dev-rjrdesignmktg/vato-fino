@@ -1,0 +1,163 @@
+{%- liquid
+  assign desktop_layout = section.settings.desktop_layout
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+  assign counter = 0
+
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+
+  # Sizes are 3/4 of normal cascade sizes due to persistent sidebar
+
+  if desktop_layout == 'two_columns'
+    assign half_width_desktop_sizes = '(min-width: 768px) 37.5vw'
+  else
+    assign half_width_desktop_sizes = '(min-width: 768px) 56.25vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign half_width_mobile_sizes = '75vw'
+  else
+    assign half_width_mobile_sizes = '100vw'
+  endif
+
+  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign full_width_sizes = '80vw'
+  else
+    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+  endif
+-%}
+
+{% for collection_item in items %}
+  {% liquid
+    if using_blocks
+      assign collection = collection_item.settings.collection
+      assign title = collection_item.settings.title
+      assign subheading = collection_item.settings.subheading
+    else
+      assign collection = collection_item
+      assign title = false
+      assign subheading = false
+    endif
+
+    assign mod = counter | modulo: 2
+
+    if section.settings.alternate_row_color_scheme != 'follow'
+      if mod > 0
+        assign color_scheme = section.settings.alternate_row_color_scheme
+      else
+        assign color_scheme = section_color
+      endif
+    else
+      assign color_scheme = section_color
+    endif
+  %}
+  <div
+    class="{% if class %} {{ class }} {% endif %} mx-auto max-w-site gap-x-grid-gutter bg-scheme-background px-5 py-section text-scheme-text lg:grid lg:grid-cols-4 lg:px-10"
+    data-color-scheme="{{ color_scheme }}"
+    {% if using_blocks %}
+      {{- collection_item.shopify_attributes -}}
+    {% endif %}
+  >
+    <div class="lg:col-span-1">
+      <div class="pb-10 pl-5 pr-20 lg:px-0 lg:pb-0">
+        <h2 class="font-heading break-word m-0 text-heading-standard">
+          {% if title != blank %}
+            {{ title | escape }}
+          {% elsif collection %}
+            {{ collection.title | escape }}
+          {% else %}
+            {{ 'sections.onboarding.collection_title' | t }}
+          {% endif %}
+        </h2>
+
+        {% if subheading != blank or show_description == true %}
+          {% if subheading != blank %}
+            <div class="text-base {% if title != blank %}mt-5{% endif %}">
+              {{ subheading }}
+            </div>
+          {% elsif collection %}
+            <div class="mt-5 text-base">
+              {{ collection.description }}
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {% if show_collection_link %}
+          <div class="mt-10">
+            <a class="theme-cta" href="{{ collection.url }}">
+              {{ 'collections.general.all_of_collection' | t }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="lg:col-span-3">
+      {% liquid
+        capture product_items
+          if collection != empty
+            assign collection_counter = 0
+            for product in collection.products limit: section.settings.max_products_cascade
+              assign remainder = collection_counter | modulo: 3
+
+              if remainder == 0 and section.settings.feature_full_width_products
+                echo full_width_item_header
+                assign sizes = full_width_sizes
+              else
+                assign sizes = half_width_sizes
+              endif
+
+              assign preload = false
+              assign loading = 'lazy'
+
+              if section.index == 1 and forloop.first
+                assign preload = true
+              endif
+
+              if section.index <= 2 and forloop.index <= 2
+                assign loading = 'eager'
+              endif
+
+              echo '<div data-media-item>'
+              render 'product-tile', product: product, tag: 'div', sizes: sizes, preload: preload, loading: loading
+              echo '</div>'
+              echo item_separator
+              assign collection_counter = collection_counter | plus: 1
+            endfor
+          else
+            assign collection_counter = 0
+            for i in (0..section.settings.max_products_cascade)
+              capture current_cycle
+                cycle '1', '2', '3', '4', '5', '6'
+              endcapture
+              assign placeholder_name = 'product-' | append: current_cycle
+              assign remainder = collection_counter | modulo: 3
+              if remainder == 0 and section.settings.feature_full_width_products
+                echo full_width_item_header
+              endif
+              render 'product-tile-placeholder', placeholder_name: placeholder_name, tag: 'div'
+              echo item_separator
+              assign collection_counter = collection_counter | plus: 1
+            endfor
+          endif
+        endcapture
+      %}
+      {% render 'cascade',
+        section_id: section.id,
+        content_items: product_items,
+        alternate_first_block_position: true,
+        enable_cascade_on_mobile: enable_cascade_on_mobile,
+        desktop_layout: desktop_layout,
+        level_of_media_size_variation: section.settings.level_of_media_size_variation,
+        sequence: section.settings.sequence,
+        alignment_variation: section.settings.alignment_variation,
+        spacing: section.settings.spacing,
+        first_block_position: section.settings.start_position,
+        use_global_settings: section.settings.use_global_settings
+      %}
+    </div>
+  </div>
+  {% assign counter = counter | plus: 1 %}
+{% endfor %}

@@ -1,0 +1,79 @@
+<div
+  class="my-4 w-full"
+  {{ block.shopify_attributes }}
+>
+  <div role="tablist" x-data="{ current: 1 }">
+    <div class="flex gap-2">
+      {% for i in (1..3) %}
+        {% liquid
+          if i > 1
+            assign enable_setting = 'enable_' | append: i
+
+            unless block.settings[enable_setting]
+              continue
+            endunless
+          endif
+          assign heading_setting = 'heading_' | append: i
+          assign heading = block.settings[heading_setting]
+
+          if heading == blank
+            continue
+          endif
+        %}
+        <button
+          id="{{ section.id }}-{{ block.id }}-tab-{{ forloop.index }}"
+          role="tab"
+          :aria-selected="current === {{ forloop.index }} ? 'true' : 'false'"
+          aria-controls="{{ section.id }}-{{ block.id }}-tabpanel-{{ forloop.index }}"
+          type="button"
+          @click="current = {{ forloop.index }}"
+        >
+          <div
+            class="break-word flex items-center text-theme-basic underline underline-offset-basic transition-colors {{  block.settings.heading_font }}{% unless forloop.first %} decoration-scheme-text/0{% endunless %}"
+            :class="{ 'decoration-scheme-text/0' : current !== {{ forloop.index }} }"
+          >
+            {{- heading | escape | strip -}}
+          </div>
+        </button>
+      {% endfor %}
+    </div>
+
+    {% for i in (1..3) %}
+      {% liquid
+        if i > 1
+          assign enable_setting = 'enable_' | append: i
+
+          unless block.settings[enable_setting]
+            continue
+          endunless
+        endif
+
+        assign heading_setting = 'heading_' | append: i
+        assign content_setting = 'content_' | append: i
+        assign page_setting = 'page_' | append: i
+
+        assign heading = block.settings[heading_setting]
+        assign content = block.settings[content_setting]
+        assign page = block.settings[page_setting]
+
+        if heading == blank
+          continue
+        endif
+      %}
+
+      <div
+        id="{{ section.id }}-{{ block.id }}-tabpanel-{{ forloop.index }}"
+        role="tabpanel"
+        aria-labelled-by="{{ section.id }}-{{ block.id }}-tab-{{ forloop.index }}"
+        class="rte rte--content-only rte--compact my-5"
+        x-show="current === {{ forloop.index }}"
+        {% unless forloop.first %}
+          style="display: none;"
+        {% endunless %}
+      >
+        {{ content }}
+        {{ page.content }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
