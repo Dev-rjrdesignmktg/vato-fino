@@ -181,10 +181,10 @@
     "featured-collection-1": {
       "type": "featured-collection",
       "settings": {
-        "title": "Colecciones",
+        "title": "Vf Originals",
         "collection": "all",
         "max_products": "4",
-        "subheading": "<p>Colecciones diseñadas no para marcar tendencia, sino para diferenciarte de los demas</p>",
+        "subheading": "<p><strong>Alianzas de culto.<br/></strong><br/>Piezas en colaboración con artistas que comparten los códigos y visión de Vato Fino.</p>",
         "show_collection_link": true,
         "enable_mobile_carousel": true,
         "enable_desktop_carousel": true,
