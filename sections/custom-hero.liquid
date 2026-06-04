@@ -1,0 +1,100 @@
+<section class="vf-hero" id="vf-hero-{{ section.id }}">
+  <div class="vf-hero__slider">
+        {% for block in section.blocks %}
+            <article class="vf-hero__slide {% if forloop.first %}is-active{% endif %}">
+                {% if block.settings.image %}
+                {{
+                    block.settings.image
+                    | image_url: width: 2500
+                    | image_tag:
+                    class: 'vf-hero__image',
+                    loading: 'lazy'
+                }}
+                {% endif %}
+                <div class="vf-hero__overlay"></div>
+                <div class="vf-hero__content">
+                    <span class="vf-hero__eyebrow">
+                        VATOFINO
+                    </span>
+
+                    <h1 class="vf-hero__title">
+                        {{ block.settings.title }}
+                    </h1>
+
+                    <div class="vf-hero__text">
+                        {{ block.settings.text }}
+                    </div>
+                    {% if block.settings.button_url != blank %}
+                        <a
+                        href="{{ block.settings.button_url }}"
+                        class="vf-hero__button"
+                        >
+                        {{ block.settings.button_text }}
+                        </a>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+  </div>
+    <div class="vf-hero__arrow__container">
+        <button class="vf-hero__arrow vf-hero__arrow--prev">
+            ←
+        </button>
+
+        <button class="vf-hero__arrow vf-hero__arrow--next">
+            →
+        </button>
+    </div>
+
+  <div class="vf-hero__pagination"></div>
+
+</section>
+
+{{ 'custom-hero.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'custom-hero.js' | asset_url }}" defer></script>
+
+{% schema %}
+    {
+        "name": "VATOFINO Hero",
+        "settings": [],
+        "blocks": [
+            {
+            "type": "slide",
+            "name": "Slide",
+            "settings": [
+                {
+                "type":"image_picker",
+                "id":"image",
+                "label":"Image"
+                },
+                {
+                "type":"text",
+                "id":"title",
+                "label":"Title"
+                },
+                {
+                "type":"textarea",
+                "id":"text",
+                "label":"Description"
+                },
+                {
+                "type":"text",
+                "id":"button_text",
+                "label":"Button Text"
+                },
+                {
+                "type":"url",
+                "id":"button_url",
+                "label":"Button Link"
+                }
+            ]
+    }
+        ],
+    "presets": [
+        {
+            "name":"VATOFINO Hero"
+        }
+    ]   
+}
+{% endschema %}
