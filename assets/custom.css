@@ -33,11 +33,7 @@ h4,
 h5,
 h6, .font-heading, .text-heading-standard{
    font-family: var(--font-secondary);
-<<<<<<< HEAD
-   font-size: var(--size-3xl);
-=======
    font-size: clamp(2rem,4vw,6rem);
->>>>>>> 4dfe64d (style: increase font size in the header)
    text-transform: none;
 }
 

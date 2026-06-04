@@ -17,6 +17,7 @@
 }
 
 .spotify-player__heading{
+    font-family: var(--font-secondary);
     margin-bottom: 2rem;
 }
 
