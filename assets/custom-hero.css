@@ -59,12 +59,13 @@
 }
 
 .vf-hero__title{
-    font-family:'Ancient Medium', serif;
+    font-family:'CSClaes-Regular', serif;
     color:white;
-    font-size:clamp(.62rem,4vw,6rem);
+    font-size:clamp(.53rem,4vw,6rem);
     line-height:.85;
     letter-spacing:-.05em;
     margin:1rem 0;
+    text-transform: none;
 }
 
 .vf-hero__text{

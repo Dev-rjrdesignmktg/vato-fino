@@ -10,7 +10,8 @@ https://help.switchthemes.co/cascade/advanced/custom-css.html
 
 
 :root {
-    --font-heading: "Ancient Medium", sans-serif;
+    --font-primary: "Ancient Medium", sans-serif;
+    --font-secondary: "CSClaes-Regular", sans-serif;
     --font-body: "Source Sans Pro", sans-serif;
     --size-base: 1rem;
     --size-lg: 1.25rem;
@@ -20,23 +21,28 @@ https://help.switchthemes.co/cascade/advanced/custom-css.html
 
 }
 
-body {
-    font-family: var(--font-body);
+h1{
+    font-size: var(--size-3xl);
+    font-family: var(--font-primary);
 }
 
-h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
-    font-family: var(--font-heading);
+h6, .font-heading, .text-heading-standard{
+   font-family: var(--font-secondary);
+   font-size: var(--size-2xl);
+   text-transform: none;
 }
 
-h1{
-    font-size: var(--size-3xl);
-}
-
-h2{
-    font-size: var(--size-2xl);
+body,
+p,
+li,
+span,
+a,
+button,
+input,
+textarea {
+    font-family: inherit;
 }
