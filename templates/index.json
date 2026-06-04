@@ -315,6 +315,17 @@
         "remove_top_padding": false,
         "remove_bottom_padding": false
       }
+    },
+    "spotify_section_Ge364j": {
+      "type": "spotify-section",
+      "name": "Spotify Player",
+      "settings": {
+        "heading": "Listen on Spotify",
+        "spotify_url": "https://open.spotify.com/embed/playlist/6Optd2hazA48ausL64Coz8?utm_source=generator&theme=0",
+        "color_scheme": "scheme4",
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
     }
   },
   "order": [
@@ -326,6 +337,7 @@
     "featured-collection-1",
     "video-with-text-overlay",
     "scrolling-text",
-    "testimonials_zye8mW"
+    "testimonials_zye8mW",
+    "spotify_section_Ge364j"
   ]
 }
