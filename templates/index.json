@@ -162,8 +162,8 @@
       "type": "rich-text",
       "name": "Rich text",
       "settings": {
-        "title": "",
-        "richtext": "<h1>Este no es tu lugar si lo que buscas es moda.</h1>",
+        "title": "Este no es tu lugar si lo que buscas es moda.",
+        "richtext": "",
         "font": "font-heading",
         "text_size": "text-heading-feature",
         "text_alignment": "text-center",
