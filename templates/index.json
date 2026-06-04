@@ -51,35 +51,6 @@
       "name": "VATOFINO Hero",
       "settings": {}
     },
-    "cascading-collection": {
-      "type": "cascading-collection",
-      "settings": {
-        "title": "",
-        "collection": "all",
-        "max_products": 12,
-        "show_product_image_only": true,
-        "feature_full_width_products": false,
-        "enable_cascade_on_mobile": true,
-        "desktop_layout": "two_columns",
-        "level_of_media_size_variation": 4,
-        "sequence": 3,
-        "alignment_variation": 3,
-        "spacing": 1.5,
-        "start_position": "left",
-        "use_global_settings": false,
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false,
-        "overlay_heading": true,
-        "heading_mobile_text_scale": 2,
-        "heading_desktop_text_scale": 7,
-        "show_view_all_link": true,
-        "overlay_cta_style": "solid",
-        "blend_mode": "normal",
-        "blend_mode_color_scheme": ""
-      }
-    },
     "rich_text_Yqfwzb": {
       "type": "rich-text",
       "name": "Rich text",
@@ -328,7 +299,6 @@
   },
   "order": [
     "custom_hero_K6txQR",
-    "cascading-collection",
     "rich_text_Yqfwzb",
     "cascading-collection-1",
     "video-with-text-overlay",
