@@ -13,6 +13,13 @@
       "type": "main-page-contact",
       "name": "Contacto",
       "settings": {
+        "heading": "Contacto",
+        "contact_title": "VATO FINO",
+        "contact_description": "Si tienes alguna propuesta de colaboración, pedido especial o simplemente entiendes el código y quieres decir algo, este es el canal.\n\nSi tu consulta es sobre una pieza adquirida, incluye tu número de orden.\n\nMantente firme, mantente fino.",
+        "location": "Sacramento, CA",
+        "instagram_url": "",
+        "facebook_url": "",
+        "email": "info@vatofino.com",
         "layout": "centered",
         "color_scheme": "scheme4"
       }
