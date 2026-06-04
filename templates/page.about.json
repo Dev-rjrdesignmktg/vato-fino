@@ -128,7 +128,7 @@
       "name": "Spotify Player",
       "settings": {
         "heading": "Listen on Spotify",
-        "spotify_url": "https://open.spotify.com/embed/playlist/6Optd2hazA48ausL64Coz8?utm_source=generator&theme=0",
+        "spotify_url": "",
         "color_scheme": "scheme4",
         "remove_top_padding": false,
         "remove_bottom_padding": false
