@@ -149,7 +149,7 @@
       "name": "FAQ",
       "settings": {
         "heading": "FAQ",
-        "question_font": "font-body",
+        "question_font": "font-heading",
         "question_size": "text-base",
         "two_columns_desktop": false,
         "color_scheme": "scheme4",
