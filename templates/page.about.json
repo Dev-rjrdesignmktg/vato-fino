@@ -123,6 +123,26 @@
         "remove_bottom_padding": false
       }
     },
+    "rich_text_CyqEGU": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "New EP:Mal Tipo x Django",
+        "richtext": "",
+        "font": "font-heading",
+        "text_size": "text-heading-feature",
+        "text_alignment": "text-left",
+        "cta_link": "",
+        "cta_label": "",
+        "button_style": "solid",
+        "desktop_width": "half",
+        "desktop_alignment": "center",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "spotify_section_e8YmtY": {
       "type": "spotify-section",
       "name": "Spotify Player",
@@ -139,6 +159,7 @@
     "image-with-text-overlay",
     "main",
     "cascade_eYmt4H",
+    "rich_text_CyqEGU",
     "spotify_section_e8YmtY"
   ]
 }
