@@ -9,6 +9,48 @@
  */
 {
   "sections": {
+    "custom_hero_K6txQR": {
+      "type": "custom-hero",
+      "blocks": {
+        "slide_Jfg6yx": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/imagenes_slide_1_1.png",
+            "title": "El poder solo multiplica lo que ya eres.",
+            "text": "",
+            "button_text": "",
+            "button_url": ""
+          }
+        },
+        "slide_LABcVf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/imagenes_slide_1_2.png",
+            "title": "Si tu lealtad tiene precio, tú también estás a la venta.",
+            "text": "",
+            "button_text": "",
+            "button_url": ""
+          }
+        },
+        "slide_H8wUAT": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/imagenes_slide_1.png",
+            "title": "El honor y la Palabra no se negocian.",
+            "text": "",
+            "button_text": "",
+            "button_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_Jfg6yx",
+        "slide_LABcVf",
+        "slide_H8wUAT"
+      ],
+      "name": "VATOFINO Hero",
+      "settings": {}
+    },
     "cascading-collection": {
       "type": "cascading-collection",
       "settings": {
@@ -285,6 +327,7 @@
     }
   },
   "order": [
+    "custom_hero_K6txQR",
     "cascading-collection",
     "rich_text_Yqfwzb",
     "cascading-collection-1",

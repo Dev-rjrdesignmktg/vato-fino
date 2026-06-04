@@ -46,28 +46,10 @@
         "showcase_second_level_links": "scroll",
         "collection_image_crop": "landscape"
       }
-    },
-    "hero-logo": {
-      "type": "hero-logo",
-      "settings": {
-        "home_page_only": true,
-        "mobile_text_scale": 4,
-        "desktop_text_scale": 10,
-        "alignment": "center",
-        "logo_max_width": 100,
-        "enable_overlay": true,
-        "overlay_offset": 0,
-        "position_underneath": false,
-        "color_scheme": "",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
     }
   },
   "order": [
     "sidebar",
-    "header",
-    "hero-logo"
+    "header"
   ]
 }
