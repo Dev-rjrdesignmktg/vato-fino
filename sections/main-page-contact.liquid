@@ -20,20 +20,61 @@
   data-color-scheme="{{ section_color }}"
 >
   <div class="mx-auto max-w-site px-5 lg:px-10">
-    <div class="{{ wrapper_class }}">
-      <div class="{{ grid_class }}">
-        <div class="{{ page_content_class }}">
-          <h1 class="font-heading break-word text-2xl">
-            {{ page.title }}
+    <div class="{{ wrapper_class }} vf-contact">
+      <div class="{{ grid_class }} vf-contact__wrapper">
+        <div class="{{ page_content_class }} vf-contact__info">
+          <h1 class="font-heading break-word ">
+            {{ section.settings.heading }}
           </h1>
+          <p class="vf-contact__description">
+            {{ section.settings.contact_description }}
+          </p>
           <div
             class="rte mt-5 text-theme-basic"
             x-data="ThemeUtil_RTE"
           >
             {{ page.content | replace: '<meta charset="utf-8">', '' }}
           </div>
+          <div class="vf-contact__details">
+            <h2>
+              {{ section.settings.contact_title }}
+            </h2>
+            <p>
+              {{ section.settings.location }}
+            </p>
+            <div class="vf-contact__social">
+              {% if section.settings.instagram_url != blank %}
+                <a
+                  class="vf-contact__social-link"
+                  href="{{ section.settings.instagram_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {% render 'icon-instagram' %}
+                </a>
+              {% endif %}
+              {% if section.settings.facebook_url != blank %}
+                <a
+                  class="vf-contact__social-link"
+                  href="{{ section.settings.facebook_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {% render 'icon-facebook' %}
+                </a>
+              {% endif %}
+              {% if section.settings.email != blank %}
+                <a
+                  href="mailto:{{ section.settings.email }}"
+                  class="vf-contact__social-link"
+                >
+                  {% render 'icon-email' %}
+                </a>
+              {% endif %}
+            </div>
         </div>
-        <div class="{{ form_class }}">
+        </div>
+        <div class="{{ form_class }} vf-contact__form">
           {% form 'contact', id: form_id %}
             {%
               render 'form-status',
@@ -46,7 +87,7 @@
             </label>
             <input
               type="text"
-              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3 vf-contact__input"
               name="contact[name]"
               id="{{ form_id }}-name"
               placeholder="{{ 'contact.form.name' | t }}"
@@ -58,7 +99,7 @@
             </label>
             <input
               type="email"
-              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3 vf-contact__input"
               name="contact[email]"
               id="{{ form_id }}-email"
               placeholder="{{ 'contact.form.email' | t }}"
@@ -73,7 +114,7 @@
             </label>
             <input
               type="tel"
-              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3"
+              class="mt-3 block w-full border-scheme-text bg-transparent px-5 py-3 vf-contact__input"
               name="contact[phone]"
               id="{{ form_id }}-phone"
               placeholder="{{ 'contact.form.phone' | t }}"
@@ -86,7 +127,7 @@
             </label>
             <textarea
               rows="10"
-              class="mt-3 block w-full  border-scheme-text bg-transparent px-5 py-3"
+              class="mt-3 block w-full  border-scheme-text bg-transparent px-5 py-3 vf-contact__textarea"
               name="contact[body]"
               id="{{ form_id }}-message"
               placeholder="{{ 'contact.form.message' | t }}"
@@ -110,6 +151,46 @@
 {
   "name": "Contact",
   "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contacto"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Título",
+      "default": "VATO FINO"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_description",
+      "label": "Descripción",
+      "default": "Si tienes alguna propuesta de colaboración..."
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Ubicación",
+      "default": "Sacramento, CA"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "info@vatofino.com"
+    },
     {
       "id": "layout",
       "type": "select",
