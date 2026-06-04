@@ -228,12 +228,12 @@
     "scrolling-text": {
       "type": "scrolling-text",
       "settings": {
-        "text": "• HONOR • PODER  • LEALTAD",
+        "text": "•HONOR •PODER  •LEALTAD",
         "repeat_text": true,
         "link": "",
         "mobile_text_scale": 2,
         "desktop_text_scale": 7,
-        "font": "heading",
+        "font": "body",
         "speed": 40,
         "direction": "",
         "color_scheme": "scheme4",
