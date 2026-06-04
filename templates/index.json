@@ -216,7 +216,7 @@
         "desktop_text_scale": 10,
         "text": "",
         "show_arrow": false,
-        "crop": "cinematic",
+        "crop": "widescreen",
         "crop_desktop": "cinematic",
         "place_content": "place-content-end-center",
         "text_align": "text-center",
