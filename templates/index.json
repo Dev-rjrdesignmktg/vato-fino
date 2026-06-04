@@ -163,10 +163,10 @@
       "name": "Rich text",
       "settings": {
         "title": "",
-        "richtext": "<p>Este no es tu lugar si lo que buscas es moda.</p>",
+        "richtext": "<h2>Este no es tu lugar si lo que buscas es moda.</h2>",
         "font": "font-heading",
-        "text_size": "text-heading-feature",
-        "text_alignment": "text-left",
+        "text_size": "text-heading-standard",
+        "text_alignment": "text-center",
         "cta_link": "",
         "cta_label": "",
         "button_style": "solid",
