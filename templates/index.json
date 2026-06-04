@@ -100,6 +100,100 @@
         "blend_mode_color_scheme": "scheme4"
       }
     },
+    "faq_DDyPcU": {
+      "type": "faq",
+      "blocks": {
+        "question_rJEUQb": {
+          "type": "question",
+          "settings": {
+            "question": "¿Qué hace diferente la calidad?",
+            "answer": "<p><strong>Cada pieza está desarrollada cuidando el peso de la tela, el patronaje, las costuras y los acabados para ofrecer una experiencia premium desde el primer uso.</strong></p>"
+          }
+        },
+        "question_za9Ld7": {
+          "type": "question",
+          "settings": {
+            "question": "¿Las colecciones son limitadas?",
+            "answer": "<p><strong>La mayoría de nuestras piezas se producen en cantidades limitadas y rara vez vuelven a restock una vez agotadas.</strong></p>"
+          }
+        },
+        "question_mC9DJG": {
+          "type": "question",
+          "settings": {
+            "question": "¿Hacen envíos internacionales?",
+            "answer": "<p><strong>Sí. Realizamos envíos nacionales e internacionales.Los tiempos de entrega pueden variar según tu ubicación.</strong></p>"
+          }
+        },
+        "question_rAiAPB": {
+          "type": "question",
+          "settings": {
+            "question": "¿Puedo cambiar o devolver mi pedido?",
+            "answer": "<p><strong>Sí. Aceptamos cambios y devoluciones dentro de los primeros 15 días después de recibir el pedido, siempre que la prenda no haya sido usada.</strong></p>"
+          }
+        },
+        "question_RnffmM": {
+          "type": "question",
+          "settings": {
+            "question": "¿Por qué esta colección se siente diferente?",
+            "answer": "<p><strong>Porque no diseñamos solo ropa.Creamos piezas pensadas para transmitir identidad, presencia y actitud.</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_rJEUQb",
+        "question_za9Ld7",
+        "question_mC9DJG",
+        "question_rAiAPB",
+        "question_RnffmM"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "FAQ",
+        "question_font": "font-body",
+        "question_size": "text-base",
+        "two_columns_desktop": false,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
+    "rich_text_4V9ejj": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "",
+        "richtext": "<p>Este no es tu lugar si lo que buscas es moda.</p>",
+        "font": "font-heading",
+        "text_size": "text-heading-feature",
+        "text_alignment": "text-left",
+        "cta_link": "",
+        "cta_label": "",
+        "button_style": "solid",
+        "desktop_width": "two_thirds",
+        "desktop_alignment": "center",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
+    "featured-collection-1": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Colecciones",
+        "collection": "all",
+        "max_products": "4",
+        "subheading": "<p>Colecciones diseñadas no para marcar tendencia, sino para diferenciarte de los demas</p>",
+        "show_collection_link": true,
+        "enable_mobile_carousel": true,
+        "enable_desktop_carousel": true,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "video-with-text-overlay": {
       "type": "video-with-text-overlay",
       "blocks": {
@@ -146,22 +240,6 @@
         "disable_color_transition": false,
         "remove_top_padding": true,
         "remove_bottom_padding": true
-      }
-    },
-    "featured-collection-1": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Colecciones",
-        "collection": "all",
-        "max_products": "4",
-        "subheading": "<p>Colecciones diseñadas no para marcar tendencia, sino para diferenciarte de los demas</p>",
-        "show_collection_link": true,
-        "enable_mobile_carousel": true,
-        "enable_desktop_carousel": true,
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
       }
     },
     "testimonials_zye8mW": {
@@ -237,74 +315,17 @@
         "remove_top_padding": false,
         "remove_bottom_padding": false
       }
-    },
-    "faq_DDyPcU": {
-      "type": "faq",
-      "blocks": {
-        "question_rJEUQb": {
-          "type": "question",
-          "settings": {
-            "question": "¿Qué hace diferente la calidad?",
-            "answer": "<p><strong>Cada pieza está desarrollada cuidando el peso de la tela, el patronaje, las costuras y los acabados para ofrecer una experiencia premium desde el primer uso.</strong></p>"
-          }
-        },
-        "question_za9Ld7": {
-          "type": "question",
-          "settings": {
-            "question": "¿Las colecciones son limitadas?",
-            "answer": "<p><strong>La mayoría de nuestras piezas se producen en cantidades limitadas y rara vez vuelven a restock una vez agotadas.</strong></p>"
-          }
-        },
-        "question_mC9DJG": {
-          "type": "question",
-          "settings": {
-            "question": "¿Hacen envíos internacionales?",
-            "answer": "<p><strong>Sí. Realizamos envíos nacionales e internacionales.Los tiempos de entrega pueden variar según tu ubicación.</strong></p>"
-          }
-        },
-        "question_rAiAPB": {
-          "type": "question",
-          "settings": {
-            "question": "¿Puedo cambiar o devolver mi pedido?",
-            "answer": "<p><strong>Sí. Aceptamos cambios y devoluciones dentro de los primeros 15 días después de recibir el pedido, siempre que la prenda no haya sido usada.</strong></p>"
-          }
-        },
-        "question_RnffmM": {
-          "type": "question",
-          "settings": {
-            "question": "¿Por qué esta colección se siente diferente?",
-            "answer": "<p><strong>Porque no diseñamos solo ropa.Creamos piezas pensadas para transmitir identidad, presencia y actitud.</strong></p>"
-          }
-        }
-      },
-      "block_order": [
-        "question_rJEUQb",
-        "question_za9Ld7",
-        "question_mC9DJG",
-        "question_rAiAPB",
-        "question_RnffmM"
-      ],
-      "name": "FAQ",
-      "settings": {
-        "heading": "FAQ",
-        "question_font": "font-body",
-        "question_size": "text-base",
-        "two_columns_desktop": false,
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
     }
   },
   "order": [
     "custom_hero_K6txQR",
     "rich_text_Yqfwzb",
     "cascading-collection-1",
+    "faq_DDyPcU",
+    "rich_text_4V9ejj",
+    "featured-collection-1",
     "video-with-text-overlay",
     "scrolling-text",
-    "featured-collection-1",
-    "testimonials_zye8mW",
-    "faq_DDyPcU"
+    "testimonials_zye8mW"
   ]
 }
