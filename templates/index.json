@@ -170,7 +170,7 @@
         "cta_link": "",
         "cta_label": "",
         "button_style": "solid",
-        "desktop_width": "two_thirds",
+        "desktop_width": "full",
         "desktop_alignment": "center",
         "color_scheme": "scheme4",
         "disable_color_transition": false,
