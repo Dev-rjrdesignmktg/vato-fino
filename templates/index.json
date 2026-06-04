@@ -56,7 +56,7 @@
       "name": "Rich text",
       "settings": {
         "title": "La lealtad no se devalua",
-        "richtext": "<p>Las masas busca inmediatez; nosotros buscamos sentido. Hoy todos siguen tendencias, por eso elegir lo auténtico es un acto de honor. Mientras la mayoría sigue el ritmo, nosotros marcamos el paso.<br/>Si buscas una prenda para encajar, sigue tu camino. Si buscas lo que pocos entienden, llegaste al origen.<br/><br/><strong>La lealtad es nuestra moneda. La clase, nuestra firma.</strong></p>",
+        "richtext": "<p>Las masas buscan inmediatez; nosotros buscamos sentido. Hoy todos siguen tendencias, por eso elegir lo auténtico es un acto de honor. Mientras la mayoría sigue el ritmo, nosotros marcamos el paso.<br/>Si buscas una prenda para encajar, sigue tu camino. Si buscas lo que pocos entienden, llegaste al origen.<br/><br/><strong>La lealtad es nuestra moneda. La clase, nuestra firma.</strong></p>",
         "font": "font-body",
         "text_size": "text-base",
         "text_alignment": "text-left",
