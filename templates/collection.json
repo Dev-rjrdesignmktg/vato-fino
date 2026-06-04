@@ -44,9 +44,9 @@
       "name": "Rich text",
       "settings": {
         "title": "Rap Fino & Elegante",
-        "richtext": "<p>Un Mantra para los que caminan con propósito.</p><p>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios términos.</p>",
+        "richtext": "<h2><strong>Un Mantra para los que caminan con propósito.</strong></h2><h2>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios términos.</h2>",
         "font": "font-body",
-        "text_size": "text-heading-standard",
+        "text_size": "text-base",
         "text_alignment": "text-left",
         "cta_link": "",
         "cta_label": "",
