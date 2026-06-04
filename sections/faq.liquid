@@ -71,7 +71,7 @@
                 {% endif %}
               "
             >
-              <h2 class="{{ spacing | split: ' ' | first }} {{ question_font }} {{ question_size }} break-word">
+              <p class="{{ spacing | split: ' ' | first }} {{ question_font }} {{ question_size }} break-word">
                 <button
                   type="button"
                   @click="expanded = ! expanded"
@@ -88,7 +88,7 @@
                     {%- render 'icon-chevron-down' %}
                   </span>
                 </button>
-              </h2>
+              </p>
               <div
                 id="answer-{{ section.id }}-{{ block.id }}"
                 x-show="expanded"
