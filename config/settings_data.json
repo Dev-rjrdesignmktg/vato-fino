@@ -21,7 +21,7 @@
     "standard_heading_desktop_text_scale": 5,
     "feature_heading_mobile_text_scale": 4,
     "feature_heading_desktop_text_scale": 9,
-    "type_main_font": "space_mono_n4",
+    "type_main_font": "open_sans_n4",
     "header_font": "font-main",
     "header_text_transform": "uppercase",
     "accent_text_transform": "uppercase",
