@@ -9,8 +9,28 @@
  */
 {
   "sections": {
+    "image_with_text_overlay_xnJwWP": {
+      "type": "image-with-text-overlay",
+      "name": "Image with text overlay",
+      "settings": {
+        "image": "shopify://shop_images/DSCN5291_1.jpg",
+        "title": "Vive bajo tus propios terminos",
+        "mobile_text_scale": 3,
+        "desktop_text_scale": 6,
+        "text": "",
+        "show_arrow": true,
+        "crop": "full-screen",
+        "crop_desktop": "widescreen",
+        "place_content": "place-content-end-center",
+        "text_align": "text-center",
+        "content_below_on_mobile": false,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false
+      }
+    },
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
         "show_collection_title": true,
         "show_collection_description": true,
@@ -19,12 +39,32 @@
         "collection_image_crop": "aspect-w-16 aspect-h-9"
       }
     },
+    "rich_text_hLmfgq": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "Rap Fino & Elegante",
+        "richtext": "<p>Un Mantra para los que caminan con propósito.</p><p>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios términos.</p>",
+        "font": "font-body",
+        "text_size": "text-heading-standard",
+        "text_alignment": "text-left",
+        "cta_link": "",
+        "cta_label": "",
+        "button_style": "solid",
+        "desktop_width": "two_thirds",
+        "desktop_alignment": "center",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "main": {
       "type": "main-collection",
       "settings": {
         "max_products": 24,
         "enable_filtering": true,
-        "desktop_filter_layout": "drawer",
+        "desktop_filter_layout": "sidebar",
         "expand_filters": true,
         "show_filter_count": true,
         "enable_color_swatch_filters": false,
@@ -45,7 +85,9 @@
     }
   },
   "order": [
+    "image_with_text_overlay_xnJwWP",
     "banner",
+    "rich_text_hLmfgq",
     "main"
   ]
 }
