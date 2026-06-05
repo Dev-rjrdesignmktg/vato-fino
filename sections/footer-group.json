@@ -13,9 +13,13 @@
   "sections": {
     "custom_liquid_8HzLHU": {
       "type": "custom-liquid",
+      "custom_css": [
+        ".custom__footer {text-align: center; font-size: 8rem;}",
+        "@media(max-width: 768px){.custom__footer{font-size: 3rem; }}"
+      ],
       "name": "Custom Liquid",
       "settings": {
-        "custom_liquid": "<h1 style=\"text-align: center; font-size: 8rem\">VATO FINO</h1>",
+        "custom_liquid": "<h1 class=\"custom__footer\">VATO FINO</h1>",
         "color_scheme": "scheme4",
         "disable_color_transition": false,
         "remove_top_padding": true,
