@@ -11,6 +11,9 @@
   "markets": {
     "union-europea": {
       "parent": "@default"
+    },
+    "latam": {
+      "parent": "@default"
     }
   }
 }
