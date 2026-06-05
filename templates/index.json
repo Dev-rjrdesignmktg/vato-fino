@@ -51,19 +51,53 @@
       "name": "VATOFINO Hero",
       "settings": {}
     },
+    "cascading_product_list_HN6hYV": {
+      "type": "cascading-product-list",
+      "name": "Cascading product list",
+      "settings": {
+        "title": "",
+        "product_list": [
+          "sloow-x-vato-fino",
+          "vato-fino-bloody-valentine",
+          "vato-fino-limited-drop-mvsa-bloody-valentines"
+        ],
+        "show_product_image_only": true,
+        "feature_full_width_products": false,
+        "enable_cascade_on_mobile": true,
+        "desktop_layout": "two_columns",
+        "level_of_media_size_variation": 2,
+        "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1.5,
+        "start_position": "left",
+        "use_global_settings": false,
+        "overlay_heading": false,
+        "heading_mobile_text_scale": 2,
+        "heading_desktop_text_scale": 7,
+        "overlay_cta_link": "",
+        "overlay_cta_label": "",
+        "overlay_cta_style": "solid",
+        "blend_mode": "normal",
+        "blend_mode_color_scheme": "scheme4",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "rich_text_Yqfwzb": {
       "type": "rich-text",
       "name": "Rich text",
       "settings": {
         "title": "La lealtad no se devalua",
-        "richtext": "<p>Las masas buscan inmediatez; nosotros buscamos sentido. Hoy todos siguen tendencias, por eso elegir lo auténtico es un acto de honor. Mientras la mayoría sigue el ritmo, nosotros marcamos el paso.<br/>Si buscas una prenda para encajar, sigue tu camino. Si buscas lo que pocos entienden, llegaste al origen.<br/><br/><strong>La lealtad es nuestra moneda. La clase, nuestra firma.</strong></p>",
+        "richtext": "<h1>Las masas buscan inmediatez; nosotros buscamos sentido. Hoy todos siguen tendencias, por eso elegir lo auténtico es un acto de honor. Mientras la mayoría sigue el ritmo, nosotros marcamos el paso.<br/>Si buscas una prenda para encajar, sigue tu camino. Si buscas lo que pocos entienden, llegaste al origen.<br/><br/><strong>La lealtad es nuestra moneda. La clase, nuestra firma.</strong></h1>",
         "font": "font-body",
-        "text_size": "text-base",
+        "text_size": "text-heading-feature",
         "text_alignment": "text-left",
         "cta_link": "shopify://collections",
         "cta_label": "Ver colecciones",
         "button_style": "solid",
-        "desktop_width": "two_thirds",
+        "desktop_width": "full",
         "desktop_alignment": "center",
         "color_scheme": "scheme4",
         "disable_color_transition": false,
@@ -310,40 +344,6 @@
         "heading": "Listen on Spotify",
         "spotify_url": "https://open.spotify.com/embed/playlist/6Optd2hazA48ausL64Coz8?utm_source=generator&theme=0",
         "color_scheme": "scheme4",
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
-    },
-    "cascading_product_list_HN6hYV": {
-      "type": "cascading-product-list",
-      "name": "Cascading product list",
-      "settings": {
-        "title": "",
-        "product_list": [
-          "sloow-x-vato-fino",
-          "vato-fino-bloody-valentine",
-          "vato-fino-limited-drop-mvsa-bloody-valentines"
-        ],
-        "show_product_image_only": true,
-        "feature_full_width_products": false,
-        "enable_cascade_on_mobile": true,
-        "desktop_layout": "two_columns",
-        "level_of_media_size_variation": 2,
-        "sequence": 1,
-        "alignment_variation": 1,
-        "spacing": 1.5,
-        "start_position": "left",
-        "use_global_settings": false,
-        "overlay_heading": false,
-        "heading_mobile_text_scale": 2,
-        "heading_desktop_text_scale": 7,
-        "overlay_cta_link": "",
-        "overlay_cta_label": "",
-        "overlay_cta_style": "solid",
-        "blend_mode": "normal",
-        "blend_mode_color_scheme": "scheme4",
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
         "remove_top_padding": false,
         "remove_bottom_padding": false
       }
