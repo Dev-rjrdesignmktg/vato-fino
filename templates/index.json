@@ -74,7 +74,7 @@
     "cascading-collection-1": {
       "type": "cascading-collection",
       "settings": {
-        "title": "",
+        "title": "Bloody Valentine",
         "collection": "all",
         "max_products": 8,
         "show_product_image_only": false,
