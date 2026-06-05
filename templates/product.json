@@ -132,7 +132,7 @@
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "product_recommendations_heading": "You may also like",
+        "product_recommendations_heading": "Productos que te podrian gustar",
         "max_products": "4",
         "enable_mobile_carousel": true,
         "enable_desktop_carousel": true,
