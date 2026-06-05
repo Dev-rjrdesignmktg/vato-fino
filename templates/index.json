@@ -51,6 +51,112 @@
       "name": "VATOFINO Hero",
       "settings": {}
     },
+    "cascade_nUYn4a": {
+      "type": "cascade",
+      "blocks": {
+        "image_9AgPBw": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/T_SHIRT_BLOODY_VALENTINE_MOCKUP_FRONT_V2_PNG.png",
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_UtxxVW": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/MOCKUPFRONTSLOOWXVATOFINO2PNG.png",
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_DWGKt8": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_dUQ3AC": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_iHMN8U": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_Uf4tWy": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_DUqQm3": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        },
+        "image_PUphMk": {
+          "type": "image",
+          "settings": {
+            "url": "",
+            "caption": "",
+            "block_width": "half"
+          }
+        }
+      },
+      "block_order": [
+        "image_9AgPBw",
+        "image_UtxxVW",
+        "image_DWGKt8",
+        "image_dUQ3AC",
+        "image_iHMN8U",
+        "image_Uf4tWy",
+        "image_DUqQm3",
+        "image_PUphMk"
+      ],
+      "name": "Cascading gallery",
+      "settings": {
+        "title": "",
+        "enable_cascade_on_mobile": true,
+        "desktop_layout": "two_columns",
+        "hide_margin": false,
+        "level_of_media_size_variation": 2,
+        "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1.5,
+        "start_position": "left",
+        "use_global_settings": false,
+        "overlay_heading": false,
+        "heading_mobile_text_scale": 2,
+        "heading_desktop_text_scale": 7,
+        "overlay_cta_link": "",
+        "overlay_cta_label": "",
+        "overlay_cta_style": "solid",
+        "blend_mode": "normal",
+        "blend_mode_color_scheme": "scheme4",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "rich_text_Yqfwzb": {
       "type": "rich-text",
       "name": "Rich text",
@@ -317,6 +423,7 @@
   },
   "order": [
     "custom_hero_K6txQR",
+    "cascade_nUYn4a",
     "rich_text_Yqfwzb",
     "cascading-collection-1",
     "rich_text_4V9ejj",
