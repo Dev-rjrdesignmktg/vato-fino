@@ -35,20 +35,29 @@
         "color_scheme": "scheme4"
       }
     },
+    "rich_text_jCf9KX": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "Sobre nosotros:  El peso del criterio.",
+        "richtext": "<h1>Si buscas moda sigue tu camino.</h1><h1>Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</h1><h1>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</h1><h1>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</h1>",
+        "font": "font-body",
+        "text_size": "text-base",
+        "text_alignment": "text-left",
+        "cta_link": "",
+        "cta_label": "",
+        "button_style": "solid",
+        "desktop_width": "full",
+        "desktop_alignment": "left",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "cascade_eYmt4H": {
       "type": "cascade",
       "blocks": {
-        "heading_with_text_k63mR3": {
-          "type": "heading_with_text",
-          "settings": {
-            "heading": "Sobre nosotros:  El peso del criterio.",
-            "rich_text": "<p>Si buscas moda sigue tu camino.</p><p>Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</p><p>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</p><p>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</p>",
-            "text_align": "text-left",
-            "cta_url": "",
-            "cta_text": "Shop now",
-            "block_width": "full"
-          }
-        },
         "heading_with_text_G96BMm": {
           "type": "heading_with_text",
           "settings": {
@@ -91,7 +100,6 @@
         }
       },
       "block_order": [
-        "heading_with_text_k63mR3",
         "heading_with_text_G96BMm",
         "image_jcXc8b",
         "heading_with_text_AUTEUV",
@@ -158,6 +166,7 @@
   "order": [
     "image-with-text-overlay",
     "main",
+    "rich_text_jCf9KX",
     "cascade_eYmt4H",
     "rich_text_CyqEGU",
     "spotify_section_e8YmtY"
