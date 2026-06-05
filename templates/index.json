@@ -341,7 +341,7 @@
       "type": "spotify-section",
       "name": "Spotify Player",
       "settings": {
-        "heading": "Listen on Spotify",
+        "heading": "Escucha en Spotify",
         "spotify_url": "https://open.spotify.com/embed/playlist/6Optd2hazA48ausL64Coz8?utm_source=generator&theme=0",
         "color_scheme": "scheme4",
         "remove_top_padding": false,
