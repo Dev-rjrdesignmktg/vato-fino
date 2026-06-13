@@ -54,22 +54,22 @@
           "settings": {
             "heading": "",
             "text_color": "text",
-            "text_1": "Premium fabrics",
+            "text_1": "Regular fit",
             "icon_1": "shirt",
-            "text_2": "WATER-BASED DISCHARGE",
+            "text_2": "Premium fabrics",
             "icon_2": "check-mark",
-            "text_3": "Designed in California",
-            "icon_3": "map-pin",
-            "text_4": "Ships worldwide",
-            "icon_4": "globe",
-            "text_5": "",
-            "icon_5": "truck"
+            "text_3": "WATER-BASED DISCHARGE",
+            "icon_3": "check-mark",
+            "text_4": "Designed in California",
+            "icon_4": "map-pin",
+            "text_5": "Ships worldwide",
+            "icon_5": "globe"
           }
         },
         "collapsible-tabs": {
           "type": "collapsible_tabs",
           "settings": {
-            "show_borders_above_and_below_tabs": false,
+            "show_borders_above_and_below_tabs": true,
             "heading_1": "Shipping",
             "content_1": "<p>We deliver worldwide. </p>",
             "page_1": "",
