@@ -58,8 +58,10 @@
         "title": "",
         "product_list": [
           "sloow-x-vato-fino",
-          "vato-fino-bloody-valentine",
-          "vato-fino-limited-drop-mvsa-bloody-valentines"
+          "vato-fino-limited-drop-mvsa-bloody-valentines",
+          "big-stan-x-vato-fino-mexico-x-colombia",
+          "big-stan-x-vato-fino-tour-mala-fama",
+          "big-stan-x-vato-fino"
         ],
         "show_product_image_only": true,
         "feature_full_width_products": false,
@@ -108,10 +110,10 @@
     "cascading-collection-1": {
       "type": "cascading-collection",
       "settings": {
-        "title": "Bloody Valentine",
-        "collection": "all",
+        "title": "Vato Fino x Big Stan",
+        "collection": "vato-fino-x-big-stan",
         "max_products": 8,
-        "show_product_image_only": false,
+        "show_product_image_only": true,
         "feature_full_width_products": false,
         "enable_cascade_on_mobile": true,
         "desktop_layout": "two_columns",
