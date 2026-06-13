@@ -15,7 +15,7 @@
         "title": {
           "type": "title",
           "settings": {
-            "text_size": "text-heading-feature"
+            "text_size": "text-heading-standard"
           }
         },
         "price": {
