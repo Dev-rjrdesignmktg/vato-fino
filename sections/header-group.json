@@ -44,7 +44,7 @@
         "menu_items_display": "icons",
         "section_padding": "py-4",
         "showcase_second_level_links": "scroll",
-        "collection_image_crop": "landscape"
+        "collection_image_crop": "none"
       }
     }
   },
