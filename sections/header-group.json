@@ -43,7 +43,7 @@
         "show_search": true,
         "menu_items_display": "icons",
         "section_padding": "py-8",
-        "showcase_second_level_links": "scroll",
+        "showcase_second_level_links": "grid",
         "collection_image_crop": "landscape"
       }
     }
