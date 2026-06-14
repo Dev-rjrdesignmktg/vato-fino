@@ -1,15 +1,43 @@
+{{ 'custom-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-hero.js' | asset_url }}" defer></script>
+
 <section class="vf-hero" id="vf-hero-{{ section.id }}">
   <div class="vf-hero__slider">
         {% for block in section.blocks %}
+
+            {% assign image_loading = 'lazy' %}
+            {% assign image_priority = 'auto' %}
+            {% assign image_preload = false %}
+
+            {% if forloop.first %}
+            {% assign image_loading = 'eager' %}
+            {% assign image_priority = 'high' %}
+            {% assign image_preload = true %}
+            {% endif %}
+
             <article class="vf-hero__slide {% if forloop.first %}is-active{% endif %}">
                 {% if block.settings.image %}
-                {{
-                    block.settings.image
-                    | image_url: width: 2500
-                    | image_tag:
-                    class: 'vf-hero__image',
-                    loading: 'lazy'
-                }}
+                <picture>
+                    <source
+                        media="(max-width: 768px)"
+                        srcset="{{ block.settings.image_mobile | image_url: width: 480 }} 480w,
+                                {{ block.settings.image_mobile | image_url: width: 768 }} 768w"
+                    >
+                        {%- assign image_alt = block.settings.image_alt | default: block.settings.title -%}
+                        {{
+                            block.settings.image
+                            | image_url: width: 1700
+                            | image_tag:
+                            class: 'vf-hero__image',
+                            loading: image_loading,
+                            fetchpriority: image_priority,
+                            preload: image_preload,
+                            sizes: '100vw',
+                            width: block.settings.image.width,
+                            height: block.settings.image.height,
+                            alt: image_alt
+                        }} 
+                </picture>
                 {% endif %}
                 <div class="vf-hero__overlay"></div>
                 <div class="vf-hero__content">
@@ -50,8 +78,6 @@
 
 </section>
 
-<script src="{{ 'custom-hero.js' | asset_url }}" defer></script>
-
 {% schema %}
     {
         "name": "VATOFINO Hero",
@@ -65,6 +91,16 @@
                 "type":"image_picker",
                 "id":"image",
                 "label":"Image"
+                },
+                {
+                "type": "image_picker",
+                "id": "image_mobile",
+                "label": "Mobile image"
+                },
+                {
+                "type": "text",
+                "id": "image_alt",
+                "label": "Image ALT"
                 },
                 {
                 "type":"text",

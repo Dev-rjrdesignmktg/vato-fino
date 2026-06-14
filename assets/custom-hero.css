@@ -61,11 +61,12 @@
 .vf-hero__title{
     font-family:'CSClaes-Regular', serif;
     color:white;
-    font-size:clamp(.53rem,4vw,6rem);
+    font-size:clamp(.1.2rem,4vw,6rem);
     line-height:.85;
     letter-spacing:-.05em;
     margin:1rem 0;
     text-transform: none;
+    line-height: 1.2;
 }
 
 .vf-hero__text{
@@ -159,10 +160,6 @@
         text-align:center;
         bottom:5rem;
 }
-
-    .vf-hero__title{
-        font-size:clamp(3rem,14vw,5rem);
-    }
 
     .vf-hero__text{
         margin:auto;
