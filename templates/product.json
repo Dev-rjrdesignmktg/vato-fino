@@ -40,7 +40,7 @@
           "settings": {
             "enable_payment_button": true,
             "show_pickup_availability": true,
-            "show_gift_card_recipient": false
+            "show_gift_card_recipient": true
           }
         },
         "rich-text": {
