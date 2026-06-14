@@ -42,7 +42,7 @@
         "enable_sidebar_nav_on_desktop": false,
         "show_search": true,
         "menu_items_display": "icons",
-        "section_padding": "py-8",
+        "section_padding": "py-4",
         "showcase_second_level_links": "scroll",
         "collection_image_crop": "landscape"
       }
