@@ -1,0 +1,366 @@
+{%- liquid
+  assign collections = section.settings.collections
+  assign show_product_image_only = section.settings.show_product_image_only
+  assign desktop_layout = section.settings.desktop_layout
+  assign enable_cascade_on_mobile = section.settings.enable_cascade_on_mobile
+
+  if desktop_layout == 'two_columns'
+    assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
+  else
+    assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign half_width_mobile_sizes = '75vw'
+  else
+    assign half_width_mobile_sizes = '100vw'
+  endif
+
+  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
+
+  if enable_cascade_on_mobile
+    assign full_width_sizes = '80vw'
+  else
+    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
+  endif
+
+  if enable_cascade_on_mobile
+    assign eager_loading_limit = 4
+  else
+    assign eager_loading_limit = 2
+  endif
+
+  assign full_width_item_header = '||__cascade-item:full__||'
+  assign item_separator = '||__cascade-item-end__||'
+
+  assign first_collection = collections.first
+  assign initial_title = first_collection.title
+  assign initial_url = first_collection.url
+-%}
+
+<section
+  id="vf-mc-{{ section.id }}"
+  class="vf-mc relative {% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section.settings.color_scheme | default: 'scheme1' }}"
+>
+  <div class="pointer-events-none absolute inset-0 z-20 w-full" data-sticky-header>
+    <div
+      class="sticky flex h-full max-h-screen w-full flex-col items-center justify-center gap-5 px-5 motion-reduce:relative lg:p-10 lg:px-10"
+      style="top: {{ section.settings.sticky_offset }}px;"
+    >
+      <p
+        class="font-heading text-scheme-text {% render 'type-scale-classes', mobile_text_scale: section.settings.heading_mobile_text_scale, desktop_text_scale: section.settings.heading_desktop_text_scale %} break-word text-center lg:max-w-3/4"
+        role="heading"
+        aria-level="2"
+        data-sticky-title
+        aria-live="polite"
+      >
+        {{ initial_title | default: 'sections.onboarding.collection_title' | t | escape }}
+      </p>
+      {%- if section.settings.show_view_all_link -%}
+        {%- assign view_all_label = section.settings.view_all_label -%}
+        {%- if view_all_label == blank -%}
+          {%- assign view_all_label = 'collections.general.all_of_collection' | t -%}
+        {%- endif -%}
+        <a
+          class="theme-button {% if section.settings.overlay_cta_style == 'solid' %}theme-button--solid theme-button--solid-overlay {% endif %}pointer-events-auto"
+          href="{{ initial_url }}"
+          data-sticky-link
+          {% if initial_url == blank %}hidden{% endif %}
+        >
+          {{ view_all_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    {%- if collections.size == 0 and request.design_mode -%}
+      <p class="border border-dashed py-10 text-center opacity-70">Selecciona una o más colecciones en la configuración de esta sección (panel derecho).</p>
+    {%- endif -%}
+
+    <div class="relative z-0">
+      {%- liquid
+        assign global_product_index = 0
+        assign placeholder_index = 0
+
+        capture product_items
+          for collection in collections
+            echo full_width_item_header
+            echo '<div data-media-item data-collection-marker data-title="'
+            echo collection.title | escape
+            echo '" data-url="'
+            echo collection.url
+            echo '"><span class="block py-2 text-center text-xs uppercase opacity-50">'
+            echo collection.title | escape
+            echo '</span></div>'
+            echo item_separator
+
+            for product in collection.products limit: section.settings.max_products
+              assign global_product_index = global_product_index | plus: 1
+
+              if section.settings.feature_full_width_products
+                cycle full_width_item_header, '', ''
+
+                capture sizes
+                  cycle full_width_sizes, half_width_sizes, half_width_sizes
+                endcapture
+              else
+                assign sizes = half_width_sizes
+              endif
+
+              assign preload = false
+              assign loading = 'lazy'
+
+              if global_product_index == 1
+                assign preload = true
+              endif
+
+              if global_product_index <= eager_loading_limit
+                assign loading = 'eager'
+              endif
+
+              echo '<div data-media-item>'
+              render 'product-tile', product: product, tag: 'div', show_image_only: show_product_image_only, sizes: sizes, preload: preload, loading: loading, full_width_item_header: full_width_item_header
+              echo '</div>'
+              echo item_separator
+            else
+              for i in (1..section.settings.max_products)
+                if section.settings.feature_full_width_products
+                  cycle full_width_item_header, '', ''
+                endif
+                assign placeholder_index = placeholder_index | modulo: 6 | plus: 1
+                assign placeholder_name = 'product-' | append: placeholder_index
+                echo '<div data-media-item>'
+                render 'product-tile-placeholder', placeholder_name: placeholder_name, tag: 'div', show_image_only: show_product_image_only, full_width_item_header: full_width_item_header
+                echo '</div>'
+                echo item_separator
+              endfor
+            endfor
+          endfor
+        endcapture
+      -%}
+      {%- render 'cascade',
+        section_id: section.id,
+        content_items: product_items,
+        alternate_first_block_position: true,
+        enable_cascade_on_mobile: enable_cascade_on_mobile,
+        desktop_layout: desktop_layout,
+        level_of_media_size_variation: section.settings.level_of_media_size_variation,
+        sequence: section.settings.sequence,
+        alignment_variation: section.settings.alignment_variation,
+        spacing: section.settings.spacing,
+        first_block_position: section.settings.start_position,
+        use_global_settings: section.settings.use_global_settings
+      -%}
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'multi-collection-cascade.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Colecciones en cascada",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Colecciones",
+      "info": "Todos los productos se muestran en un único flujo de cascada continuo, en el orden en que agregues las colecciones aquí. El título flotante cambia de colección conforme haces scroll."
+    },
+    {
+      "type": "header",
+      "content": "Productos"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "label": "Número de productos por colección",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_image_only",
+      "label": "Mostrar solo la imagen del producto",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_full_width_products",
+      "label": "Destacar productos a ancho completo",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Encabezado sticky"
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_text_scale",
+      "min": -2,
+      "max": 4,
+      "step": 1,
+      "label": "Escala de texto en móvil",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "heading_desktop_text_scale",
+      "min": -2,
+      "max": 10,
+      "step": 1,
+      "label": "Escala de texto en escritorio",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all_link",
+      "label": "Mostrar “Ver todo”",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Texto del botón",
+      "info": "Opcional. Si se deja en blanco, usa el texto predeterminado."
+    },
+    {
+      "type": "select",
+      "id": "overlay_cta_style",
+      "label": "Estilo del botón",
+      "options": [
+        { "value": "solid", "label": "Sólido" },
+        { "value": "border-only", "label": "Borde" }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "range",
+      "id": "sticky_offset",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 0,
+      "label": "Desplazamiento superior",
+      "info": "Ajusta este valor si tu tema tiene un header fijo, para que no se solape con él."
+    },
+    {
+      "type": "header",
+      "content": "Cascade effect"
+    },
+    {
+      "type": "paragraph",
+      "content": "Ajusta la variación, secuencia y alineación de tamaños de imagen para crear diseños únicos."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cascade_on_mobile",
+      "label": "Activar diseño en cascada en móvil",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Diseño en escritorio",
+      "default": "two_columns",
+      "options": [
+        { "value": "single_column", "label": "Una columna" },
+        { "value": "two_columns", "label": "Dos columnas" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "level_of_media_size_variation",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "label": "Nivel de variación de tamaño",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "sequence",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Secuencia",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "alignment_variation",
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "label": "Variación de alineación",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.5,
+      "label": "Espacio vertical entre elementos",
+      "default": 1.5,
+      "unit": "x"
+    },
+    {
+      "type": "select",
+      "id": "start_position",
+      "label": "Posición inicial",
+      "options": [
+        { "value": "left", "label": "Arriba a la izquierda" },
+        { "value": "right", "label": "Arriba a la derecha" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_settings",
+      "label": "Usar configuración global",
+      "default": false,
+      "info": "Esto anula todas las opciones de cascada anteriores. Configura los valores globales en la configuración del tema (categoría “cascading content”)."
+    },
+    {
+      "type": "header",
+      "content": "Color y espaciado"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme1",
+      "label": "Esquema de color"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Desactivar transición de color"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Quitar espaciado superior",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Quitar espaciado inferior",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colecciones en cascada"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "aside"]
+  }
+}
+{% endschema %}
