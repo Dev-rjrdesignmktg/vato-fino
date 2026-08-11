@@ -39,7 +39,7 @@
       "type": "rich-text",
       "name": "Rich text",
       "settings": {
-        "title": "Sobre nosotros:  El peso del criterio.",
+        "title": "Sobre Nosotros:  El Peso del Criterio.",
         "richtext": "<h1>Si buscas moda sigue tu camino.</h1><h1>Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</h1><h1>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</h1><h1>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</h1>",
         "font": "font-body",
         "text_size": "text-base",
