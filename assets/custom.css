@@ -55,3 +55,7 @@ input,
 textarea {
     font-family: var(--font-body);
 }
+
+.header__logo-text {
+    font-family: var(--font-secondary);
+}
