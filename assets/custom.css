@@ -10,9 +10,9 @@ https://help.switchthemes.co/cascade/advanced/custom-css.html
 
 
 :root {
-    --font-primary: "Ancient Medium", sans-serif;
+    --font-primary: "CSClaes-Regular", sans-serif;
     --font-secondary: "CSClaes-Regular", sans-serif;
-    --font-body: "Source Sans Pro", sans-serif;
+    --font-body: "Rigena", sans-serif;
     --size-base: 1rem;
     --size-lg: 1.25rem;
     --size-xl: 1.5rem;
@@ -40,6 +40,7 @@ h3,
 h4,
 h5,
 h6, .text-heading-standard{
+   font-family: var(--font-secondary);
    text-transform: none;
    line-height: var(--line-height);
 }
@@ -52,5 +53,5 @@ a,
 button,
 input,
 textarea {
-    font-family: inherit;
+    font-family: var(--font-body);
 }
