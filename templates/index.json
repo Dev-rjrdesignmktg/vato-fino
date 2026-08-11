@@ -166,7 +166,7 @@
       "type": "featured-collection",
       "settings": {
         "title": "Vf Originals",
-        "collection": "all",
+        "collection": "vato-fino-originals",
         "max_products": "8",
         "subheading": "<p><strong>Alianzas de culto.<br/></strong><br/>Piezas en colaboración con artistas que comparten los códigos y visión de Vato Fino.</p>",
         "show_collection_link": true,
