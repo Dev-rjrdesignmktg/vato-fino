@@ -141,7 +141,7 @@
       "type": "rich-text",
       "name": "Rich text",
       "settings": {
-        "title": "Este no es tu lugar si lo que buscas es moda.",
+        "title": "Este no es tu Lugar si lo que Buscas es Moda.",
         "richtext": "",
         "font": "font-heading",
         "text_size": "text-heading-feature",
@@ -253,7 +253,7 @@
       ],
       "name": "Text columns with images",
       "settings": {
-        "title": "Artistas asociados",
+        "title": "Artistas Asociados",
         "subheading": "<p>artistas que comparten con la visión e identidad de nuestra marca</p>",
         "column_text_align": "text-left",
         "cta_link": "",
