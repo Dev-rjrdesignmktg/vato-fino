@@ -338,7 +338,7 @@
         "subheading": "<p><strong>Venimos a demostrar que lo independiente también puede ser impecable.</strong></p>",
         "per_row_desktop": "2",
         "enable_mobile_carousel": true,
-        "enable_desktop_carousel": false,
+        "enable_desktop_carousel": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
         "remove_top_padding": false,
