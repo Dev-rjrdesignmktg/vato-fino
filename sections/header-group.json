@@ -25,21 +25,6 @@
     },
     "header": {
       "type": "header",
-      "blocks": {
-        "logo_advanced_pbAwEX": {
-          "type": "logo_advanced",
-          "settings": {
-            "liquid": "<span class=\"font-heading text-lg\">{{ shop.name }}</span>",
-            "liquid_sticky": "",
-            "liquid_mobile": "",
-            "liquid_mobile_sticky": "",
-            "breakpoint": 768
-          }
-        }
-      },
-      "block_order": [
-        "logo_advanced_pbAwEX"
-      ],
       "settings": {
         "logo_max_width": 4,
         "linklist": "main-menu",
@@ -58,8 +43,8 @@
         "show_search": true,
         "menu_items_display": "icons",
         "section_padding": "py-4",
-        "showcase_second_level_links": "grid",
-        "collection_image_crop": "none"
+        "showcase_second_level_links": "scroll",
+        "collection_image_crop": "landscape"
       }
     }
   },
