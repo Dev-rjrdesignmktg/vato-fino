@@ -25,6 +25,21 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "logo_advanced_pbAwEX": {
+          "type": "logo_advanced",
+          "settings": {
+            "liquid": "<span class=\"font-heading text-lg\">{{ shop.name }}</span>",
+            "liquid_sticky": "",
+            "liquid_mobile": "",
+            "liquid_mobile_sticky": "",
+            "breakpoint": 768
+          }
+        }
+      },
+      "block_order": [
+        "logo_advanced_pbAwEX"
+      ],
       "settings": {
         "logo_max_width": 4,
         "linklist": "main-menu",

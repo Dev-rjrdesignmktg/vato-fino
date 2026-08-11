@@ -16,6 +16,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/imagenes_slide_1_1.png",
+            "image_alt": "",
             "title": "El poder solo multiplica lo que ya eres.",
             "text": "",
             "button_text": "",
@@ -26,6 +27,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/imagenes_slide_1_2.png",
+            "image_alt": "",
             "title": "Si tu lealtad tiene precio, tú también estás a la venta.",
             "text": "",
             "button_text": "",
@@ -36,6 +38,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/imagenes_slide_1.png",
+            "image_alt": "",
             "title": "El honor y la palabra no se negocian.",
             "text": "",
             "button_text": "",
