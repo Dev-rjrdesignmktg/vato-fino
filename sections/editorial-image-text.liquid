@@ -1,0 +1,233 @@
+{% liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+  assign image_position = section.settings.image_position | default: 'left'
+
+  assign sizes = '(min-width: 990px) 50vw, 100vw'
+
+  if image_position == 'right'
+    assign grid_modifier = ' editorial-image-text__grid--reversed'
+  else
+    assign grid_modifier = ''
+  endif
+
+  if section.index == 1
+    assign preload = true
+  else
+    assign preload = false
+  endif
+%}
+
+<section
+  id="{{ section.id }}"
+  class="editorial-image-text {% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    <div
+      class="editorial-image-text__grid{{ grid_modifier }}"
+      x-data="{ revealed: false }"
+    >
+      <div
+        class="editorial-image-text__media"
+        x-intersect.once="revealed = true"
+        :class="revealed && 'is-visible'"
+      >
+        <div class="aspect-w-3 aspect-h-4 relative block overflow-hidden rounded">
+          {% if section.settings.image != blank %}
+            {{
+              section.settings.image
+              | image_url: width: 1600
+              | image_tag:
+                sizes: sizes,
+                preload: preload,
+                class: 'absolute inset-0 block h-full w-full object-cover'
+            }}
+          {% else %}
+            {{
+              'image'
+              | placeholder_svg_tag: 'absolute inset-0 h-full w-full bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+            }}
+          {% endif %}
+        </div>
+      </div>
+
+      <div
+        class="editorial-image-text__content"
+        :class="revealed && 'is-visible'"
+      >
+        <div class="editorial-image-text__content-inner">
+          {% if section.settings.title != blank %}
+            <h2 class="font-heading text-heading-standard break-word">
+              {{ section.settings.title | escape }}
+            </h2>
+          {% endif %}
+
+          {% if section.settings.text != blank %}
+            <div
+              class="rte rte--content-only rte--compact break-word text-base {% if section.settings.title != blank %}mt-10{% endif %}"
+            >
+              {{ section.settings.text }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #{{ section.id }} .editorial-image-text__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  #{{ section.id }} .editorial-image-text__media,
+  #{{ section.id }} .editorial-image-text__content {
+    width: 100%;
+  }
+
+  #{{ section.id }} .editorial-image-text__content-inner {
+    max-width: 38rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  #{{ section.id }} .editorial-image-text__content .rte {
+    line-height: 1.7;
+  }
+
+  #{{ section.id }} .editorial-image-text__media,
+  #{{ section.id }} .editorial-image-text__content {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  #{{ section.id }} .editorial-image-text__media.is-visible,
+  #{{ section.id }} .editorial-image-text__content.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (min-width: 990px) {
+    #{{ section.id }} .editorial-image-text__grid {
+      flex-direction: row;
+      align-items: center;
+      gap: 5.5rem;
+    }
+
+    #{{ section.id }} .editorial-image-text__grid--reversed {
+      flex-direction: row-reverse;
+    }
+
+    #{{ section.id }} .editorial-image-text__media,
+    #{{ section.id }} .editorial-image-text__content {
+      width: 50%;
+    }
+
+    #{{ section.id }} .editorial-image-text__content-inner {
+      margin-inline: 0;
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #{{ section.id }} .editorial-image-text__media,
+    #{{ section.id }} .editorial-image-text__content {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Editorial: imagen y texto",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Posición de la imagen en escritorio",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Nuestra historia"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Cuenta la historia de tu marca, tus valores y lo que os hace únicos. Usa este espacio para conectar con tus clientes a un nivel más personal.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Combinación de color",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Desactivar transición",
+      "info": "Anula la configuración global de transición de color entre secciones."
+    },
+    {
+      "type": "header",
+      "content": "Espaciado",
+      "info": "Ajusta el espacio vertical para conectar visualmente esta sección con las secciones adyacentes."
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Quitar espaciado superior",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Quitar espaciado inferior",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial: imagen y texto"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer", "aside"]
+  }
+}
+{% endschema %}
