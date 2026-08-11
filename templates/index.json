@@ -500,6 +500,36 @@
         "remove_top_padding": false,
         "remove_bottom_padding": false
       }
+    },
+    "cascading_collection_n6LTqa": {
+      "type": "cascading-collection",
+      "name": "Cascading collection",
+      "settings": {
+        "title": "{{ section.settings.collection.title }}",
+        "collection": "vato-fino-club-internationalis",
+        "max_products": 4,
+        "show_product_image_only": true,
+        "feature_full_width_products": false,
+        "enable_cascade_on_mobile": true,
+        "desktop_layout": "two_columns",
+        "level_of_media_size_variation": 2,
+        "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1.5,
+        "start_position": "left",
+        "use_global_settings": false,
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false,
+        "overlay_heading": true,
+        "heading_mobile_text_scale": 2,
+        "heading_desktop_text_scale": 7,
+        "show_view_all_link": true,
+        "overlay_cta_style": "solid",
+        "blend_mode": "normal",
+        "blend_mode_color_scheme": ""
+      }
     }
   },
   "order": [
@@ -512,6 +542,7 @@
     "cascading_collection_adBif9",
     "cascading_collection_39abzg",
     "cascading_collection_Vb9Hdp",
+    "cascading_collection_n6LTqa",
     "rich_text_4V9ejj",
     "featured-collection-1",
     "video-with-text-overlay",
