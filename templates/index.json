@@ -60,12 +60,7 @@
       "settings": {
         "title": "",
         "product_list": [
-          "sloow-x-vato-fino",
-          "vato-fino-limited-drop-mvsa-bloody-valentines",
           "big-stan-x-vato-fino-mexico-x-colombia",
-          "big-stan-x-vato-fino-tour-mala-fama",
-          "big-stan-x-vato-fino",
-          "vato-fino-club",
           "vato-fino-x-django",
           "vato-fino-x-irving-o-d-originals"
         ],
@@ -116,7 +111,7 @@
     "cascading-collection-1": {
       "type": "cascading-collection",
       "settings": {
-        "title": "Vato Fino x Big Stan",
+        "title": "{{ section.settings.collection.title }}",
         "collection": "vato-fino-x-big-stan",
         "max_products": 8,
         "show_product_image_only": true,
@@ -138,7 +133,7 @@
         "heading_desktop_text_scale": 10,
         "show_view_all_link": true,
         "overlay_cta_style": "solid",
-        "blend_mode": "difference",
+        "blend_mode": "exclusion",
         "blend_mode_color_scheme": "scheme4"
       }
     },
