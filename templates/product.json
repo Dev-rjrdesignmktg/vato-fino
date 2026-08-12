@@ -54,11 +54,11 @@
           "settings": {
             "heading": "",
             "text_color": "text",
-            "text_1": "Regular fit",
+            "text_1": "{{ product.metafields.custom.cut_t_shirt.value }}",
             "icon_1": "shirt",
             "text_2": "Premium fabrics",
             "icon_2": "check-mark",
-            "text_3": "WATER-BASED DISCHARGE",
+            "text_3": "{{ product.metafields.custom.product_printing_method.value }}",
             "icon_3": "check-mark",
             "text_4": "Designed in California",
             "icon_4": "map-pin",
