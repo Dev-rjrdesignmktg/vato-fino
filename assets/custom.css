@@ -12,7 +12,7 @@ https://help.switchthemes.co/cascade/advanced/custom-css.html
 :root {
     --font-primary: "CSClaes-Regular", sans-serif;
     --font-secondary: "CSClaes-Regular", sans-serif;
-    --font-body: "Rigena", sans-serif;
+    --font-body: "Source Sans Pro", sans-serif;
     --size-base: 1rem;
     --size-lg: 1.25rem;
     --size-xl: 1.5rem;
@@ -53,7 +53,7 @@ a,
 button,
 input,
 textarea {
-    font-family: var(--font-body);
+    font-family: inherit;
 }
 
 .header__logo-text {
