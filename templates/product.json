@@ -46,7 +46,7 @@
         "rich-text": {
           "type": "rich_text",
           "settings": {
-            "content": "<p>Vato Fino x Big Stan - Tour El Mala Fama 2026 - Collaboration</p><p><strong>Nota:</strong> Cada pieza se fabrica bajo pedido y puede tardar entre 3-5 días.</p>"
+            "content": "<p></p>{{ product.description }}"
           }
         },
         "icon-list": {
