@@ -1,0 +1,73 @@
+{% comment %}
+  Custom snippet — not part of the base theme. Paired with sections/custom-artist-showcase.liquid.
+  Renders a single artist tile: image, optional name overlay, hover-darken scrim,
+  and a full-cover link when block.settings.link is set.
+{% endcomment %}
+{%- liquid
+  unless preload
+    assign preload = false
+  endunless
+
+  unless loading
+    assign loading = null
+  endunless
+
+  assign has_link = false
+  if block.settings.link != blank
+    assign has_link = true
+  endif
+
+  assign link_label = block.settings.artist_name
+  if link_label == blank
+    assign link_label = block.settings.richtext | strip_html
+  endif
+-%}
+
+<li class="{{ item_class }}" {{ block.shopify_attributes }}>
+  <div class="group relative">
+    {% if has_link %}
+      <a
+        class="absolute inset-0 z-10"
+        href="{{ block.settings.link }}"
+      >
+        <span class="sr-only">{{ link_label }}</span>
+      </a>
+    {% endif %}
+
+    <div class="relative">
+      {% if block.settings.image != blank %}
+        {{
+          block.settings.image
+          | image_url: width: 1600
+          | image_tag: class: 'block w-full', sizes: sizes, loading: 'lazy'
+        }}
+      {% else %}
+        <div class="relative block">
+          {{
+            'image'
+            | placeholder_svg_tag: 'bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current'
+          }}
+        </div>
+      {% endif %}
+
+      {% if has_link %}
+        <div class="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-500 group-hover:opacity-30 motion-reduce:group-hover:opacity-0">
+          <div class="h-full w-full bg-scheme-background"></div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.artist_name != blank %}
+        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-24 w-full bg-gradient-to-t from-scheme-background to-transparent"></div>
+        <div class="font-heading text-heading-standard break-word pointer-events-none absolute bottom-0 left-0 right-0 p-5">
+          {{ block.settings.artist_name | escape }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if block.settings.richtext != blank %}
+    <div class="rte rte--content-only rte--compact mt-5">
+      {{ block.settings.richtext }}
+    </div>
+  {% endif %}
+</li>
