@@ -230,41 +230,41 @@
         "remove_bottom_padding": true
       }
     },
-    "custom_artist_showcase_eJbHKA": {
+    "text_columns_with_images_UVFQ4Y": {
       "type": "custom-artist-showcase",
       "blocks": {
-        "artist_cibQcM": {
+        "image_with_text_hHhfkN": {
           "type": "artist",
           "settings": {
-            "image": "shopify://shop_images/1_3.webp",
-            "artist_name": "",
-            "link": "",
-            "richtext": ""
-          }
-        },
-        "artist_C69Akf": {
-          "type": "artist",
-          "settings": {
-            "image": "shopify://shop_images/3.webp",
-            "artist_name": "",
+            "image": "shopify://shop_images/3_4518a51a-02c9-4354-9aad-8a4d9a9565ea.png",
+            "artist_name": "Django",
             "link": "https://linktr.ee/djangorap",
             "richtext": ""
           }
         },
-        "artist_tVtjAQ": {
+        "image_with_text_LKxAEB": {
           "type": "artist",
           "settings": {
-            "image": "shopify://shop_images/4.webp",
-            "artist_name": "",
+            "image": "shopify://shop_images/4.png",
+            "artist_name": "Irving O.D",
             "link": "https://linktr.ee/irving_o.d",
+            "richtext": ""
+          }
+        },
+        "image_with_text_4xt3Mj": {
+          "type": "artist",
+          "settings": {
+            "image": "shopify://shop_images/5_bcd89f46-0e2a-492b-9970-00c1e4637ff9.png",
+            "artist_name": "Sloowtrack",
+            "link": "",
             "richtext": ""
           }
         }
       },
       "block_order": [
-        "artist_cibQcM",
-        "artist_C69Akf",
-        "artist_tVtjAQ"
+        "image_with_text_hHhfkN",
+        "image_with_text_LKxAEB",
+        "image_with_text_4xt3Mj"
       ],
       "name": "Artist showcase",
       "settings": {
@@ -376,7 +376,7 @@
     "featured-collection-1",
     "video-with-text-overlay",
     "scrolling-text",
-    "custom_artist_showcase_eJbHKA",
+    "text_columns_with_images_UVFQ4Y",
     "testimonials_zye8mW",
     "spotify_section_Ge364j"
   ]
