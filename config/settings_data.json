@@ -47,6 +47,7 @@
     "social_instagram_link": "https://instagram.com/shopify",
     "social_facebook_link": "https://www.facebook.com/shopify",
     "social_tiktok_link": "https://www.tiktok.com/@shopify",
+    "favicon": "shopify://shop_images/VATO_FINO_LOGO.png",
     "variance": "high",
     "cascade_item_spacing": "large",
     "enable_sidebar_nav_animation": true,
