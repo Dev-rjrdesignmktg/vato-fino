@@ -347,7 +347,7 @@
       "name": "Testimonials",
       "settings": {
         "title": "Reseñas",
-        "subheading": "<p><strong>Venimos a demostrar que lo independiente también puede ser impecable.</strong></p>",
+        "subheading": "<p>Venimos a demostrar que lo independiente también puede ser impecable.</p>",
         "per_row_desktop": "2",
         "enable_mobile_carousel": true,
         "enable_desktop_carousel": true,
