@@ -929,6 +929,38 @@
         "label": "Open drawer when product is added to cart",
         "info": "Add to cart behaviour when cart type is set to modal",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Cross-selling"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_cross_sell_enable",
+        "label": "Show cross-sell products in cart drawer",
+        "info": "Suggests complementary products at the bottom of the cart drawer, with a one-click add.",
+        "default": true
+      },
+      {
+        "type": "collection",
+        "id": "cart_cross_sell_collection",
+        "label": "Cross-sell collection",
+        "info": "Products already in the cart are not suggested."
+      },
+      {
+        "type": "text",
+        "id": "cart_cross_sell_heading",
+        "label": "Cross-sell heading",
+        "default": "You may also like"
+      },
+      {
+        "type": "range",
+        "id": "cart_cross_sell_limit",
+        "label": "Number of products to show",
+        "min": 2,
+        "max": 8,
+        "step": 1,
+        "default": 4
       }
     ]
   },

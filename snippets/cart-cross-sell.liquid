@@ -1,0 +1,133 @@
+{%- comment -%}
+  Cross-selling module for the cart drawer.
+  Renders complementary products from settings.cart_cross_sell_collection,
+  excluding anything already in the cart, with an instant AJAX "add" button.
+  Does not touch the native cart-items / cart-footer markup or logic.
+{%- endcomment -%}
+
+{%- liquid
+  assign cross_sell_ready = false
+
+  if settings.cart_cross_sell_enable and settings.cart_cross_sell_collection != blank
+    assign cross_sell_collection = collections[settings.cart_cross_sell_collection]
+
+    if cross_sell_collection != blank and cross_sell_collection.products.size > 0
+      assign cross_sell_ready = true
+    endif
+  endif
+-%}
+
+{%- if cross_sell_ready and cart != empty -%}
+  {%- liquid
+    assign cross_sell_limit = settings.cart_cross_sell_limit | default: 4
+    assign cross_sell_heading = settings.cart_cross_sell_heading | default: 'You may also like'
+    assign cross_sell_shown = 0
+
+    assign cart_product_ids = '|'
+    for cart_item in cart.items
+      assign cart_product_ids = cart_product_ids | append: cart_item.product_id | append: '|'
+    endfor
+  -%}
+
+  <div
+    class="cart-cross-sell mt-5 border-t border-scheme-text pt-5"
+    data-cart-cross-sell
+  >
+    <h3 class="text-theme-basic">
+      {{ cross_sell_heading }}
+    </h3>
+
+    <ul
+      class="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto -mx-5 px-5 pb-2 md:mx-0 md:px-0"
+    >
+      {%- for product in cross_sell_collection.products -%}
+        {%- liquid
+          assign cross_sell_needle = '|' | append: product.id | append: '|'
+        -%}
+
+        {%- unless cart_product_ids contains cross_sell_needle or product.available == false -%}
+          {%- if cross_sell_shown < cross_sell_limit -%}
+            {%- liquid
+              assign cross_sell_shown = cross_sell_shown | plus: 1
+              assign current_variant = product.selected_or_first_available_variant
+              assign on_sale = false
+              if product.compare_at_price > product.price
+                assign on_sale = true
+              endif
+            -%}
+
+            <li
+              class="w-28 shrink-0 snap-start"
+              x-data="ThemeModule_CartCrossSellItem({ variantId: {{ current_variant.id }}, available: {{ current_variant.available }} })"
+            >
+              <a
+                href="{{ product.url }}"
+                class="block"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                {%- if product.media.size > 0 -%}
+                  {{
+                    product.featured_media
+                    | image_url: width: 300
+                    | image_tag:
+                      class: 'block w-full aspect-1 bg-scheme-background object-cover object-center',
+                      loading: 'lazy',
+                      sizes: '112px'
+                  }}
+                {%- else -%}
+                  <div class="aspect-1 w-full bg-scheme-background"></div>
+                {%- endif -%}
+              </a>
+
+              <a href="{{ product.url }}" class="mt-2 block">
+                <p class="break-word text-xs leading-5">
+                  {{ product.title }}
+                </p>
+              </a>
+
+              <div class="mt-1">
+                {%- render 'product-price',
+                  product: product,
+                  on_sale: on_sale,
+                  sold_out: false,
+                  current_variant: current_variant
+                -%}
+              </div>
+
+              <button
+                type="button"
+                class="theme-button theme-button--solid mt-2 block w-full py-2 text-center text-xs leading-5 transition-opacity"
+                :class="{ 'cursor-progress opacity-50': loading, 'opacity-70': added }"
+                :disabled="loading || added"
+                :aria-busy="loading"
+                aria-live="polite"
+                @click.prevent="addToCart()"
+              >
+                <span x-show="!added">
+                  {{- 'products.product.add_to_cart' | t -}}
+                </span>
+                <span
+                  x-show="added"
+                  x-cloak
+                >
+                  {{- 'products.product.added_to_cart' | t -}}
+                </span>
+              </button>
+
+              <p
+                class="mt-1 text-center text-xs text-scheme-accent"
+                x-show="hasError"
+                x-cloak
+              >
+                {{- 'cart.general.cart_error' | t -}}
+              </p>
+            </li>
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <script src="{{ 'cart-cross-sell.js' | asset_url }}" type="module"></script>
+{%- endif -%}
