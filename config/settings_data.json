@@ -29,6 +29,7 @@
     "body_text_uppercase": true,
     "section_titles_position": "left_of_content",
     "zoom_media_links_on_hover": true,
+    "cascade_fade_in_items": true,
     "button_border_radius": "0.5rem",
     "button_style": "1",
     "button_color": "text",

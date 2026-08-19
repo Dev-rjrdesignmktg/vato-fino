@@ -9,21 +9,48 @@
  */
 {
   "sections": {
+    "rich_text_6cfVkn": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "Colecciones de Vato Fino",
+        "richtext": "",
+        "font": "font-heading",
+        "text_size": "text-base",
+        "text_alignment": "text-center",
+        "cta_link": "",
+        "cta_label": "",
+        "button_style": "solid",
+        "desktop_width": "full",
+        "desktop_alignment": "center",
+        "color_scheme": "scheme4",
+        "disable_color_transition": false,
+        "remove_top_padding": false,
+        "remove_bottom_padding": false
+      }
+    },
     "collections-list": {
       "type": "main-list-collections-list",
       "settings": {
-        "feature_full_width_collections": true,
+        "feature_full_width_collections": false,
+        "text_display": "overlay",
+        "overlay_text_size": "text-heading-feature",
         "enable_cascade_on_mobile": true,
         "desktop_layout": "two_columns",
+        "level_of_media_size_variation": 2,
         "sequence": 1,
+        "alignment_variation": 1,
+        "spacing": 1.5,
+        "start_position": "left",
         "use_global_settings": true,
-        "color_scheme": "scheme1",
+        "color_scheme": "scheme4",
         "remove_top_padding": false,
         "remove_bottom_padding": false
       }
     }
   },
   "order": [
+    "rich_text_6cfVkn",
     "collections-list"
   ]
 }
