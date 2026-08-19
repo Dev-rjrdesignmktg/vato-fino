@@ -18,10 +18,10 @@
             "image": "shopify://shop_images/12.webp",
             "image_mobile": "shopify://shop_images/12.webp",
             "image_alt": "Hero de Vato Fino poder y confianza",
-            "title": "El Poder Solo Multiplica lo que ya Eres.",
+            "title": "Los Contratos Vencen. El Honor es Para Siempre.",
             "text": "",
-            "button_text": "",
-            "button_url": ""
+            "button_text": "EXPLORAR DROPS",
+            "button_url": "shopify://collections/vato-fino-records"
           }
         },
         "slide_LABcVf": {
@@ -32,8 +32,8 @@
             "image_alt": "Hero de Vato Fino lealtad no tiene precio",
             "title": "Si tu Lealtad Tiene Precio, tú También Estás a la Venta.",
             "text": "",
-            "button_text": "",
-            "button_url": ""
+            "button_text": "VER MERCH OFICIAL",
+            "button_url": "shopify://collections/vato-fino-originals"
           }
         },
         "slide_H8wUAT": {
@@ -42,10 +42,10 @@
             "image": "shopify://shop_images/DSC7652.webp",
             "image_mobile": "shopify://shop_images/DSC7652.webp",
             "image_alt": "Hero de Vato Fino Honor y Palabra",
-            "title": "El Honor y la Palabra no se Negocian.",
+            "title": "Lo Peligroso del Poder no es Tomarlo, es en Quién te Convierte Para Mantenerlo.",
             "text": "",
-            "button_text": "",
-            "button_url": ""
+            "button_text": "VER MERCH OFICIAL",
+            "button_url": "shopify://collections"
           }
         }
       },
@@ -174,7 +174,7 @@
         "title": "Vf Originals",
         "collection": "vato-fino-originals",
         "max_products": "4",
-        "subheading": "<p><strong>Alianzas de culto.<br/></strong><br/>Piezas en colaboración con artistas que comparten los códigos y visión de Vato Fino.</p>",
+        "subheading": "<p><strong>Alianzas de culto.<br/></strong><br/><em>Piezas en colaboración con artistas que comparten los códigos y visión de Vato Fino.</em></p>",
         "show_collection_link": true,
         "enable_mobile_carousel": true,
         "enable_desktop_carousel": true,
@@ -291,8 +291,8 @@
           "settings": {
             "image_style": "photo",
             "rating": "5_stars",
-            "quote": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>",
-            "source": "Source",
+            "quote": "<p><strong>Caída perfecta sin sentirla pesada.\"</strong></p><p>La neta superó mis expectativas. Pensé que por el corte iba a estar pesada o calurosa, pero cero, es super suave, fresca y la tela se siente de calidad. No se deforma después de varias lavadas. Vale 100% lo que cuesta.</p>",
+            "source": "Marcos V.",
             "text_align": "text-left"
           }
         },
@@ -301,8 +301,8 @@
           "settings": {
             "image_style": "photo",
             "rating": "5_stars",
-            "quote": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>",
-            "source": "Source",
+            "quote": "<p><strong>Impresión tacto cero.\"</strong></p><p><em>Compré la playera de mi rapero favorito y la impresión está a otro nivel, cero plastisol tieso que te hace sudar, el estampado es parte de la misma tela y no se siente al tacto.. Por fin merch oficial bien hecha.\"</em></p><p></p>",
+            "source": "Damián R.",
             "text_align": "text-left"
           }
         },
@@ -311,8 +311,8 @@
           "settings": {
             "image_style": "photo",
             "rating": "5_stars",
-            "quote": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>",
-            "source": "Source",
+            "quote": "<p><strong>Diseño imponente con la mejor calidad.\"</strong></p><p><em>A diferencia de otras marcas que venden playeras oversized incomodas que parecen costal, esta tiene una caída muy perra en el pecho y los hombros. El algodón se siente de alta gama y el diseño está 10/10</em></p>",
+            "source": "Gael T.",
             "text_align": "text-left"
           }
         },
@@ -321,18 +321,8 @@
           "settings": {
             "image_style": "photo",
             "rating": "5_stars",
-            "quote": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>",
-            "source": "Source",
-            "text_align": "text-left"
-          }
-        },
-        "testimonial_Gcgkh6": {
-          "type": "testimonial",
-          "settings": {
-            "image_style": "photo",
-            "rating": "5_stars",
-            "quote": "<p>A quote from a customer or staff member can help show off your products’ unique selling points.</p>",
-            "source": "Source",
+            "quote": "<p><strong>Me la han chuleado un buen en la calle.\"</strong></p><p><em>Desde el primer día que me la puse me la chulearon. Me preguntan a cada rato donde la compré. El diseño de la espalda llama mucho la atención sin verse cargado. Cuando la tocas se nota que es una playera de calidad.</em></p>",
+            "source": "Erick L.",
             "text_align": "text-left"
           }
         }
@@ -341,8 +331,7 @@
         "testimonial_mnQMd6",
         "testimonial_MQTnaD",
         "testimonial_NMBPHG",
-        "testimonial_hwB3i7",
-        "testimonial_Gcgkh6"
+        "testimonial_hwB3i7"
       ],
       "name": "Testimonials",
       "settings": {
