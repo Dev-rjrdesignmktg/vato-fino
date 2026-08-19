@@ -19,7 +19,24 @@
 
 .spotify-player__heading{
     font-family: var(--font-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.spotify-player__eyebrow{
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.spotify-player__subtitle{
+    font-size: 1rem;
+    opacity: 0.8;
     margin-bottom: 2rem;
+    max-width: 40ch;
 }
 
 @media (max-width: 768px){
@@ -32,3 +49,4 @@
         height: 500px;
     }
 }
+

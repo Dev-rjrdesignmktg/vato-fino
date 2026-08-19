@@ -11,11 +11,25 @@
 >
   <div class="spotify-player__container">
 
-    {% if section.settings.heading != blank %}
-      <h2 class="spotify-player__heading">
-        {{ section.settings.heading }}
-      </h2>
-    {% endif %}
+    <div class="spotify-player__content">
+      {% if section.settings.heading != blank %}
+        <h2 class="spotify-player__heading">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.eyebrow != blank %}
+        <span class="spotify-player__eyebrow">
+          {{ section.settings.eyebrow }}
+        </span>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="spotify-player__subtitle">
+          {{ section.settings.subtitle }}
+        </p>
+      {% endif %}
+    </div>
 
     <div class="spotify-player__wrapper">
       <iframe
@@ -34,9 +48,20 @@
   "settings": [
     {
       "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "VATOFINO"
+    },
+    {
+      "type": "text",
       "id": "heading",
       "label": "Título",
       "default": "Listen on Spotify"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo"
     },
     {
       "type": "text",
