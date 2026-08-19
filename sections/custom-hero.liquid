@@ -41,9 +41,11 @@
                 {% endif %}
                 <div class="vf-hero__overlay"></div>
                 <div class="vf-hero__content">
-                    <span class="vf-hero__eyebrow">
-                        VATOFINO
-                    </span>
+                    {% if block.settings.eyebrow != blank %}
+                        <span class="vf-hero__eyebrow">
+                            {{ block.settings.eyebrow }}
+                        </span>
+                    {% endif %}
 
                     <h1 class="vf-hero__title">
                         {{ block.settings.title }}
@@ -101,6 +103,12 @@
                 "type": "text",
                 "id": "image_alt",
                 "label": "Image ALT"
+                },
+                {
+                "type":"text",
+                "id":"eyebrow",
+                "label":"Eyebrow",
+                "default":"VATOFINO"
                 },
                 {
                 "type":"text",

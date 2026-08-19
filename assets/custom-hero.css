@@ -80,10 +80,19 @@
     margin-top:2rem;
     display:inline-flex;
     padding:1rem 2rem;
-    border:1px solid rgba(255,255,255,.3);
+    border-radius:var(--button-border-radius);
+    border:1px solid rgba(255,255,255,.6);
+    background:rgba(255,255,255,.1);
     color:white;
     text-decoration:none;
     backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    box-shadow:.25rem .25rem 0 0 rgba(255,255,255,.6);
+    transition:background .3s ease;
+}
+
+.vf-hero__button:hover{
+    background:rgba(255,255,255,.18);
 }
 
 .vf-hero__arrow{
