@@ -118,12 +118,12 @@
       "settings": {
         "collections": [
           "vato-fino-essentials",
-          "frontpage",
           "vato-fino-x-big-stan",
           "vato-fino-x-django",
           "vato-fino-x-irving-o-d",
           "vato-fino-x-sloowtrack",
-          "vato-fino-records"
+          "vato-fino-records",
+          "playeras-vato-fino"
         ],
         "max_products": 6,
         "show_product_image_only": true,
