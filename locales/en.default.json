@@ -412,6 +412,19 @@
         },
         "item_label": {
           "many": "{{count}} items"
+        },
+        "out_of_stock": {
+          "missing_items": {
+            "title": {
+              "many": "{{count}} items are no longer available"
+            },
+            "some_available_notice": {
+              "many": "The remaining items are still available for purchase. Unavailable items will be removed from the cart."
+            },
+            "none_available_notice": {
+              "many": "These items are no longer available and have been removed from the cart."
+            }
+          }
         }
       },
       "order_summary": {
@@ -532,6 +545,12 @@
         },
         "unbranded_description_with_fulfillment_weeks": {
           "many": "Ships in %{count} weeks"
+        },
+        "split_shipping_shipment_count_notice_one_time_purchase": {
+          "many": "Your order will arrive in %{count} shipments"
+        },
+        "split_shipping_arrives_in_shipments": {
+          "many": "Arrives in %{count} shipments"
         }
       },
       "payment": {
@@ -563,6 +582,16 @@
         },
         "discount_codes_modified_summary": {
           "many": "%{count} discount codes modified"
+        },
+        "pending_payment": {
+          "oxxo": {
+            "days_left": {
+              "many": "%{count} days"
+            }
+          }
+        },
+        "shop_pay_hsa": {
+          "pay_button_label": "Continue with the health survey"
         }
       },
       "shipping_errors": {
@@ -721,6 +750,36 @@
         },
         "location_far_away_other_items": {
           "many": "%{count} branches with your items"
+        },
+        "stock_details": {
+          "ship_separately": {
+            "many": "They will be sent separately"
+          },
+          "remove_items": {
+            "many": "They will be removed from your order"
+          }
+        },
+        "unavailable_item_count": {
+          "many": "%{count} items unavailable"
+        },
+        "ship_separately_notice": {
+          "many": "%{count} items will be shipped separately"
+        },
+        "stock_details_modal": {
+          "can_ship_description": {
+            "many": "These items are sold out at the selected pickup location."
+          },
+          "cannot_ship_description": {
+            "many": "These items are sold out at the selected pickup location and cannot be shipped."
+          }
+        },
+        "stock_details_banner": {
+          "heading": {
+            "many": "%{count} items are not available for pickup at %{location}"
+          },
+          "ship_separately": {
+            "many": "send them separately"
+          }
         }
       },
       "general": {
@@ -823,6 +882,9 @@
         },
         "ship_items_count": {
           "many": "Send %{count} items"
+        },
+        "items_count": {
+          "many": "%{count} items"
         }
       },
       "merchandise_unavailable_in_buyer_location": {
@@ -833,6 +895,16 @@
       "remote_merchandise_only": {
         "detail_item_label": {
           "many": "{{count}} items"
+        }
+      },
+      "field_errors": {
+        "custom_field": {
+          "cart_metafield_value_too_long_with_limit": {
+            "many": "Enter %{count} characters or fewer."
+          },
+          "cart_metafield_value_too_short_with_limit": {
+            "many": "Enter at least %{count} characters."
+          }
         }
       }
     },
@@ -878,6 +950,11 @@
         },
         "gift_card_resend_button": {
           "many": "Resend gift cards"
+        },
+        "fulfillment_tracking": {
+          "gift_card_sent_to_recipient": {
+            "many": "The gift cards were sent to the recipients."
+          }
         }
       },
       "order_list": {
@@ -964,6 +1041,11 @@
         "lessThanOneHourAgo": {
           "many": "{{count}} minutes ago"
         }
+      }
+    },
+    "navigation_and_structure": {
+      "store_credit_multi_currency_accessibility_label": {
+        "many": "{{formattedBalance}} in store credit and in {{count}} more currencies"
       }
     }
   }
