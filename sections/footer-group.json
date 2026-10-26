@@ -15,7 +15,7 @@
       "type": "custom-liquid",
       "custom_css": [
         ".custom__footer {text-align: center; font-size: 8rem;}",
-        "@media(max-width: 768px){.custom__footer{font-size: 3rem; }}"
+        "@media (max-width: 768px) {.custom__footer {font-size: 3rem; }}"
       ],
       "name": "Custom Liquid",
       "settings": {
@@ -57,7 +57,7 @@
         "newsletter-0"
       ],
       "settings": {
-        "logo": "shopify://shop_images/VATO_FINO_LOGO.png",
+        "logo": "shopify://shop_images/Black_and_Ochre_Minimalist_Magic_Moon_Logo_-_2_-_Edited.webp",
         "show_payment_icons": true,
         "show_locale_selector": true,
         "show_country_selector": true,
