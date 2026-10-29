@@ -20,7 +20,12 @@
         },
         "price": {
           "type": "price",
-          "settings": {}
+          "settings": {
+            "micro_copy": "Colab Artista | Rap Fino & Callejero",
+            "micro_copy_mobile": "below",
+            "micro_copy_tablet": "below",
+            "micro_copy_desktop": "inline"
+          }
         },
         "quantity-selector": {
           "type": "quantity_selector",
@@ -33,6 +38,30 @@
           "settings": {
             "option_style": "radio",
             "hide_option_labels": true
+          }
+        },
+        "club_spec_3LNpJi": {
+          "type": "club_spec",
+          "settings": {
+            "layout_mobile": "stacked",
+            "layout_tablet": "stacked",
+            "layout_desktop": "columns",
+            "concept_label": "Concepto",
+            "concept_heading": "La voz del barrio",
+            "concept_text": "<p>Big Stan conecta la crudeza del asfalto con la brutalidad del amor, logrando un equilibrio perfecto entre calle, lealtad y sentimiento. Un diseño con sello de archivo que le rinde tributo a quienes mantienen las raíces intactas donde sea que se paren.&nbsp;</p>",
+            "spec_heading": "Ficha técnica",
+            "spec_tag": "EST. 1989",
+            "feature_label": "Característica",
+            "feature_text": "Algodón 100% hilado en ring spun con costuras laterales reforzadas y estampado Discharge.",
+            "advantage_label": "Ventaja",
+            "advantage_text": "Mantiene la fluidez del tejido y evita torsiones o deformaciones tras el lavado.",
+            "benefit_label": "Beneficio",
+            "benefit_text": "Una caída recta y ligera que resalta el perfil urbano sin agregar peso ni calor.",
+            "details_heading": "Detalles del diseño",
+            "front_label": "Frente",
+            "front_text": "Fotografía de archivo tomada en México",
+            "back_label": "Espalda",
+            "back_text": "Icónica calavera coronada de Vato Fino"
           }
         },
         "buy-buttons": {
@@ -110,6 +139,7 @@
         "price",
         "quantity-selector",
         "variant-picker",
+        "club_spec_3LNpJi",
         "buy-buttons",
         "rich-text",
         "icon-list",
@@ -121,8 +151,12 @@
         "media_width_on_desktop": "6",
         "enable_thumbnails_on_desktop": true,
         "thumbnails_width_on_desktop": "small",
+        "thumbnails_below_on_mobile": true,
+        "main_media_ratio_mobile": "1/1",
+        "main_media_fit_mobile": "cover",
         "product_content_width_on_desktop": "full_width",
         "product_content_alignment": "md:justify-end",
+        "enable_sticky_media": true,
         "enable_image_zoom": true,
         "enable_video_looping": true,
         "enable_video_autoplay": true,
