@@ -51,6 +51,13 @@
       </template>
     {% endif %}
 
+    {%- if block.settings.micro_copy != blank -%}
+      {{ 'product-club-spec.css' | asset_url | stylesheet_tag }}
+      <span class="vf-price-tag vf-m-{{ block.settings.micro_copy_mobile | default: 'below' }} vf-t-{{ block.settings.micro_copy_tablet | default: 'below' }} vf-d-{{ block.settings.micro_copy_desktop | default: 'inline' }}">
+        {{- block.settings.micro_copy | escape -}}
+      </span>
+    {%- endif -%}
+
     <template x-if="currentVariant && currentVariant.unit_price">
       <div class="mt-2 text-sm text-scheme-secondary" data-unit-price-wrapper>
         <span class="sr-only">

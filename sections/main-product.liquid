@@ -48,6 +48,11 @@
     endcase
   endif
 
+  assign thumbnails_below = false
+  if enable_thumbnails_on_desktop and section.settings.thumbnails_below_on_mobile
+    assign thumbnails_below = true
+  endif
+
   if thumbnails_width_on_desktop == 'small'
     assign product_media_grid_class = 'md:grid-cols-[fit-content(6rem)_1fr_1fr_1fr_1fr]'
     if media_position_on_desktop == 'right'
@@ -127,6 +132,174 @@
     /* ... calculate the tallest media’s height in vw and apply to thumbnails */
     --thumbnails-height: calc(var(--featured-media-width) / var(--tallest-media-aspect-ratio));
   }
+
+  @media (min-width: 768px) {
+    #{{ section.id }} .vf-sticky-media {
+      position: sticky;
+      top: calc(var(--sticky-header-height, 0px) + 1.5rem);
+      align-self: start;
+    }
+  }
+
+  /* Thumbnails below the featured media on mobile + tablet (< 1024px).
+     Desktop keeps the original vertical thumbnails column. */
+  #{{ section.id }} .vf-thumbs__arrow {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    /* min-width: 0 keeps the Splide list (all slides in one row) from
+       stretching the grid column past the viewport */
+    #{{ section.id }} .vf-thumbs-below {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    #{{ section.id }} .vf-thumbs-below > * {
+      width: 100%;
+      min-width: 0;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      order: 2;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails {
+      flex: 1;
+      min-width: 0;
+      max-height: none;
+      overflow: hidden;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__list {
+      display: flex;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__list > * {
+      flex: none;
+      margin: 0;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails:not(.is-active) .splide__list {
+      gap: .75rem;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails:not(.is-active) .splide__list > * {
+      width: 6.5rem;
+      height: 6.5rem;
+    }
+
+    /* Uniform square thumbnails regardless of the image's aspect ratio */
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__slide a {
+      height: 100%;
+      overflow: hidden;
+      border-radius: var(--media-border-radius);
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__slide a > div:not(.absolute),
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__slide img {
+      width: 100%;
+      height: 100%;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--thumbnails .splide__slide img {
+      object-fit: cover;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .thumbnails-rewind-top,
+    #{{ section.id }} .vf-thumbs-below .thumbnails-ffwd-bottom,
+    #{{ section.id }} .vf-thumbs-below .thumbnails-overflow-indicator-top,
+    #{{ section.id }} .vf-thumbs-below .thumbnails-overflow-indicator-bottom {
+      display: none;
+    }
+  }
+
+  /* Main media at one shared aspect ratio on mobile + tablet */
+  {%- liquid
+    assign main_media_ratio = section.settings.main_media_ratio_mobile | default: '1/1'
+    assign main_media_fit = section.settings.main_media_fit_mobile | default: 'cover'
+  -%}
+  {%- if thumbnails_below and main_media_ratio != 'natural' -%}
+    @media (max-width: 1023px) {
+      #{{ section.id }} .vf-thumbs-below .splide--product .splide__slide img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: {{ main_media_ratio }};
+        object-fit: {{ main_media_fit }};
+      }
+    }
+  {%- endif -%}
+
+  /* Mobile: swipe only, breathing room before the title */
+  @media (max-width: 767px) {
+    #{{ section.id }} .vf-thumbs-below .splide--product .splide__arrows {
+      display: none;
+    }
+
+    /* Full-width main image: the thumbnail row already signals more media,
+       so the next-slide peek is dropped */
+    #{{ section.id }} .vf-thumbs-below .splide--product .splide__track {
+      margin: 0;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--product .splide__slide {
+      width: 100%;
+      padding: 0;
+    }
+
+    #{{ section.id }} .vf-thumbs-below {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  /* Tablet: tighter media/info gutter (theme default is 60px), arrows beside the thumbnail row */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    #{{ section.id }} {
+      --grid-gutter: 1.75rem;
+    }
+
+    /* Thumbnails take the full row; arrows wrap underneath, aligned right */
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs {
+      flex-wrap: wrap;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs .splide--thumbnails {
+      flex-basis: 100%;
+      order: -1;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs__arrow:first-child {
+      margin-left: auto;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs__arrow {
+      display: block;
+      flex: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: .5rem;
+      border: 1px solid rgb(var(--color-scheme-text) / .2);
+      border-radius: 999px;
+      transition: border-color .3s ease, background .3s ease;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .vf-thumbs__arrow:hover {
+      border-color: rgb(var(--color-scheme-text) / .6);
+      background: rgb(var(--color-scheme-text) / .08);
+    }
+  }
+
+  #{{ section.id }} .vf-thumbs__arrow svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 </style>
 
 <section
@@ -150,7 +323,7 @@
         class="grid gap-half-section md:grid-cols-12 md:gap-grid-gutter"
       >
         <div
-          class="md:col-span-item {{ media_position_class }} md:grid {{ product_media_grid_class }} md:gap-4"
+          class="md:col-span-item {{ media_position_class }} md:grid {{ product_media_grid_class }} md:gap-4{% if section.settings.enable_sticky_media %} vf-sticky-media{% endif %}{% if thumbnails_below %} vf-thumbs-below{% endif %}"
           style="--item-col-span: {{ product_media_col_span }};"
         >
           {% if product.media.size > 0 %}
@@ -192,11 +365,24 @@
             {% elsif product.media.size > 1 %}
               {% if enable_thumbnails_on_desktop %}
                 <div
-                  class="sw-hidden md:col-span-1 md:block {% if media_position_on_desktop == 'right' %} md:order-2 {% endif %}"
+                  class="sw-hidden md:col-span-1 md:block {% if media_position_on_desktop == 'right' %} md:order-2 {% endif %} vf-thumbs"
                 >
+                  {%- if thumbnails_below -%}
+                    <button
+                      type="button"
+                      class="vf-thumbs__arrow"
+                      onclick="window.slideshows['slideshow-{{ section.id }}']?.go('<')"
+                    >
+                      <span class="sr-only">{{- 'sections.slideshow.previous_slide' | t -}}</span>
+                      {% render 'icon-previous' %}
+                    </button>
+                  {%- endif -%}
                   <div
                     id="slideshow-thumbnails-{{ section.id }}"
                     class="splide splide--thumbnails max-h-[--thumbnails-height] [&:not(.is-active)]:overflow-hidden"
+                    {% if thumbnails_below %}
+                      data-splide='{"breakpoints":{"1023":{"direction":"ltr","fixedWidth":"6.5rem","fixedHeight":"6.5rem","gap":"0.75rem"}}}'
+                    {% endif %}
                     x-data="
                       {
                         firstVisible: true,
@@ -267,6 +453,16 @@
                       ></div>
                     </div>
                   </div>
+                  {%- if thumbnails_below -%}
+                    <button
+                      type="button"
+                      class="vf-thumbs__arrow"
+                      onclick="window.slideshows['slideshow-{{ section.id }}']?.go('>')"
+                    >
+                      <span class="sr-only">{{- 'sections.slideshow.next_slide' | t -}}</span>
+                      {% render 'icon-next' %}
+                    </button>
+                  {%- endif -%}
                 </div>
               {% endif %}
               <div class="col-span-5 {% if enable_thumbnails_on_desktop %}md:col-span-4{% endif %}">
@@ -476,6 +672,9 @@
 
                     when 'information'
                       render 'product-block-information', block: block
+
+                    when 'club_spec'
+                      render 'product-block-club-spec', block: block
                   endcase
                 endfor
               %}
@@ -656,6 +855,36 @@
       "default": "small"
     },
     {
+      "type": "checkbox",
+      "id": "thumbnails_below_on_mobile",
+      "label": "Show thumbnails below media on mobile and tablet",
+      "info": "Below 1024px: thumbnail row under the media, with arrows on tablet and swipe only on mobile. Desktop keeps the thumbnails column.",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "main_media_ratio_mobile",
+      "label": "Main media ratio on mobile and tablet",
+      "info": "Shows every product image at the same size below 1024px.",
+      "options": [
+        { "value": "natural", "label": "Natural (each image as uploaded)" },
+        { "value": "1/1", "label": "Square 1:1" },
+        { "value": "4/5", "label": "Portrait 4:5" },
+        { "value": "3/4", "label": "Portrait 3:4" }
+      ],
+      "default": "1/1"
+    },
+    {
+      "type": "select",
+      "id": "main_media_fit_mobile",
+      "label": "Main media fit on mobile and tablet",
+      "options": [
+        { "value": "cover", "label": "Fill (crops edges)" },
+        { "value": "contain", "label": "Fit (shows whole image)" }
+      ],
+      "default": "cover"
+    },
+    {
       "type": "header",
       "content": "Product content"
     },
@@ -698,6 +927,13 @@
     {
       "type": "header",
       "content": "Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_media",
+      "label": "Enable sticky media on desktop",
+      "info": "Product media stays in view while scrolling the product details (768px and up).",
+      "default": true
     },
     {
       "type": "checkbox",
@@ -755,7 +991,198 @@
     {
       "type": "price",
       "name": "Price",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "micro_copy",
+          "label": "Micro-copy",
+          "info": "Short label shown next to the price, e.g. Prenda Oficial del Club"
+        },
+        {
+          "type": "header",
+          "content": "Micro-copy layout"
+        },
+        {
+          "type": "select",
+          "id": "micro_copy_mobile",
+          "label": "Mobile (< 768px)",
+          "options": [
+            { "value": "inline", "label": "Next to price" },
+            { "value": "below", "label": "Below price" }
+          ],
+          "default": "below"
+        },
+        {
+          "type": "select",
+          "id": "micro_copy_tablet",
+          "label": "Tablet (768px – 1023px)",
+          "options": [
+            { "value": "inline", "label": "Next to price" },
+            { "value": "below", "label": "Below price" }
+          ],
+          "default": "below"
+        },
+        {
+          "type": "select",
+          "id": "micro_copy_desktop",
+          "label": "Desktop (≥ 1024px)",
+          "options": [
+            { "value": "inline", "label": "Next to price" },
+            { "value": "below", "label": "Below price" }
+          ],
+          "default": "inline"
+        }
+      ]
+    },
+    {
+      "type": "club_spec",
+      "name": "Club spec sheet",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "layout_mobile",
+          "label": "Mobile (< 768px)",
+          "options": [
+            { "value": "stacked", "label": "Stacked" },
+            { "value": "columns", "label": "Columns" }
+          ],
+          "default": "stacked"
+        },
+        {
+          "type": "select",
+          "id": "layout_tablet",
+          "label": "Tablet (768px – 1023px)",
+          "options": [
+            { "value": "stacked", "label": "Stacked" },
+            { "value": "columns", "label": "Columns" }
+          ],
+          "default": "stacked"
+        },
+        {
+          "type": "select",
+          "id": "layout_desktop",
+          "label": "Desktop (≥ 1024px)",
+          "options": [
+            { "value": "stacked", "label": "Stacked" },
+            { "value": "columns", "label": "Columns" }
+          ],
+          "default": "columns"
+        },
+        {
+          "type": "header",
+          "content": "Concept"
+        },
+        {
+          "type": "text",
+          "id": "concept_label",
+          "label": "Label",
+          "default": "Concepto"
+        },
+        {
+          "type": "text",
+          "id": "concept_heading",
+          "label": "Heading",
+          "default": "El uniforme oficial de la comunidad."
+        },
+        {
+          "type": "richtext",
+          "id": "concept_text",
+          "label": "Text",
+          "default": "<p>\"Internationalis\" conecta las capitales globales del rap bajo un mismo código visual. Gráfica frontal discreta con numeración romana; a la espalda, la mano en hueso haciendo la señal del club.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Spec sheet"
+        },
+        {
+          "type": "text",
+          "id": "spec_heading",
+          "label": "Heading",
+          "default": "Ficha técnica"
+        },
+        {
+          "type": "text",
+          "id": "spec_tag",
+          "label": "Tag",
+          "default": "EST. 1989"
+        },
+        {
+          "type": "text",
+          "id": "feature_label",
+          "label": "Row 1 label",
+          "default": "Característica"
+        },
+        {
+          "type": "textarea",
+          "id": "feature_text",
+          "label": "Row 1 text",
+          "default": "Tejido de algodón hilado en ring spun ultrasuave con estampado Discharge."
+        },
+        {
+          "type": "text",
+          "id": "advantage_label",
+          "label": "Row 2 label",
+          "default": "Ventaja"
+        },
+        {
+          "type": "textarea",
+          "id": "advantage_text",
+          "label": "Row 2 text",
+          "default": "Transpirabilidad total: la tinta no obstruye los poros de la tela con plástico."
+        },
+        {
+          "type": "text",
+          "id": "benefit_label",
+          "label": "Row 3 label",
+          "default": "Beneficio"
+        },
+        {
+          "type": "textarea",
+          "id": "benefit_text",
+          "label": "Row 3 text",
+          "default": "Ligereza absoluta para moverte en el asfalto todo el día con máxima comodidad y frescura."
+        },
+        {
+          "type": "header",
+          "content": "Design details"
+        },
+        {
+          "type": "text",
+          "id": "details_heading",
+          "label": "Heading",
+          "default": "Detalles del diseño"
+        },
+        {
+          "type": "text",
+          "id": "front_label",
+          "label": "Front label",
+          "default": "Frente"
+        },
+        {
+          "type": "textarea",
+          "id": "front_text",
+          "label": "Front text",
+          "default": "Gráfica discreta con numeración romana."
+        },
+        {
+          "type": "text",
+          "id": "back_label",
+          "label": "Back label",
+          "default": "Espalda"
+        },
+        {
+          "type": "textarea",
+          "id": "back_text",
+          "label": "Back text",
+          "default": "Estampa icónica Vato Fino Club EST. 1989. Reconocimiento inmediato en cualquier ciudad."
+        }
+      ]
     },
     {
       "type": "quantity_selector",

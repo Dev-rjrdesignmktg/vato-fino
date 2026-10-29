@@ -1,0 +1,194 @@
+/* Vato Fino — club spec sheet (PDP)
+   Layout modifiers per breakpoint, set from the theme editor:
+   .vf-m-*  mobile  (< 768px)
+   .vf-t-*  tablet  (768px – 1023px)
+   .vf-d-*  desktop (≥ 1024px) */
+
+.vf-price-tag {
+    align-items: center;
+    gap: .5em;
+    max-width: 100%;
+    padding: .45em .9em;
+    border: 1px solid rgb(var(--color-scheme-text) / .35);
+    border-radius: 999px;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+.vf-price-tag::before {
+    content: "";
+    flex: none;
+    width: .4em;
+    height: .4em;
+    border-radius: 999px;
+    background: rgb(var(--color-scheme-text));
+}
+
+.vf-spec {
+    --vf-rule: rgb(var(--color-scheme-text) / .15);
+    --vf-muted: rgb(var(--color-scheme-text) / .6);
+    display: grid;
+    gap: 3rem;
+}
+
+.vf-spec__label {
+    margin: 0;
+    font-family: inherit;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--vf-muted);
+}
+
+/* Concept */
+
+.vf-spec__heading {
+    margin: 1rem 0 0;
+    font-family: var(--font-primary);
+    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    text-transform: none;
+}
+
+.vf-spec__text {
+    margin-top: 1rem;
+    line-height: 1.7;
+    color: rgb(var(--color-scheme-text) / .8);
+}
+
+.vf-spec__text p {
+    margin: 0;
+}
+
+/* Spec sheet */
+
+.vf-spec__sheet-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(var(--color-scheme-text) / .6);
+}
+
+.vf-spec__tag {
+    font-family: var(--font-primary);
+    font-size: .9rem;
+    letter-spacing: .05em;
+}
+
+.vf-spec__rows {
+    margin: 0;
+}
+
+.vf-spec__row {
+    display: grid;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--vf-rule);
+}
+
+.vf-spec__row > * {
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.vf-spec__numeral {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--vf-muted);
+    transition: color .3s ease;
+}
+
+.vf-spec__row:hover .vf-spec__numeral {
+    color: rgb(var(--color-scheme-text));
+}
+
+.vf-spec__row-label {
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.vf-spec__row-text {
+    margin: 0;
+    line-height: 1.6;
+    color: rgb(var(--color-scheme-text) / .8);
+}
+
+/* Design details */
+
+.vf-spec__details-grid {
+    display: grid;
+    gap: 1px;
+    margin-top: 1rem;
+    background: var(--vf-rule);
+    border: 1px solid var(--vf-rule);
+    border-radius: var(--button-border-radius, .5rem);
+    overflow: hidden;
+}
+
+.vf-spec__detail {
+    min-width: 0;
+    padding: 1.5rem 1.25rem;
+    background: rgb(var(--color-scheme-background));
+}
+
+.vf-spec__detail-label {
+    display: block;
+    margin-bottom: .75rem;
+    font-family: var(--font-primary);
+    font-size: 1.25rem;
+    line-height: 1;
+    text-transform: none;
+}
+
+.vf-spec__detail p {
+    margin: 0;
+    line-height: 1.6;
+    color: rgb(var(--color-scheme-text) / .8);
+}
+
+/* Layout variants — written once, applied per breakpoint below */
+
+@media (max-width: 767px) {
+    .vf-price-tag.vf-m-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
+    .vf-price-tag.vf-m-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+
+    .vf-spec { gap: 2.5rem; }
+    .vf-spec.vf-m-columns .vf-spec__row { grid-template-columns: 2rem 7rem 1fr; }
+    .vf-spec.vf-m-columns .vf-spec__details-grid { grid-template-columns: 1fr 1fr; }
+    .vf-spec.vf-m-stacked .vf-spec__row { grid-template-columns: 2rem 1fr; row-gap: .4rem; }
+    .vf-spec.vf-m-stacked .vf-spec__row-text { grid-column: 2; }
+    .vf-spec.vf-m-stacked .vf-spec__details-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .vf-price-tag.vf-t-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
+    .vf-price-tag.vf-t-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+
+    .vf-spec.vf-t-columns .vf-spec__row { grid-template-columns: 2.5rem 8.5rem 1fr; }
+    .vf-spec.vf-t-columns .vf-spec__details-grid { grid-template-columns: 1fr 1fr; }
+    .vf-spec.vf-t-stacked .vf-spec__row { grid-template-columns: 2rem 1fr; row-gap: .4rem; }
+    .vf-spec.vf-t-stacked .vf-spec__row-text { grid-column: 2; }
+    .vf-spec.vf-t-stacked .vf-spec__details-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1024px) {
+    .vf-price-tag.vf-d-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
+    .vf-price-tag.vf-d-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+
+    .vf-spec.vf-d-columns .vf-spec__row { grid-template-columns: 2.5rem 8.5rem 1fr; }
+    .vf-spec.vf-d-columns .vf-spec__details-grid { grid-template-columns: 1fr 1fr; }
+    .vf-spec.vf-d-stacked .vf-spec__row { grid-template-columns: 2rem 1fr; row-gap: .4rem; }
+    .vf-spec.vf-d-stacked .vf-spec__row-text { grid-column: 2; }
+    .vf-spec.vf-d-stacked .vf-spec__details-grid { grid-template-columns: 1fr; }
+}

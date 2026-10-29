@@ -1,0 +1,147 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "text_size": "text-heading-feature"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "micro_copy": "Prenda Oficial del Club"
+          }
+        },
+        "quantity-selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "hide_label": false
+          }
+        },
+        "variant-picker": {
+          "type": "variant_picker",
+          "settings": {
+            "option_style": "radio",
+            "hide_option_labels": true
+          }
+        },
+        "buy-buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "enable_payment_button": true,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "icon-list": {
+          "type": "icon_list",
+          "settings": {
+            "heading": "",
+            "text_color": "text",
+            "text_1": "{{ product.metafields.custom.cut_t_shirt.value }}",
+            "icon_1": "shirt",
+            "text_2": "Premium fabrics",
+            "icon_2": "check-mark",
+            "text_3": "{{ product.metafields.custom.product_printing_method.value }}",
+            "icon_3": "check-mark",
+            "text_4": "Designed in California",
+            "icon_4": "map-pin",
+            "text_5": "Ships worldwide",
+            "icon_5": "globe"
+          }
+        },
+        "collapsible-tabs": {
+          "type": "collapsible_tabs",
+          "settings": {
+            "show_borders_above_and_below_tabs": true,
+            "heading_1": "Production",
+            "content_1": "<p>Made to order. 3-5 Days Lead Time.</p>",
+            "page_1": "",
+            "icon_1": "none",
+            "enable_2": true,
+            "heading_2": "Shipping",
+            "content_2": "<p>We deliver worldwide. </p>",
+            "page_2": "",
+            "icon_2": "none",
+            "enable_3": true,
+            "heading_3": "Returns",
+            "content_3": "<p>See our return policy</p>",
+            "page_3": "",
+            "icon_3": "none",
+            "enable_4": false,
+            "heading_4": "Collapsible tab",
+            "content_4": "",
+            "page_4": "",
+            "icon_4": "none",
+            "enable_5": false,
+            "heading_5": "Collapsible tab",
+            "content_5": "",
+            "page_5": "",
+            "icon_5": "none"
+          }
+        },
+        "complementary": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Pairs well with",
+            "text_size": "text-heading-scheme2",
+            "product_list_limit": 10
+          }
+        },
+        "club-spec": {
+          "type": "club_spec",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "quantity-selector",
+        "variant-picker",
+        "buy-buttons",
+        "club-spec",
+        "icon-list",
+        "collapsible-tabs",
+        "complementary"
+      ],
+      "settings": {
+        "media_position_on_desktop": "left",
+        "media_width_on_desktop": "7",
+        "enable_thumbnails_on_desktop": true,
+        "thumbnails_width_on_desktop": "small",
+        "product_content_width_on_desktop": "full_width",
+        "product_content_alignment": "md:justify-start",
+        "enable_image_zoom": true,
+        "enable_video_looping": true,
+        "enable_video_autoplay": true,
+        "color_scheme": "scheme4"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "Productos que te podrian gustar",
+        "max_products": "4",
+        "enable_mobile_carousel": true,
+        "enable_desktop_carousel": true,
+        "color_scheme": "scheme4"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

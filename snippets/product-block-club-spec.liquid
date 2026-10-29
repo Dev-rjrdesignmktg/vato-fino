@@ -1,0 +1,68 @@
+{{ 'product-club-spec.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign rows = 'feature,advantage,benefit' | split: ','
+  assign numerals = 'I,II,III' | split: ','
+-%}
+
+<div
+  class="vf-spec vf-m-{{ block.settings.layout_mobile | default: 'stacked' }} vf-t-{{ block.settings.layout_tablet | default: 'stacked' }} vf-d-{{ block.settings.layout_desktop | default: 'columns' }} w-full min-w-0 my-10 group-first:mt-0" {{ block.shopify_attributes }}>
+  {%- if block.settings.concept_heading != blank or block.settings.concept_text != blank -%}
+    <div class="vf-spec__concept">
+      {%- if block.settings.concept_label != blank -%}
+        <p class="vf-spec__label">{{ block.settings.concept_label | escape }}</p>
+      {%- endif -%}
+      {%- if block.settings.concept_heading != blank -%}
+        <h2 class="vf-spec__heading">{{ block.settings.concept_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if block.settings.concept_text != blank -%}
+        <div class="vf-spec__text">{{ block.settings.concept_text }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="vf-spec__sheet">
+    <div class="vf-spec__sheet-head">
+      <h3 class="vf-spec__label">{{ block.settings.spec_heading | escape }}</h3>
+      {%- if block.settings.spec_tag != blank -%}
+        <span class="vf-spec__tag">{{ block.settings.spec_tag | escape }}</span>
+      {%- endif -%}
+    </div>
+
+    <dl class="vf-spec__rows">
+      {%- for row in rows -%}
+        {%- capture label_key %}{{ row }}_label{% endcapture -%}
+        {%- capture text_key %}{{ row }}_text{% endcapture -%}
+        {%- if block.settings[text_key] != blank -%}
+          <div class="vf-spec__row">
+            <span class="vf-spec__numeral" aria-hidden="true">{{ numerals[forloop.index0] }}</span>
+            <dt class="vf-spec__row-label">{{ block.settings[label_key] | escape }}</dt>
+            <dd class="vf-spec__row-text">{{ block.settings[text_key] | escape | newline_to_br }}</dd>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </dl>
+  </div>
+
+  {%- if block.settings.front_text != blank or block.settings.back_text != blank -%}
+    <div class="vf-spec__details">
+      {%- if block.settings.details_heading != blank -%}
+        <h3 class="vf-spec__label">{{ block.settings.details_heading | escape }}</h3>
+      {%- endif -%}
+      <div class="vf-spec__details-grid">
+        {%- if block.settings.front_text != blank -%}
+          <div class="vf-spec__detail">
+            <span class="vf-spec__detail-label">{{ block.settings.front_label | escape }}</span>
+            <p>{{ block.settings.front_text | escape | newline_to_br }}</p>
+          </div>
+        {%- endif -%}
+        {%- if block.settings.back_text != blank -%}
+          <div class="vf-spec__detail">
+            <span class="vf-spec__detail-label">{{ block.settings.back_label | escape }}</span>
+            <p>{{ block.settings.back_text | escape | newline_to_br }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
