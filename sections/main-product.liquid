@@ -220,14 +220,37 @@
     }
   }
 
+  /* Main media at one shared aspect ratio on mobile + tablet */
+  {%- liquid
+    assign main_media_ratio = section.settings.main_media_ratio_mobile | default: '1/1'
+    assign main_media_fit = section.settings.main_media_fit_mobile | default: 'cover'
+  -%}
+  {%- if thumbnails_below and main_media_ratio != 'natural' -%}
+    @media (max-width: 1023px) {
+      #{{ section.id }} .vf-thumbs-below .splide--product .splide__slide img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: {{ main_media_ratio }};
+        object-fit: {{ main_media_fit }};
+      }
+    }
+  {%- endif -%}
+
   /* Mobile: swipe only, breathing room before the title */
   @media (max-width: 767px) {
     #{{ section.id }} .vf-thumbs-below .splide--product .splide__arrows {
       display: none;
     }
 
+    /* Full-width main image: the thumbnail row already signals more media,
+       so the next-slide peek is dropped */
     #{{ section.id }} .vf-thumbs-below .splide--product .splide__track {
-      margin-bottom: 0;
+      margin: 0;
+    }
+
+    #{{ section.id }} .vf-thumbs-below .splide--product .splide__slide {
+      width: 100%;
+      padding: 0;
     }
 
     #{{ section.id }} .vf-thumbs-below {
@@ -837,6 +860,29 @@
       "label": "Show thumbnails below media on mobile and tablet",
       "info": "Below 1024px: thumbnail row under the media, with arrows on tablet and swipe only on mobile. Desktop keeps the thumbnails column.",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "main_media_ratio_mobile",
+      "label": "Main media ratio on mobile and tablet",
+      "info": "Shows every product image at the same size below 1024px.",
+      "options": [
+        { "value": "natural", "label": "Natural (each image as uploaded)" },
+        { "value": "1/1", "label": "Square 1:1" },
+        { "value": "4/5", "label": "Portrait 4:5" },
+        { "value": "3/4", "label": "Portrait 3:4" }
+      ],
+      "default": "1/1"
+    },
+    {
+      "type": "select",
+      "id": "main_media_fit_mobile",
+      "label": "Main media fit on mobile and tablet",
+      "options": [
+        { "value": "cover", "label": "Fill (crops edges)" },
+        { "value": "contain", "label": "Fit (shows whole image)" }
+      ],
+      "default": "cover"
     },
     {
       "type": "header",
