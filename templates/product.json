@@ -118,7 +118,7 @@
       ],
       "settings": {
         "media_position_on_desktop": "left",
-        "media_width_on_desktop": "7",
+        "media_width_on_desktop": "6",
         "enable_thumbnails_on_desktop": true,
         "thumbnails_width_on_desktop": "grow",
         "product_content_width_on_desktop": "full_width",
