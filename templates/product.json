@@ -21,6 +21,7 @@
         "price": {
           "type": "price",
           "settings": {
+            "micro_copy": "{{ product.metafields.custom.micro_copy_precio.value }}",
             "micro_copy_mobile": "below",
             "micro_copy_tablet": "below",
             "micro_copy_desktop": "inline"
@@ -46,13 +47,21 @@
             "layout_tablet": "stacked",
             "layout_desktop": "columns",
             "concept_label": "Concepto",
+            "concept_heading": "",
+            "concept_text": "",
             "spec_heading": "Ficha técnica",
+            "spec_tag": "",
             "feature_label": "Característica",
+            "feature_text": "",
             "advantage_label": "Ventaja",
+            "advantage_text": "",
             "benefit_label": "Beneficio",
+            "benefit_text": "",
             "details_heading": "Detalles del diseño",
             "front_label": "Frente",
-            "back_label": "Espalda"
+            "front_text": "",
+            "back_label": "Espalda",
+            "back_text": ""
           }
         },
         "buy-buttons": {
