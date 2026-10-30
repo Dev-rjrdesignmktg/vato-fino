@@ -75,7 +75,7 @@
         "rich-text": {
           "type": "rich_text",
           "settings": {
-            "content": "<p></p><p></p>"
+            "content": "<p></p>{{ product.description }}"
           }
         },
         "icon-list": {
