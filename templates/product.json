@@ -47,21 +47,21 @@
             "layout_tablet": "stacked",
             "layout_desktop": "columns",
             "concept_label": "Concepto",
-            "concept_heading": "",
-            "concept_text": "",
+            "concept_heading": "{{ product.metafields.custom.titulo_concepto.value }}",
+            "concept_text": "{{ product.metafields.custom.texto_concepto | metafield_tag }}",
             "spec_heading": "Ficha técnica",
-            "spec_tag": "",
+            "spec_tag": "{{ product.metafields.custom.etiqueta_ficha.value }}",
             "feature_label": "Característica",
-            "feature_text": "",
+            "feature_text": "{{ product.metafields.custom.caracteristica | metafield_tag }}",
             "advantage_label": "Ventaja",
-            "advantage_text": "",
+            "advantage_text": "{{ product.metafields.custom.ventaja | metafield_tag }}",
             "benefit_label": "Beneficio",
-            "benefit_text": "",
+            "benefit_text": "{{ product.metafields.custom.beneficio | metafield_tag }}",
             "details_heading": "Detalles del diseño",
             "front_label": "Frente",
-            "front_text": "",
+            "front_text": "{{ product.metafields.custom.frente | metafield_tag }}",
             "back_label": "Espalda",
-            "back_text": ""
+            "back_text": "{{ product.metafields.custom.espalda | metafield_tag }}"
           }
         },
         "buy-buttons": {
@@ -70,12 +70,6 @@
             "enable_payment_button": true,
             "show_pickup_availability": true,
             "show_gift_card_recipient": true
-          }
-        },
-        "rich-text": {
-          "type": "rich_text",
-          "settings": {
-            "content": "<p></p>{{ product.description }}"
           }
         },
         "icon-list": {
@@ -141,7 +135,6 @@
         "variant-picker",
         "club_spec_3LNpJi",
         "buy-buttons",
-        "rich-text",
         "icon-list",
         "collapsible-tabs",
         "complementary"
