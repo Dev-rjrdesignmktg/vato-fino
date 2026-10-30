@@ -4,7 +4,23 @@
    .vf-t-*  tablet  (768px – 1023px)
    .vf-d-*  desktop (≥ 1024px) */
 
+/* Price + micro-copy share a flex row so the tag centers on the price.
+   .vf-price-break forces the tag onto its own line in "below" mode. */
+.vf-price-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: .5rem;
+}
+
+.vf-price-break {
+    display: none;
+    flex-basis: 100%;
+    height: 0;
+}
+
 .vf-price-tag {
+    display: inline-flex;
     align-items: center;
     gap: .5em;
     max-width: 100%;
@@ -160,8 +176,9 @@
 /* Layout variants — written once, applied per breakpoint below */
 
 @media (max-width: 767px) {
-    .vf-price-tag.vf-m-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
-    .vf-price-tag.vf-m-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+    .vf-price-tag.vf-m-inline { margin: 0 0 0 .25rem; }
+    .vf-price-tag.vf-m-below  { margin: .75rem 0 0; }
+    .vf-price-break.vf-m-below { display: block; }
 
     .vf-spec { gap: 2.5rem; }
     .vf-spec.vf-m-columns .vf-spec__row { grid-template-columns: 2rem 7rem 1fr; }
@@ -172,8 +189,9 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-    .vf-price-tag.vf-t-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
-    .vf-price-tag.vf-t-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+    .vf-price-tag.vf-t-inline { margin: 0 0 0 .25rem; }
+    .vf-price-tag.vf-t-below  { margin: .75rem 0 0; }
+    .vf-price-break.vf-t-below { display: block; }
 
     .vf-spec.vf-t-columns .vf-spec__row { grid-template-columns: 2.5rem 8.5rem 1fr; }
     .vf-spec.vf-t-columns .vf-spec__details-grid { grid-template-columns: 1fr 1fr; }
@@ -183,8 +201,9 @@
 }
 
 @media (min-width: 1024px) {
-    .vf-price-tag.vf-d-inline { display: inline-flex; margin: .25rem 0 0 .75rem; }
-    .vf-price-tag.vf-d-below  { display: flex; width: fit-content; margin: .75rem 0 0; }
+    .vf-price-tag.vf-d-inline { margin: 0 0 0 .25rem; }
+    .vf-price-tag.vf-d-below  { margin: .75rem 0 0; }
+    .vf-price-break.vf-d-below { display: block; }
 
     .vf-spec.vf-d-columns .vf-spec__row { grid-template-columns: 2.5rem 8.5rem 1fr; }
     .vf-spec.vf-d-columns .vf-spec__details-grid { grid-template-columns: 1fr 1fr; }

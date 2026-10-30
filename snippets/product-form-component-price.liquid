@@ -12,6 +12,9 @@
   {% endif %}
 >
   {% if product != blank %}
+    {%- if block.settings.micro_copy != blank -%}
+      <div class="vf-price-row">
+    {%- endif -%}
     <span class="sr-only">{{ 'products.general.regular_price' | t }}</span>
     <span
       class="{% if product.compare_at_price_max > product.price %} text-scheme-accent {% else %} text-scheme-text {% endif %} text-theme-basic"
@@ -52,10 +55,15 @@
     {% endif %}
 
     {%- if block.settings.micro_copy != blank -%}
+      {%- capture vf_tag_layout -%}
+        vf-m-{{ block.settings.micro_copy_mobile | default: 'below' }} vf-t-{{ block.settings.micro_copy_tablet | default: 'below' }} vf-d-{{ block.settings.micro_copy_desktop | default: 'inline' }}
+      {%- endcapture -%}
       {{ 'product-club-spec.css' | asset_url | stylesheet_tag }}
-      <span class="vf-price-tag vf-m-{{ block.settings.micro_copy_mobile | default: 'below' }} vf-t-{{ block.settings.micro_copy_tablet | default: 'below' }} vf-d-{{ block.settings.micro_copy_desktop | default: 'inline' }}">
+      <span class="vf-price-break {{ vf_tag_layout }}" aria-hidden="true"></span>
+      <span class="vf-price-tag {{ vf_tag_layout }}">
         {{- block.settings.micro_copy | escape -}}
       </span>
+      </div>
     {%- endif -%}
 
     <template x-if="currentVariant && currentVariant.unit_price">
