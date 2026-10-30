@@ -21,7 +21,6 @@
         "price": {
           "type": "price",
           "settings": {
-            "micro_copy": "Colab Artista | Rap Fino & Callejero",
             "micro_copy_mobile": "below",
             "micro_copy_tablet": "below",
             "micro_copy_desktop": "inline"
@@ -47,21 +46,13 @@
             "layout_tablet": "stacked",
             "layout_desktop": "columns",
             "concept_label": "Concepto",
-            "concept_heading": "La voz del Barrio",
-            "concept_text": "<p>Big Stan conecta la crudeza del asfalto con la brutalidad del amor, logrando un equilibrio perfecto entre calle, lealtad y sentimiento. Un diseño con sello de archivo que le rinde tributo a quienes mantienen las raíces intactas donde sea que se paren.&nbsp;</p>",
             "spec_heading": "Ficha técnica",
-            "spec_tag": "EST. 1989",
             "feature_label": "Característica",
-            "feature_text": "Algodón 100% hilado en ring spun con costuras laterales reforzadas y estampado Discharge.",
             "advantage_label": "Ventaja",
-            "advantage_text": "Mantiene la fluidez del tejido y evita torsiones o deformaciones tras el lavado.",
             "benefit_label": "Beneficio",
-            "benefit_text": "Una caída recta y ligera que resalta el perfil urbano sin agregar peso ni calor.",
             "details_heading": "Detalles del diseño",
             "front_label": "Frente",
-            "front_text": "Fotografía de archivo tomada en México",
-            "back_label": "Espalda",
-            "back_text": "Icónica calavera coronada de Vato Fino"
+            "back_label": "Espalda"
           }
         },
         "buy-buttons": {

@@ -674,7 +674,7 @@
                       render 'product-block-information', block: block
 
                     when 'club_spec'
-                      render 'product-block-club-spec', block: block
+                      render 'product-block-club-spec', block: block, product: product
                   endcase
                 endfor
               %}
@@ -867,10 +867,22 @@
       "label": "Main media ratio on mobile and tablet",
       "info": "Shows every product image at the same size below 1024px.",
       "options": [
-        { "value": "natural", "label": "Natural (each image as uploaded)" },
-        { "value": "1/1", "label": "Square 1:1" },
-        { "value": "4/5", "label": "Portrait 4:5" },
-        { "value": "3/4", "label": "Portrait 3:4" }
+        {
+          "value": "natural",
+          "label": "Natural (each image as uploaded)"
+        },
+        {
+          "value": "1/1",
+          "label": "Square 1:1"
+        },
+        {
+          "value": "4/5",
+          "label": "Portrait 4:5"
+        },
+        {
+          "value": "3/4",
+          "label": "Portrait 3:4"
+        }
       ],
       "default": "1/1"
     },
@@ -879,8 +891,14 @@
       "id": "main_media_fit_mobile",
       "label": "Main media fit on mobile and tablet",
       "options": [
-        { "value": "cover", "label": "Fill (crops edges)" },
-        { "value": "contain", "label": "Fit (shows whole image)" }
+        {
+          "value": "cover",
+          "label": "Fill (crops edges)"
+        },
+        {
+          "value": "contain",
+          "label": "Fit (shows whole image)"
+        }
       ],
       "default": "cover"
     },
@@ -997,7 +1015,7 @@
           "type": "text",
           "id": "micro_copy",
           "label": "Micro-copy",
-          "info": "Short label shown next to the price, e.g. Prenda Oficial del Club"
+          "info": "Connect to the product metafield custom.price_micro_copy (dynamic source) so each product shows its own text. Left empty, the tag is hidden."
         },
         {
           "type": "header",
@@ -1008,8 +1026,14 @@
           "id": "micro_copy_mobile",
           "label": "Mobile (< 768px)",
           "options": [
-            { "value": "inline", "label": "Next to price" },
-            { "value": "below", "label": "Below price" }
+            {
+              "value": "inline",
+              "label": "Next to price"
+            },
+            {
+              "value": "below",
+              "label": "Below price"
+            }
           ],
           "default": "below"
         },
@@ -1018,8 +1042,14 @@
           "id": "micro_copy_tablet",
           "label": "Tablet (768px – 1023px)",
           "options": [
-            { "value": "inline", "label": "Next to price" },
-            { "value": "below", "label": "Below price" }
+            {
+              "value": "inline",
+              "label": "Next to price"
+            },
+            {
+              "value": "below",
+              "label": "Below price"
+            }
           ],
           "default": "below"
         },
@@ -1028,8 +1058,14 @@
           "id": "micro_copy_desktop",
           "label": "Desktop (≥ 1024px)",
           "options": [
-            { "value": "inline", "label": "Next to price" },
-            { "value": "below", "label": "Below price" }
+            {
+              "value": "inline",
+              "label": "Next to price"
+            },
+            {
+              "value": "below",
+              "label": "Below price"
+            }
           ],
           "default": "inline"
         }
@@ -1041,6 +1077,10 @@
       "limit": 1,
       "settings": [
         {
+          "type": "paragraph",
+          "content": "Connect each content field to a product metafield (dynamic source). Empty fields are hidden, and the block hides when all content is empty. Labels and layout are shared across products."
+        },
+        {
           "type": "header",
           "content": "Layout"
         },
@@ -1049,8 +1089,14 @@
           "id": "layout_mobile",
           "label": "Mobile (< 768px)",
           "options": [
-            { "value": "stacked", "label": "Stacked" },
-            { "value": "columns", "label": "Columns" }
+            {
+              "value": "stacked",
+              "label": "Stacked"
+            },
+            {
+              "value": "columns",
+              "label": "Columns"
+            }
           ],
           "default": "stacked"
         },
@@ -1059,8 +1105,14 @@
           "id": "layout_tablet",
           "label": "Tablet (768px – 1023px)",
           "options": [
-            { "value": "stacked", "label": "Stacked" },
-            { "value": "columns", "label": "Columns" }
+            {
+              "value": "stacked",
+              "label": "Stacked"
+            },
+            {
+              "value": "columns",
+              "label": "Columns"
+            }
           ],
           "default": "stacked"
         },
@@ -1069,8 +1121,14 @@
           "id": "layout_desktop",
           "label": "Desktop (≥ 1024px)",
           "options": [
-            { "value": "stacked", "label": "Stacked" },
-            { "value": "columns", "label": "Columns" }
+            {
+              "value": "stacked",
+              "label": "Stacked"
+            },
+            {
+              "value": "columns",
+              "label": "Columns"
+            }
           ],
           "default": "columns"
         },
@@ -1087,14 +1145,12 @@
         {
           "type": "text",
           "id": "concept_heading",
-          "label": "Heading",
-          "default": "El uniforme oficial de la comunidad."
+          "label": "Heading"
         },
         {
           "type": "richtext",
           "id": "concept_text",
-          "label": "Text",
-          "default": "<p>\"Internationalis\" conecta las capitales globales del rap bajo un mismo código visual. Gráfica frontal discreta con numeración romana; a la espalda, la mano en hueso haciendo la señal del club.</p>"
+          "label": "Text"
         },
         {
           "type": "header",
@@ -1109,8 +1165,7 @@
         {
           "type": "text",
           "id": "spec_tag",
-          "label": "Tag",
-          "default": "EST. 1989"
+          "label": "Tag"
         },
         {
           "type": "text",
@@ -1119,10 +1174,9 @@
           "default": "Característica"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "feature_text",
-          "label": "Row 1 text",
-          "default": "Tejido de algodón hilado en ring spun ultrasuave con estampado Discharge."
+          "label": "Row 1 text"
         },
         {
           "type": "text",
@@ -1131,10 +1185,9 @@
           "default": "Ventaja"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "advantage_text",
-          "label": "Row 2 text",
-          "default": "Transpirabilidad total: la tinta no obstruye los poros de la tela con plástico."
+          "label": "Row 2 text"
         },
         {
           "type": "text",
@@ -1143,10 +1196,9 @@
           "default": "Beneficio"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "benefit_text",
-          "label": "Row 3 text",
-          "default": "Ligereza absoluta para moverte en el asfalto todo el día con máxima comodidad y frescura."
+          "label": "Row 3 text"
         },
         {
           "type": "header",
@@ -1165,10 +1217,9 @@
           "default": "Frente"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "front_text",
-          "label": "Front text",
-          "default": "Gráfica discreta con numeración romana."
+          "label": "Front text"
         },
         {
           "type": "text",
@@ -1177,10 +1228,9 @@
           "default": "Espalda"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "back_text",
-          "label": "Back text",
-          "default": "Estampa icónica Vato Fino Club EST. 1989. Reconocimiento inmediato en cualquier ciudad."
+          "label": "Back text"
         }
       ]
     },

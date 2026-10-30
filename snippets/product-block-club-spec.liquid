@@ -1,68 +1,93 @@
-{{ 'product-club-spec.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Content fields are meant to be connected to product metafields
+  (dynamic sources) in the theme editor, so each product shows its own copy.
+  Empty fields are skipped; the whole block hides when all content is empty.
+{%- endcomment -%}
 
 {%- liquid
-  assign rows = 'feature,advantage,benefit' | split: ','
+  assign s = block.settings
+  assign rows = s.feature_text | append: '|||' | append: s.advantage_text | append: '|||' | append: s.benefit_text | split: '|||'
+  assign row_labels = s.feature_label | append: '|||' | append: s.advantage_label | append: '|||' | append: s.benefit_label | split: '|||'
   assign numerals = 'I,II,III' | split: ','
+
+  assign has_concept = false
+  if s.concept_heading != blank or s.concept_text != blank
+    assign has_concept = true
+  endif
+
+  assign has_sheet = false
+  if s.feature_text != blank or s.advantage_text != blank or s.benefit_text != blank
+    assign has_sheet = true
+  endif
+
+  assign has_details = false
+  if s.front_text != blank or s.back_text != blank
+    assign has_details = true
+  endif
 -%}
 
-<div
-  class="vf-spec vf-m-{{ block.settings.layout_mobile | default: 'stacked' }} vf-t-{{ block.settings.layout_tablet | default: 'stacked' }} vf-d-{{ block.settings.layout_desktop | default: 'columns' }} w-full min-w-0 my-10 group-first:mt-0" {{ block.shopify_attributes }}>
-  {%- if block.settings.concept_heading != blank or block.settings.concept_text != blank -%}
-    <div class="vf-spec__concept">
-      {%- if block.settings.concept_label != blank -%}
-        <p class="vf-spec__label">{{ block.settings.concept_label | escape }}</p>
-      {%- endif -%}
-      {%- if block.settings.concept_heading != blank -%}
-        <h2 class="vf-spec__heading">{{ block.settings.concept_heading | escape }}</h2>
-      {%- endif -%}
-      {%- if block.settings.concept_text != blank -%}
-        <div class="vf-spec__text">{{ block.settings.concept_text }}</div>
-      {%- endif -%}
-    </div>
-  {%- endif -%}
+{%- if has_concept or has_sheet or has_details -%}
+  {{ 'product-club-spec.css' | asset_url | stylesheet_tag }}
 
-  <div class="vf-spec__sheet">
-    <div class="vf-spec__sheet-head">
-      <h3 class="vf-spec__label">{{ block.settings.spec_heading | escape }}</h3>
-      {%- if block.settings.spec_tag != blank -%}
-        <span class="vf-spec__tag">{{ block.settings.spec_tag | escape }}</span>
-      {%- endif -%}
-    </div>
-
-    <dl class="vf-spec__rows">
-      {%- for row in rows -%}
-        {%- capture label_key %}{{ row }}_label{% endcapture -%}
-        {%- capture text_key %}{{ row }}_text{% endcapture -%}
-        {%- if block.settings[text_key] != blank -%}
-          <div class="vf-spec__row">
-            <span class="vf-spec__numeral" aria-hidden="true">{{ numerals[forloop.index0] }}</span>
-            <dt class="vf-spec__row-label">{{ block.settings[label_key] | escape }}</dt>
-            <dd class="vf-spec__row-text">{{ block.settings[text_key] | escape | newline_to_br }}</dd>
-          </div>
+  <div
+    class="vf-spec vf-m-{{ s.layout_mobile | default: 'stacked' }} vf-t-{{ s.layout_tablet | default: 'stacked' }} vf-d-{{ s.layout_desktop | default: 'columns' }} w-full min-w-0 my-10 group-first:mt-0" {{ block.shopify_attributes }}>
+    {%- if has_concept -%}
+      <div class="vf-spec__concept">
+        {%- if s.concept_label != blank -%}
+          <p class="vf-spec__label">{{ s.concept_label | escape }}</p>
         {%- endif -%}
-      {%- endfor -%}
-    </dl>
-  </div>
-
-  {%- if block.settings.front_text != blank or block.settings.back_text != blank -%}
-    <div class="vf-spec__details">
-      {%- if block.settings.details_heading != blank -%}
-        <h3 class="vf-spec__label">{{ block.settings.details_heading | escape }}</h3>
-      {%- endif -%}
-      <div class="vf-spec__details-grid">
-        {%- if block.settings.front_text != blank -%}
-          <div class="vf-spec__detail">
-            <span class="vf-spec__detail-label">{{ block.settings.front_label | escape }}</span>
-            <p>{{ block.settings.front_text | escape | newline_to_br }}</p>
-          </div>
+        {%- if s.concept_heading != blank -%}
+          <h2 class="vf-spec__heading">{{ s.concept_heading | escape }}</h2>
         {%- endif -%}
-        {%- if block.settings.back_text != blank -%}
-          <div class="vf-spec__detail">
-            <span class="vf-spec__detail-label">{{ block.settings.back_label | escape }}</span>
-            <p>{{ block.settings.back_text | escape | newline_to_br }}</p>
-          </div>
+        {%- if s.concept_text != blank -%}
+          <div class="vf-spec__text">{{ s.concept_text }}</div>
         {%- endif -%}
       </div>
-    </div>
-  {%- endif -%}
-</div>
+    {%- endif -%}
+
+    {%- if has_sheet -%}
+      <div class="vf-spec__sheet">
+        <div class="vf-spec__sheet-head">
+          <h3 class="vf-spec__label">{{ s.spec_heading | escape }}</h3>
+          {%- if s.spec_tag != blank -%}
+            <span class="vf-spec__tag">{{ s.spec_tag | escape }}</span>
+          {%- endif -%}
+        </div>
+
+        <dl class="vf-spec__rows">
+          {%- for row_text in rows -%}
+            {%- if row_text != blank -%}
+              <div class="vf-spec__row">
+                <span class="vf-spec__numeral" aria-hidden="true">{{ numerals[forloop.index0] }}</span>
+                <dt class="vf-spec__row-label">{{ row_labels[forloop.index0] | escape }}</dt>
+                <dd class="vf-spec__row-text">{{ row_text }}</dd>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+      </div>
+    {%- endif -%}
+
+    {%- if has_details -%}
+      <div class="vf-spec__details">
+        {%- if s.details_heading != blank -%}
+          <h3 class="vf-spec__label">{{ s.details_heading | escape }}</h3>
+        {%- endif -%}
+        <div class="vf-spec__details-grid">
+          {%- if s.front_text != blank -%}
+            <div class="vf-spec__detail">
+              <span class="vf-spec__detail-label">{{ s.front_label | escape }}</span>
+              {{ s.front_text }}
+            </div>
+          {%- endif -%}
+          {%- if s.back_text != blank -%}
+            <div class="vf-spec__detail">
+              <span class="vf-spec__detail-label">{{ s.back_label | escape }}</span>
+              {{ s.back_text }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

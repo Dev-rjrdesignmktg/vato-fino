@@ -20,9 +20,7 @@
         },
         "price": {
           "type": "price",
-          "settings": {
-            "micro_copy": "Prenda Oficial del Club"
-          }
+          "settings": {}
         },
         "quantity-selector": {
           "type": "quantity_selector",

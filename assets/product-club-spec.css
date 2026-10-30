@@ -140,6 +140,10 @@
     color: rgb(var(--color-scheme-text) / .8);
 }
 
+.vf-spec__row-text p {
+    margin: 0;
+}
+
 /* Design details */
 
 .vf-spec__details-grid {
