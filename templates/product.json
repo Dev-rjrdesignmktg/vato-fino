@@ -72,6 +72,12 @@
             "show_gift_card_recipient": true
           }
         },
+        "rich-text": {
+          "type": "rich_text",
+          "settings": {
+            "content": "<p></p><p></p>"
+          }
+        },
         "icon-list": {
           "type": "icon_list",
           "settings": {
@@ -135,6 +141,7 @@
         "variant-picker",
         "club_spec_3LNpJi",
         "buy-buttons",
+        "rich-text",
         "icon-list",
         "collapsible-tabs",
         "complementary"
