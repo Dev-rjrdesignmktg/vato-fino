@@ -75,7 +75,7 @@
         "rich-text": {
           "type": "rich_text",
           "settings": {
-            "content": "<p></p>{{ product.description }}"
+            "content": "{{ product.description }}"
           }
         },
         "icon-list": {
@@ -105,7 +105,7 @@
             "icon_1": "none",
             "enable_2": true,
             "heading_2": "Shipping",
-            "content_2": "<p>We deliver worldwide. </p>",
+            "content_2": "<p>We deliver worldwide.&nbsp;</p>",
             "page_2": "",
             "icon_2": "none",
             "enable_3": true,
