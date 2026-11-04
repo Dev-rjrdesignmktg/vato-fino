@@ -500,7 +500,9 @@
         align-center
       "
     >
-      <h1
+      {%- comment -%} En la home el <h1> lo aporta el hero (custom-hero) {%- endcomment -%}
+      {%- if request.page_type == 'index' -%}{%- assign logo_tag = 'div' -%}{%- else -%}{%- assign logo_tag = 'h1' -%}{%- endif -%}
+      <{{ logo_tag }}
         class="break-word my-auto"
       >
         <a href="{{ routes.root_url }}">
@@ -518,7 +520,7 @@
             %}
           {% endunless %}
         </a>
-      </h1>
+      </{{ logo_tag }}>
     </div>
 
     <div class="flex items-center justify-end">

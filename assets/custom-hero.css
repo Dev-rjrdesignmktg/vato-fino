@@ -1,77 +1,31 @@
-.vf-hero{
-    position:relative;
-    height:90vh;
-    overflow:hidden;
-}
-
-.vf-hero__slider{
-    height:100%;
-}
-
-.vf-hero__slide{
-    position:absolute;
-    inset:0;
-    opacity:0;
-    visibility:hidden;
-    transition:opacity .8s ease;
-}
-
-.vf-hero__slide.is-active{
-    opacity:1;
-    visibility:visible;
-}
+/*
+  VATOFINO Hero — estilos no críticos.
+  El layout crítico (alto, slides, imagen, título) está inline en
+  sections/custom-hero.liquid para no bloquear el primer renderizado.
+*/
 
 .vf-hero__image{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    object-position:var(--vf-focal-desktop, 50% 50%);
     transition:transform 12s ease;
+    will-change:auto;
 }
 
 .vf-hero__slide.is-active .vf-hero__image{
     transform:scale(1.08);
 }
 
-.vf-hero__overlay{
-    position:absolute;
-    inset:0;
-    background:
-    linear-gradient(
-        90deg,
-        rgba(0,0,0,.65) 0%,
-        rgba(0,0,0,.3) 40%,
-        rgba(0,0,0,.05) 100%
-    );
-}
-
-.vf-hero__content{
-    position:absolute;
-    left:8%;
-    bottom:12%;
-    z-index:10;
-    max-width:900px;
-}
-
 .vf-hero__eyebrow{
-    color:white;
+    margin:0;
+    color:#fff;
     letter-spacing:.2em;
     font-size:.75rem;
-}
-
-.vf-hero__title{
-    font-family:'CSClaes-Regular', serif;
-    color:white;
-    font-size:clamp(.1.2rem,4vw,6rem);
-    line-height:.85;
-    letter-spacing:-.05em;
-    margin:1rem 0;
-    text-transform: none;
-    line-height: 1.2;
+    text-transform:uppercase;
 }
 
 .vf-hero__text{
     max-width:40ch;
-    color:rgba(255,255,255,.85);
+    margin:0;
+    color:rgba(255,255,255,.9);
     line-height:1.8;
     font-size:1.1rem;
 }
@@ -79,11 +33,13 @@
 .vf-hero__button{
     margin-top:2rem;
     display:inline-flex;
+    align-items:center;
+    min-height:44px;
     padding:1rem 2rem;
     border-radius:var(--button-border-radius);
     border:1px solid rgba(255,255,255,.6);
     background:rgba(255,255,255,.1);
-    color:white;
+    color:#fff;
     text-decoration:none;
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
@@ -95,83 +51,140 @@
     background:rgba(255,255,255,.18);
 }
 
+.vf-hero__button:focus-visible,
+.vf-hero__arrow:focus-visible,
+.vf-hero__dot:focus-visible,
+.vf-hero__toggle:focus-visible{
+    outline:2px solid #fff;
+    outline-offset:3px;
+}
+
+/* Flechas */
 .vf-hero__arrow{
     position:absolute;
     top:50%;
     transform:translateY(-50%);
     z-index:30;
+    display:grid;
+    place-items:center;
     width:56px;
     height:56px;
-    border:none;
     cursor:pointer;
     background:rgba(255,255,255,.08);
-    color:white;
+    color:#fff;
     backdrop-filter:blur(12px);
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.15);
-    opacity: 0;
-    transition:
-        opacity .35s ease,
-        transform .35s ease,
-        background .35s ease;
-
-    pointer-events: auto;
+    -webkit-backdrop-filter:blur(12px);
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.15);
+    opacity:0;
+    transition:opacity .35s ease, background .35s ease;
 }
 
-.vf-hero__arrow--prev{
-    left:30px;
-}
+.vf-hero__arrow--prev{ left:30px; }
+.vf-hero__arrow--next{ right:30px; }
 
-.vf-hero__arrow--next{
-    right:30px;
-}
-
-.vf-hero:hover .vf-hero__arrow{
-    opacity: 1;
+.vf-hero:hover .vf-hero__arrow,
+.vf-hero:focus-within .vf-hero__arrow{
+    opacity:1;
 }
 
 .vf-hero .vf-hero__arrow:hover{
-    background: rgba(255,255,255,.16);
+    background:rgba(255,255,255,.16);
+}
+
+/* Paginación + pausa */
+.vf-hero__controls{
+    position:absolute;
+    left:50%;
+    bottom:28px;
+    transform:translateX(-50%);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
 }
 
 .vf-hero__pagination{
-    position:absolute;
-    left:50%;
-    bottom:40px;
-    transform:translateX(-50%);
     display:flex;
-    gap:.75rem;
-    z-index:20;
+    gap:.25rem;
 }
 
+/* Área táctil de 44px; la barra visible se dibuja con ::before */
 .vf-hero__dot{
-    width:40px;
-    height:3px;
-    background:rgba(255,255,255,.3);
+    position:relative;
+    width:48px;
+    height:44px;
+    padding:0;
+    border:0;
+    background:transparent;
     cursor:pointer;
 }
 
-.vf-hero__dot.is-active{
-    background:white;
-    height: 3.5px;
+.vf-hero__dot::before{
+    content:"";
+    position:absolute;
+    left:4px;
+    right:4px;
+    top:50%;
+    height:3px;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,.4);
+    transition:background .3s ease;
 }
 
-@media(max-width:768px){
+.vf-hero__dot.is-active::before{
+    background:#fff;
+    height:4px;
+}
 
-    .vf-hero{
-        height:85vh;
+.vf-hero__toggle{
+    display:grid;
+    place-items:center;
+    width:44px;
+    height:44px;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+}
+
+.vf-hero__icon-play{ display:none; }
+.vf-hero.is-paused .vf-hero__icon-play{ display:block; }
+.vf-hero.is-paused .vf-hero__icon-pause{ display:none; }
+
+@media (max-width:768px){
+
+    .vf-hero__image{
+        object-position:var(--vf-focal-mobile, 50% 50%);
     }
-
-    .vf-hero__content{
-        left:0;
-        right:0;
-        padding:0 2rem;
-        text-align:center;
-        bottom:5rem;
-}
 
     .vf-hero__text{
         margin:auto;
     }
 
+    .vf-hero__arrow__container{
+        display:none;
+    }
+
+    .vf-hero__controls{
+        bottom:16px;
+    }
+
+    /* Sin zoom continuo en móvil: ahorra trabajo de GPU/batería */
+    .vf-hero__slide.is-active .vf-hero__image{
+        transform:none;
+    }
+}
+
+@media (prefers-reduced-motion:reduce){
+    .vf-hero__slide,
+    .vf-hero__slide.is-active,
+    .vf-hero__image{
+        transition:none !important;
+    }
+
+    .vf-hero__slide.is-active .vf-hero__image{
+        transform:none;
+    }
 }

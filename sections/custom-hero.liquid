@@ -1,142 +1,289 @@
-{{ 'custom-hero.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  VATOFINO Hero
+  Rendimiento:
+  - CSS crítico inline (sin solicitud que bloquee el renderizado).
+  - Solo el primer slide se descarga con prioridad alta; el resto queda en
+    display:none hasta que la página termina de cargar (ver custom-hero.js).
+  - Móvil usa un recorte vertical 9:16 servido por el CDN de Shopify en vez
+    de reescalar la imagen horizontal de escritorio.
+{%- endcomment -%}
+
+{%- liquid
+  assign slide_count = section.blocks.size
+  assign autoplay_speed = section.settings.autoplay_speed | times: 1000
+  assign mobile_widths = '375,540,720,900,1080' | split: ','
+  assign desktop_widths = '960,1280,1600,1920,2400'
+-%}
+
+<style>
+  #vf-hero-{{ section.id }}{position:relative;height:90vh;height:90svh;overflow:hidden;background:#000;color:#fff}
+  #vf-hero-{{ section.id }} .vf-hero__slider{height:100%}
+  #vf-hero-{{ section.id }} .vf-hero__slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility 0s linear .8s}
+  #vf-hero-{{ section.id }} .vf-hero__slide.is-active{opacity:1;visibility:visible;transition:opacity .8s ease}
+  #vf-hero-{{ section.id }}:not(.is-ready) .vf-hero__slide:not(.is-active){display:none}
+  #vf-hero-{{ section.id }} .vf-hero__media,#vf-hero-{{ section.id }} .vf-hero__image{display:block;width:100%;height:100%}
+  #vf-hero-{{ section.id }} .vf-hero__image{object-fit:cover}
+  #vf-hero-{{ section.id }} .vf-hero__overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.3) 40%,rgba(0,0,0,.05) 100%)}
+  #vf-hero-{{ section.id }} .vf-hero__content{position:absolute;left:8%;bottom:12%;z-index:10;max-width:900px}
+  #vf-hero-{{ section.id }} .vf-hero__title{font-family:'CSClaes-Regular',serif;color:#fff;font-size:clamp(2.5rem,4vw,4.5rem);line-height:1.2;letter-spacing:-.05em;margin:1rem 0;text-transform:none}
+  @media (max-width:768px){
+    #vf-hero-{{ section.id }}{height:85vh;height:85svh}
+    #vf-hero-{{ section.id }} .vf-hero__overlay{background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,.1) 100%)}
+    #vf-hero-{{ section.id }} .vf-hero__content{left:0;right:0;padding:0 2rem;text-align:center;bottom:5rem}
+  }
+</style>
+<link rel="stylesheet" href="{{ 'custom-hero.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'custom-hero.css' | asset_url | stylesheet_tag }}</noscript>
 <script src="{{ 'custom-hero.js' | asset_url }}" defer></script>
 
-<section class="vf-hero" id="vf-hero-{{ section.id }}">
-  <div class="vf-hero__slider">
-        {% for block in section.blocks %}
+<section
+  class="vf-hero"
+  id="vf-hero-{{ section.id }}"
+  aria-roledescription="carrusel"
+  aria-label="{{ section.settings.aria_label | default: 'Colecciones destacadas' | escape }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ autoplay_speed }}"
+>
+  <div class="vf-hero__slider" id="vf-hero-slider-{{ section.id }}" aria-live="off">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign desktop_image = block.settings.image
+        assign mobile_image = block.settings.image_mobile | default: block.settings.image
+        assign image_alt = block.settings.image_alt | default: block.settings.title | escape
 
-            {% assign image_loading = 'lazy' %}
-            {% assign image_priority = 'auto' %}
-            {% assign image_preload = false %}
+        if forloop.first
+          assign image_loading = 'eager'
+          assign image_priority = 'high'
+        else
+          assign image_loading = 'lazy'
+          assign image_priority = 'low'
+        endif
 
-            {% if forloop.first %}
-            {% assign image_loading = 'eager' %}
-            {% assign image_priority = 'high' %}
-            {% assign image_preload = true %}
-            {% endif %}
+        assign focal = desktop_image.presentation.focal_point | default: '50% 50%'
+        assign mobile_focal = mobile_image.presentation.focal_point | default: focal
+        assign img_style = '--vf-focal-desktop:' | append: focal | append: ';--vf-focal-mobile:' | append: mobile_focal | append: ';'
 
-            <article class="vf-hero__slide {% if forloop.first %}is-active{% endif %}">
-                {% if block.settings.image %}
-                <picture>
-                    <source
-                        media="(max-width: 768px)"
-                        srcset="{{ block.settings.image_mobile | image_url: width: 480 }} 480w,
-                                {{ block.settings.image_mobile | image_url: width: 768 }} 768w"
-                    >
-                        {%- assign image_alt = block.settings.image_alt | default: block.settings.title -%}
-                        {{
-                            block.settings.image
-                            | image_url: width: 1700
-                            | image_tag:
-                            class: 'vf-hero__image',
-                            loading: image_loading,
-                            fetchpriority: image_priority,
-                            preload: image_preload,
-                            sizes: '100vw',
-                            width: block.settings.image.width,
-                            height: block.settings.image.height,
-                            alt: image_alt
-                        }} 
-                </picture>
-                {% endif %}
-                <div class="vf-hero__overlay"></div>
-                <div class="vf-hero__content">
-                    {% if block.settings.eyebrow != blank %}
-                        <span class="vf-hero__eyebrow">
-                            {{ block.settings.eyebrow }}
-                        </span>
-                    {% endif %}
+        comment
+          Ancho máximo real para un recorte 9:16 sin reescalar hacia arriba
+        endcomment
+        assign mobile_max_w = mobile_image.height | times: 9 | divided_by: 16
+        if mobile_image.width < mobile_max_w
+          assign mobile_max_w = mobile_image.width
+        endif
+        if mobile_max_w > 1080
+          assign mobile_max_w = 1080
+        endif
+      -%}
 
-                    <h1 class="vf-hero__title">
-                        {{ block.settings.title }}
-                    </h1>
+      <article
+        class="vf-hero__slide{% if forloop.first %} is-active{% endif %}"
+        role="group"
+        aria-roledescription="diapositiva"
+        aria-label="{{ forloop.index }} de {{ slide_count }}"
+        {% unless forloop.first %}aria-hidden="true" inert{% endunless %}
+        {{ block.shopify_attributes }}
+      >
+        {%- if desktop_image != blank -%}
+          <picture class="vf-hero__media">
+            {%- if mobile_image != blank -%}
+              {%- capture mobile_srcset -%}
+                {%- for w in mobile_widths -%}
+                  {%- assign w_num = w | plus: 0 -%}
+                  {%- if w_num < mobile_max_w -%}
+                    {%- assign h_num = w_num | times: 16 | divided_by: 9 -%}
+                    {{ mobile_image | image_url: width: w_num, height: h_num, crop: 'center' }} {{ w_num }}w,
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- assign mobile_max_h = mobile_max_w | times: 16 | divided_by: 9 -%}
+                {{ mobile_image | image_url: width: mobile_max_w, height: mobile_max_h, crop: 'center' }} {{ mobile_max_w }}w
+              {%- endcapture -%}
+              <source
+                media="(max-width: 768px)"
+                srcset="{{ mobile_srcset | strip }}"
+                sizes="100vw"
+                width="900"
+                height="1600"
+              >
+            {%- endif -%}
+            {{
+              desktop_image
+              | image_url: width: 2400
+              | image_tag:
+                class: 'vf-hero__image',
+                widths: desktop_widths,
+                sizes: '100vw',
+                loading: image_loading,
+                fetchpriority: image_priority,
+                decoding: 'async',
+                alt: image_alt,
+                style: img_style
+            }}
+          </picture>
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'vf-hero__image' }}
+        {%- endif -%}
 
-                    <div class="vf-hero__text">
-                        {{ block.settings.text }}
-                    </div>
-                    {% if block.settings.button_url != blank %}
-                        <a
-                        href="{{ block.settings.button_url }}"
-                        class="vf-hero__button"
-                        >
-                        {{ block.settings.button_text }}
-                        </a>
-                    {% endif %}
-                </div>
-            </article>
-        {% endfor %}
+        <div class="vf-hero__overlay" aria-hidden="true"></div>
+
+        <div class="vf-hero__content">
+          {%- if block.settings.eyebrow != blank -%}
+            <p class="vf-hero__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.title != blank -%}
+            {%- if forloop.first -%}
+              <h1 class="vf-hero__title">{{ block.settings.title | escape }}</h1>
+            {%- else -%}
+              <h2 class="vf-hero__title">{{ block.settings.title | escape }}</h2>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <p class="vf-hero__text">{{ block.settings.text | escape | newline_to_br }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.button_url != blank and block.settings.button_text != blank -%}
+            <a href="{{ block.settings.button_url }}" class="vf-hero__button">
+              {{- block.settings.button_text | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
   </div>
-    <div class="vf-hero__arrow__container">
-        <button class="vf-hero__arrow vf-hero__arrow--prev">
-            ←
-        </button>
 
-        <button class="vf-hero__arrow vf-hero__arrow--next">
-            →
-        </button>
+  {%- if slide_count > 1 -%}
+    <div class="vf-hero__arrow__container">
+      <button
+        type="button"
+        class="vf-hero__arrow vf-hero__arrow--prev"
+        aria-controls="vf-hero-slider-{{ section.id }}"
+        aria-label="Diapositiva anterior"
+      >
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <button
+        type="button"
+        class="vf-hero__arrow vf-hero__arrow--next"
+        aria-controls="vf-hero-slider-{{ section.id }}"
+        aria-label="Diapositiva siguiente"
+      >
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
 
-  <div class="vf-hero__pagination"></div>
+    <div class="vf-hero__controls">
+      {%- if section.settings.autoplay -%}
+        <button
+          type="button"
+          class="vf-hero__toggle"
+          aria-label="Pausar carrusel"
+          data-label-pause="Pausar carrusel"
+          data-label-play="Reproducir carrusel"
+        >
+          <svg class="vf-hero__icon-pause" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="4" height="16"/><rect x="15" y="4" width="4" height="16"/></svg>
+          <svg class="vf-hero__icon-play" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>
+        </button>
+      {%- endif -%}
 
+      <div class="vf-hero__pagination">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="vf-hero__dot{% if forloop.first %} is-active{% endif %}"
+            aria-controls="vf-hero-slider-{{ section.id }}"
+            aria-label="Ir a la diapositiva {{ forloop.index }} de {{ slide_count }}"
+            {% if forloop.first %}aria-current="true"{% endif %}
+            data-index="{{ forloop.index0 }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
+{
+  "name": "VATOFINO Hero",
+  "settings": [
     {
-        "name": "VATOFINO Hero",
-        "settings": [],
-        "blocks": [
-            {
-            "type": "slide",
-            "name": "Slide",
-            "settings": [
-                {
-                "type":"image_picker",
-                "id":"image",
-                "label":"Image"
-                },
-                {
-                "type": "image_picker",
-                "id": "image_mobile",
-                "label": "Mobile image"
-                },
-                {
-                "type": "text",
-                "id": "image_alt",
-                "label": "Image ALT"
-                },
-                {
-                "type":"text",
-                "id":"eyebrow",
-                "label":"Eyebrow",
-                "default":"VATOFINO"
-                },
-                {
-                "type":"text",
-                "id":"title",
-                "label":"Title"
-                },
-                {
-                "type":"textarea",
-                "id":"text",
-                "label":"Description"
-                },
-                {
-                "type":"text",
-                "id":"button_text",
-                "label":"Button Text"
-                },
-                {
-                "type":"url",
-                "id":"button_url",
-                "label":"Button Link"
-                }
-            ]
+      "type": "text",
+      "id": "aria_label",
+      "label": "Etiqueta accesible del carrusel",
+      "default": "Colecciones destacadas"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Reproducción automática",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Cambiar slide cada",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 7
     }
-        ],
-    "presets": [
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
         {
-            "name":"VATOFINO Hero"
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recomendado: 2400 × 1350 px (horizontal)."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Opcional. Recomendado: 1080 × 1920 px (vertical). Si se deja vacío se recorta la imagen principal. Usa el punto focal para controlar el recorte."
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image ALT"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "VATOFINO"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link"
         }
-    ]   
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VATOFINO Hero"
+    }
+  ]
 }
 {% endschema %}
