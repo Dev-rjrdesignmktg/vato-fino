@@ -34,6 +34,7 @@
     <div class="spotify-player__wrapper">
       <iframe
         class="spotify-player__embed"
+        title="{{ section.settings.heading | default: 'Playlist de Spotify' | strip_html | escape }}"
         src="{{ section.settings.spotify_url }}"
         loading="lazy"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
