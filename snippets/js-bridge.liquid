@@ -45,8 +45,25 @@
       cart_update_url: {{ routes.cart_update_url | json }},
       cart_clear_url: {{ routes.cart_clear_url | json }},
     },
-    moneyFormat: {{ shop.money_format | json }},
-    moneyWithCurrencyFormat: {{ shop.money_with_currency_format | json }},
+    {%- comment -%}
+      shop.money_format / shop.money_with_currency_format always use the store's base
+      currency (e.g. USD). Derive the formats from the active market currency instead,
+      falling back to the shop formats if the sample can't be parsed.
+    {%- endcomment -%}
+    {%- liquid
+      assign money_sample = 123456 | money | strip_html
+      assign money_with_currency_sample = 123456 | money_with_currency | strip_html
+      assign active_money_format = money_sample | replace: '1,234.56', '{{amount}}' | replace: '1.234,56', '{{amount_with_comma_separator}}' | replace: '1,235', '{{amount_no_decimals}}' | replace: '1.235', '{{amount_no_decimals_with_comma_separator}}'
+      assign active_money_with_currency_format = money_with_currency_sample | replace: '1,234.56', '{{amount}}' | replace: '1.234,56', '{{amount_with_comma_separator}}' | replace: '1,235', '{{amount_no_decimals}}' | replace: '1.235', '{{amount_no_decimals_with_comma_separator}}'
+      unless active_money_format contains '{{'
+        assign active_money_format = shop.money_format
+      endunless
+      unless active_money_with_currency_format contains '{{'
+        assign active_money_with_currency_format = shop.money_with_currency_format
+      endunless
+    -%}
+    moneyFormat: {{ active_money_format | json }},
+    moneyWithCurrencyFormat: {{ active_money_with_currency_format | json }},
     get defaultMoneyFormat() {
       {% if settings.currency_code_enable %}
         return this.moneyWithCurrencyFormat;
