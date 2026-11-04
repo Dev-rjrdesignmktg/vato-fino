@@ -58,7 +58,11 @@
         "slide_H8wUAT"
       ],
       "name": "VATOFINO Hero",
-      "settings": {}
+      "settings": {
+        "aria_label": "Colecciones destacadas",
+        "autoplay": true,
+        "autoplay_speed": 7
+      }
     },
     "cascading_product_list_HN6hYV": {
       "type": "cascading-product-list",
