@@ -119,6 +119,7 @@
                         autoplay: true,
                         loop: section.settings.enable_video_looping,
                         x-ref: 'video'
+                      | replace: '<img ', '<img alt="" '
                     }}
                   </div>
                 {% when 'external_video' %}
