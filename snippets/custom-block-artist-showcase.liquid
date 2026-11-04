@@ -19,7 +19,10 @@
 
   assign link_label = block.settings.artist_name
   if link_label == blank
-    assign link_label = block.settings.richtext | strip_html
+    assign link_label = block.settings.richtext | strip_html | strip
+  endif
+  if link_label == blank
+    assign link_label = 'Ver artista'
   endif
 -%}
 
@@ -29,6 +32,7 @@
       <a
         class="absolute inset-0 z-10"
         href="{{ block.settings.link }}"
+        aria-label="{{ link_label | escape }}"
       >
         <span class="sr-only">{{ link_label }}</span>
       </a>
