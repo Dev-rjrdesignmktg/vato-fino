@@ -225,7 +225,7 @@
 
       if settings[social_link] != blank
         capture social_account_item
-          echo '<a href="' | append: settings[social_link] | append: '">'
+          echo '<a href="' | append: settings[social_link] | append: '" target="_blank" rel="noopener" aria-label="' | append: social | append: ' (se abre en una pestaña nueva)">'
           case social_handle
             when 'facebook'
               render 'icon-facebook'

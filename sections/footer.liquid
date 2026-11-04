@@ -150,9 +150,9 @@
                       if settings[social_link] != blank
                         capture social_account_item
                           if social_handle == 'email'
-                            echo '<a href="mailto:' | append: settings[social_link] | append: '">'
+                            echo '<a href="mailto:' | append: settings[social_link] | append: '" aria-label="' | append: social | append: '">'
                           else
-                            echo '<a href="' | append: settings[social_link] | append: '">'
+                            echo '<a href="' | append: settings[social_link] | append: '" target="_blank" rel="noopener" aria-label="' | append: social | append: ' (se abre en una pestaña nueva)">'
                           endif
                           case social_handle
                             when 'facebook'
