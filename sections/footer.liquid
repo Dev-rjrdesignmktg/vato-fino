@@ -26,6 +26,7 @@
   {% liquid
     assign tagline_blocks = section.blocks | where: 'type', 'tagline'
     assign logo_in_tagline = false
+    assign logo_rendered = false
     if section.settings.logo != blank and tagline_blocks.size > 0
       assign logo_in_tagline = true
     endif
@@ -123,11 +124,13 @@
                   {% endif %}
                 </div>
               {% when 'tagline' %}
-                {% if logo_in_tagline and block.id == tagline_blocks.first.id %}
-                  <div class="logo mb-5">
+                {% if logo_in_tagline and logo_rendered == false %}
+                  {% assign logo_rendered = true %}
+                  <div class="logo footer-tagline-logo mb-5">
                     {{ logo_markup }}
                   </div>
                 {% endif %}
+                <div class="footer-tagline-content">
                 <div class="rte rte--content-only rte--compact text-theme-basic">
                   {{ block.settings.text }}
                 </div>
@@ -205,6 +208,7 @@
                     </ul>
                   </div>
                 {% endif %}
+                </div>
               {% when 'newsletter' %}
                 {% if block.settings.text != blank %}
                   <div class="rte rte--content-only rte--compact mb-5 text-theme-basic">
@@ -326,8 +330,38 @@
   }
 
   @media (min-width: 768px) {
+    .footer-blocks .footer-block--menus,
+    .footer-blocks .footer-block--newsletter {
+      align-self: start;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 989px) {
     .footer-blocks .footer-block--menus {
       align-self: end;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .footer-blocks .footer-block--tagline {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      grid-column: span 4 / span 4;
+    }
+
+    .footer-blocks .footer-block--menus,
+    .footer-blocks .footer-block--newsletter {
+      grid-column: span 3 / span 3;
+    }
+
+    .footer-tagline-logo {
+      flex-shrink: 0;
+      margin-bottom: 0;
+    }
+
+    .footer-tagline-content {
+      min-width: 0;
     }
   }
 </style>
