@@ -157,6 +157,8 @@
       }
     </script>
     <script src="{{ 'enhancements.js' | asset_url }}" defer></script>
+    {% comment %} Fuente del título del hero: precargada para evitar el cambio de diseño (CLS) al cambiar de fuente {% endcomment %}
+    {{ 'CSClaes-Regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
     <style>
   @font-face {
     font-family: 'Ancient Medium';
