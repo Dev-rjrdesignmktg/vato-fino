@@ -177,7 +177,11 @@
     {% endif %}
   {% endif %}
 {% else %}
-  <span class="header__logo-text">
-    {{ shop.name }}
+  {% comment %} Text logo: logo_max_width drives the font size, capped by viewport so it fits on mobile {% endcomment %}
+  <span
+    class="header__logo-text"
+    style="font-size: min({{ section.settings.logo_max_width | append: 'rem' }}, 9vw);"
+  >
+    {{- shop.name -}}
   </span>
 {% endif %}

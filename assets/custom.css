@@ -57,7 +57,11 @@ textarea {
 }
 
 .header__logo-text {
+    display: block;
     font-family: var(--font-secondary);
+    line-height: 1;
+    /* Trim font ascent/descent so the logo adds no vertical space */
+    text-box: trim-both cap alphabetic;
 }
 
 /* Navbar + footer links: hairline underline that draws in from the left and retracts to the right */
