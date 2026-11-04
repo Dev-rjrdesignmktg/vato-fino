@@ -23,37 +23,49 @@
   class="bg-scheme-background pb-10 pt-10 text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
   data-color-scheme="{{ section_color }}"
 >
-  <div class="mx-auto grid max-w-site gap-5 gap-y-10 px-5 lg:grid-cols-7 lg:gap-10 lg:px-10">
+  {% liquid
+    assign tagline_blocks = section.blocks | where: 'type', 'tagline'
+    assign logo_in_tagline = false
+    if section.settings.logo != blank and tagline_blocks.size > 0
+      assign logo_in_tagline = true
+    endif
+  %}
+
+  {% capture logo_markup %}
     {% if section.settings.logo != blank %}
+      {% liquid
+        assign logo = section.settings.logo
+        assign logo_max_width = 100
+        assign requested_width = logo_max_width | times: 3
+        assign logo_style = 'max-width: ' | append: logo_max_width | append: 'px'
+        assign logo_alt = section.settings.logo.alt | default: shop.name | escape
+      %}
+      {% capture logo_sizes %}34vw, (min-width: 990px) calc(100vw / 7){% endcapture %}
+      <a href="{{ routes.root_url }}" class="block lg:max-w-[75%]">
+        {{
+          logo
+          | image_url: width: requested_width
+          | image_tag:
+            style: logo_style,
+            sizes: logo_sizes,
+            loading: 'lazy',
+            alt: logo_alt
+        }}
+      </a>
+    {% endif %}
+  {% endcapture %}
+
+  <div class="footer-grid {% if section.settings.logo != blank and logo_in_tagline == false %}footer-grid--has-logo{% endif %} mx-auto grid max-w-site gap-5 gap-y-10 px-5 lg:grid-cols-7 lg:gap-10 lg:px-10">
+    {% if section.settings.logo != blank and logo_in_tagline == false %}
       <div class="logo grid gap-5 lg:row-span-full lg:row-start-1 {% unless section.blocks.size > 0 or payment_icons or country_selector or locale_selector %} items-center {% endunless %}">
         <div class="logo">
-          {% if section.settings.logo != blank %}
-            {% liquid
-              assign logo = section.settings.logo
-              assign logo_max_width = 100
-              assign requested_width = logo_max_width | times: 3
-              assign logo_style = 'max-width: ' | append: logo_max_width | append: 'px'
-              assign logo_alt = section.settings.logo.alt | default: shop.name | escape
-            %}
-            {% capture logo_sizes %}34vw, (min-width: 990px) calc(100vw / 7){% endcapture %}
-            <a href="{{ routes.root_url }}" class="block lg:max-w-[75%]">
-              {{
-                logo
-                | image_url: width: requested_width
-                | image_tag:
-                  style: logo_style,
-                  sizes: logo_sizes,
-                  loading: 'lazy',
-                  alt: logo_alt
-              }}
-            </a>
-          {% endif %}
+          {{ logo_markup }}
         </div>
       </div>
     {% endif %}
 
     {% if section.blocks.size > 0 %}
-      <div class="blocks {% if section.settings.logo != blank %}lg:col-span-6{%  else %}lg:col-span-7{%  endif %} mb-10 grid grid-cols-1 gap-5 gap-y-10 lg:grid-cols-10 lg:gap-10">
+      <div class="blocks footer-blocks {% if section.settings.logo != blank and logo_in_tagline == false %}lg:col-span-6{%  else %}lg:col-span-7{%  endif %} mb-10 grid grid-cols-1 gap-5 gap-y-10 lg:grid-cols-10 lg:gap-10">
         {% for block in section.blocks %}
           <div
             class="
@@ -74,6 +86,7 @@
                   lg:col-span-3
                 {% endif -%}
               {% endif %}
+              footer-block--{{ block.type }}
             "
             {{ block.shopify_attributes }}
           >
@@ -110,6 +123,11 @@
                   {% endif %}
                 </div>
               {% when 'tagline' %}
+                {% if logo_in_tagline and block.id == tagline_blocks.first.id %}
+                  <div class="logo mb-5">
+                    {{ logo_markup }}
+                  </div>
+                {% endif %}
                 <div class="rte rte--content-only rte--compact text-theme-basic">
                   {{ block.settings.text }}
                 </div>
@@ -178,7 +196,7 @@
                     endif
                   %}
                   <div class="mt-10">
-                    <ul class="-m-2 flex flex-wrap justify-end lg:justify-start">
+                    <ul class="-m-2 flex flex-wrap justify-start">
                       {% for item in social_account_items %}
                         <li class="m-2 h-[1.125rem] w-[1.125rem]">
                           {{ item }}
@@ -241,7 +259,7 @@
       </div>
     {% endif %}
 
-    <div class="copyright-and-payment-icons-and-markets md:items-top flex flex-col md:flex-row-reverse lg:col-span-7">
+    <div class="copyright-and-payment-icons-and-markets footer-bottom md:items-top flex flex-col md:flex-row-reverse lg:col-span-7">
       {% if payment_icons or country_selector or locale_selector %}
         <div class="payment-and-markets {% unless section.blocks.size == 0 %} lg:row-start-last {% endunless %} flex flex-col {% unless country_selector or locale_selector %} justify-end {% endunless %} items-start lg:items-end">
           <div class="-my-3">
@@ -284,6 +302,35 @@
     </div>
   </div>
 </section>
+
+<style>
+  @media (min-width: 768px) and (max-width: 989px) {
+    .footer-grid--has-logo {
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: 2.5rem;
+      align-items: start;
+    }
+
+    .footer-grid--has-logo .footer-bottom {
+      grid-column: 1 / -1;
+    }
+
+    .footer-blocks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2.5rem;
+    }
+
+    .footer-blocks .footer-block--newsletter {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .footer-blocks .footer-block--menus {
+      align-self: end;
+    }
+  }
+</style>
 
 {% schema %}
 {
