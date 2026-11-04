@@ -26,7 +26,11 @@
   #vf-hero-{{ section.id }} .vf-hero__overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.3) 40%,rgba(0,0,0,.05) 100%)}
   #vf-hero-{{ section.id }} .vf-hero__content{position:absolute;left:8%;bottom:12%;z-index:10;max-width:900px}
   #vf-hero-{{ section.id }} .vf-hero__title{font-family:'CSClaes-Regular',serif;color:#fff;font-size:clamp(2.5rem,4vw,4.5rem);line-height:1.2;letter-spacing:-.05em;margin:1rem 0;text-transform:none}
+  #vf-hero-{{ section.id }} .vf-hero__eyebrow{margin:0;color:#fff;letter-spacing:.2em;font-size:.75rem;line-height:1.5;text-transform:uppercase}
+  #vf-hero-{{ section.id }} .vf-hero__text{max-width:40ch;margin:0;color:rgba(255,255,255,.9);line-height:1.8;font-size:1.1rem}
+  #vf-hero-{{ section.id }} .vf-hero__button{margin-top:2rem;display:inline-flex;align-items:center;min-height:44px;padding:1rem 2rem;line-height:1.2;border:1px solid rgba(255,255,255,.6);color:#fff;text-decoration:none}
   @media (max-width:768px){
+    #vf-hero-{{ section.id }} .vf-hero__text{margin:auto}
     #vf-hero-{{ section.id }}{height:85vh;height:85svh}
     #vf-hero-{{ section.id }} .vf-hero__overlay{background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,.1) 100%)}
     #vf-hero-{{ section.id }} .vf-hero__content{left:0;right:0;padding:0 2rem;text-align:center;bottom:5rem}
