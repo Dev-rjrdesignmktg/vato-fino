@@ -3,7 +3,8 @@
     <li class="break-word mx-2 my-1">
       <a
         href="{{ link.url }}"
-        class="underline-offset-basic hover:underline"
+        class="link-underline"
+        {% if link.current %}aria-current="page"{% endif %}
       >
         {{ link.title }}
       </a>

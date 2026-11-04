@@ -59,3 +59,27 @@ textarea {
 .header__logo-text {
     font-family: var(--font-secondary);
 }
+
+/* Navbar + footer links: hairline underline that draws in from the left and retracts to the right */
+.link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    padding-bottom: 0.03rem;
+    text-decoration: none;
+    transition: background-size 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.link-underline:hover,
+.link-underline:focus-visible,
+.link-underline[aria-current="page"] {
+    background-position: left bottom;
+    background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .link-underline {
+        transition: none;
+    }
+}

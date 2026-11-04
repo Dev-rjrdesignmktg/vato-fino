@@ -432,7 +432,7 @@
                   {% if link.links.size > 0 %}
                     <button
                       type="button"
-                      class="text-left underline-offset-basic hover:underline"
+                      class="text-left link-underline"
                       @click="$store.nav.currentIndex = {{ forloop.index }}; $store.modals.open('desktop-sidebar-nav');"
                     >
                       <div class="flex items-center">
@@ -444,8 +444,9 @@
                     </button>
                   {% else %}
                     <a
-                      class="break-word underline-offset-basic hover:underline"
+                      class="break-word link-underline"
                       href="{{ link.url }}"
+                      {% if link.current %}aria-current="page"{% endif %}
                     >
                       {{- link.title -}}
                     </a>
@@ -613,14 +614,14 @@
         {% elsif menu_items_display == 'text' %}
           {% if meta_items contains 'a' %}
             <a
-              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% endif %} underline-offset-basic hover:underline"
+              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% endif %} link-underline"
               href="{{ routes.account_url }}"
             >
               {{ 'layout.customer.account' | t }}
             </a>
           {% elsif meta_items contains 'l' %}
             <a
-              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% endif %} underline-offset-basic hover:underline"
+              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% endif %} link-underline"
               href="{{ routes.account_login_url }}"
             >
               {{ 'layout.customer.log_in' | t }}
@@ -629,7 +630,7 @@
 
           {% if meta_items contains 's' %}
             <a
-              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% else %} block {% endif %} underline-offset-basic hover:underline"
+              class="mx-2 my-1 {% if header_layout_mobile == 'n_l_m' %} sw-hidden md:block {% else %} block {% endif %} link-underline"
               data-open-search
               x-ref="search"
               @click.prevent="$store.modals.open('search')"
@@ -643,7 +644,7 @@
 
           {% if meta_items contains 'c' %}
             <a
-              class="mx-2 my-1 underline-offset-basic hover:underline"
+              class="mx-2 my-1 link-underline"
               href="{{ routes.cart_url }}"
               role="button"
               id="CartButton"
@@ -656,7 +657,7 @@
             </a>
           {% elsif meta_items contains 'k' %}
             <a
-              class="mx-2 my-1 underline-offset-basic hover:underline"
+              class="mx-2 my-1 link-underline"
               href="{{ routes.cart_url }}"
             >
               {{ 'layout.cart.title' | t }}
