@@ -1,9 +1,9 @@
-<ul class="{% unless has_two_linklists %} flex flex-wrap {% endunless %} -mx-2 -my-1 text-theme-basic">
+<ul class="{% unless has_two_linklists %} flex flex-wrap {% endunless %} -mx-2 text-theme-basic">
   {% for link in linklist.links %}
-    <li class="break-word mx-2 my-1">
+    <li class="break-word mx-2">
       <a
         href="{{ link.url }}"
-        class="link-underline"
+        class="link-underline footer-link"
         {% if link.current %}aria-current="page"{% endif %}
       >
         {{ link.title }}

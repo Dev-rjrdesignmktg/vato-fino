@@ -19,13 +19,22 @@ document.addEventListener('alpine:init', () => {
 
       // Safari won't autoplay inserted videos
       if (this.$refs.video.autoplay) {
-        this.$nextTick(() => {
-          this.$refs.video.play();
-        });
+        this.$nextTick(() => this.play());
       }
     },
     play() {
-      this.$refs.video.play();
+      // play() returns a promise that rejects with AbortError when a pause()
+      // (e.g. off-screen / carousel change) interrupts it. That's expected, so
+      // swallow it instead of logging an uncaught console error.
+      const promise = this.$refs.video.play();
+      if (promise && typeof promise.catch === 'function') {
+        promise.catch((error) => {
+          if (error && error.name !== 'AbortError' && error.name !== 'NotAllowedError') {
+            console.error(error);
+          }
+        });
+      }
+      return promise;
     },
     pause() {
       this.$refs.video.pause();
