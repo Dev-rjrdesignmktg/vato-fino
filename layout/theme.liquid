@@ -189,7 +189,15 @@
 
     <div id="MainContent">
       {% if request.page_type == 'policy' %}
-        <section data-color-scheme="{{ settings.color_schemes | first }}">
+        {%- liquid
+          assign policy_scheme = settings.policy_color_scheme
+          if request.path contains '/policies/terms-of-service'
+            assign policy_scheme = settings.policy_terms_color_scheme
+          elsif request.path contains '/policies/refund-policy'
+            assign policy_scheme = settings.policy_refund_color_scheme
+          endif
+        -%}
+        <section data-color-scheme="{{ policy_scheme | default: settings.color_schemes.first }}">
       {% endif %}
       {{ content_for_layout }}
       {% if request.page_type == 'policy' %}

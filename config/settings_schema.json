@@ -74,6 +74,33 @@
       },
       {
         "type": "header",
+        "content": "Policy pages"
+      },
+      {
+        "type": "paragraph",
+        "content": "Shopify policy pages can't be edited in the theme editor, so their color schemes are set here."
+      },
+      {
+        "type": "color_scheme",
+        "id": "policy_terms_color_scheme",
+        "label": "Terms of service",
+        "default": "scheme1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "policy_refund_color_scheme",
+        "label": "Refund policy",
+        "default": "scheme1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "policy_color_scheme",
+        "label": "Other policies",
+        "info": "Privacy, shipping, contact information and legal notice.",
+        "default": "scheme1"
+      },
+      {
+        "type": "header",
         "content": "Transitions"
       },
       {
