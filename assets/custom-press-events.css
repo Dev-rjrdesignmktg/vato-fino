@@ -1,0 +1,273 @@
+/*
+    VATOFINO Prensa & Eventos — estilos de sections/custom-press-events.liquid
+    y snippets/custom-block-press-events.liquid.
+    Grid con scroll infinito (sin carrusel).
+    Scoped bajo .press-events; los colores salen del color scheme del tema
+    (--color-scheme-* son tripletas rgb). Mobile-first: base = teléfono,
+    luego 750px (tablet) y 990px (desktop, mismo breakpoint "lg" del tema).
+*/
+
+.press-events {
+    --pe-text: rgb(var(--color-scheme-text));
+    --pe-muted: rgb(var(--color-scheme-text) / 0.62);
+    --pe-line: rgb(var(--color-scheme-text) / 0.14);
+    --pe-line-strong: rgb(var(--color-scheme-text) / 0.55);
+    --pe-surface: rgb(var(--color-scheme-text) / 0.03);
+    --pe-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Header */
+.press-events__header {
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+}
+.press-events__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--pe-muted);
+}
+.press-events__title { margin: 0; }
+.press-events__subtitle {
+    margin-top: 1.25rem;
+    color: var(--pe-muted);
+    max-width: 40rem;
+}
+
+/*
+  Filter — look comes from the theme's .theme-button / .theme-button--solid
+  (3D style follows Theme settings → Buttons). Only layout + tap size here.
+  Gap leaves room for the 0.25rem 3D offset so buttons don't overlap.
+*/
+.press-events__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-bottom: 2.25rem;
+    padding: 0 0.25rem 0.25rem 0;
+}
+.press-events__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 48px;
+}
+.press-events__count { opacity: 0.6; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ */
+/* Grid layout — single column on mobile                               */
+/* ------------------------------------------------------------------ */
+.press-events__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.press-events__item[hidden] { display: none; }
+
+/* Infinite scroll — cards not yet revealed take no space. */
+.press-events__item[data-deferred] { display: none; }
+
+.press-events__sentinel {
+    width: 100%;
+    height: 1px;
+}
+.press-events__sentinel[hidden] { display: none; }
+
+.press-events__item.is-revealed {
+    animation: press-events-reveal 0.6s var(--pe-ease) both;
+}
+@keyframes press-events-reveal {
+    from { opacity: 0; transform: translateY(1.5rem); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Card                                                                */
+/* ------------------------------------------------------------------ */
+.press-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--pe-line);
+    background: var(--pe-surface);
+    transition: transform 0.5s var(--pe-ease), border-color 0.5s var(--pe-ease), box-shadow 0.5s var(--pe-ease);
+}
+
+/* Responsive media: mobile ratio first, desktop ratio from 750px. */
+.press-card__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--pe-ratio-m, 4 / 5);
+    background: rgb(var(--color-scheme-text) / 0.06);
+}
+.press-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(var(--color-scheme-background) / 0.55), transparent 55%);
+    pointer-events: none;
+}
+.press-card__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.press-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--pe-focal-m, 50% 50%);
+    /* Black & white at rest; original color on hover / focus / tap (see below). */
+    filter: grayscale(1) contrast(1.05);
+    transition: transform 0.9s var(--pe-ease), filter 0.6s var(--pe-ease);
+}
+
+/*
+  Color reveal for keyboard (focus on the CTA) and touch (while the finger is
+  down — touch screens have no hover).
+*/
+.press-card:focus-within .press-card__img,
+.press-card:active .press-card__img {
+    filter: grayscale(0) contrast(1);
+}
+.press-card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    padding: 0.375rem 0.625rem;
+    border: 1px solid rgb(var(--color-scheme-text) / 0.4);
+    background: rgb(var(--color-scheme-background) / 0.7);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    font-size: 0.625rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.press-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+    padding: 1.5rem 1.25rem 1.25rem;
+}
+.press-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pe-muted);
+}
+.press-card__outlet { color: var(--pe-text); }
+.press-card__outlet + .press-card__date::before {
+    content: '';
+    display: inline-block;
+    width: 1.25rem;
+    height: 1px;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+    background: var(--pe-line-strong);
+}
+.press-card__headline {
+    margin: 0;
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+    line-height: 1.2;
+}
+.press-card__excerpt {
+    margin: 0;
+    color: var(--pe-muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/*
+  Whole-card click target. A separate overlay link (aria-hidden, tabindex -1)
+  instead of a stretched ::after on the CTA, because the theme's 3D buttons
+  use ::after and position: relative on .theme-button.
+*/
+.press-card__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* CTA — theme 3D button; sits above the overlay. 48px min tap target. */
+.press-card__footer {
+    margin-top: auto;
+    padding: 0.5rem 0.25rem 0.25rem 0;
+}
+.press-card__cta {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 48px;
+    text-decoration: none;
+}
+
+.press-events__empty {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--pe-line-strong);
+    text-align: center;
+    color: var(--pe-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Tablet ≥ 750px                                                      */
+/* ------------------------------------------------------------------ */
+@media (min-width: 750px) {
+    .press-events__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 1.5rem; }
+
+    .press-card__media { aspect-ratio: var(--pe-ratio, 4 / 5); }
+    .press-card__img { object-position: var(--pe-focal-d, var(--pe-focal-m, 50% 50%)); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Desktop ≥ 990px                                                     */
+/* ------------------------------------------------------------------ */
+@media (min-width: 990px) {
+    .press-events__header { margin-bottom: 3.5rem; }
+
+    .press-events__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3.5rem 2rem; }
+    .press-events__grid--2 { gap: 4rem 2.5rem; }
+}
+
+/* Hover — only on devices that truly hover, so touch doesn't get sticky states */
+@media (hover: hover) and (pointer: fine) {
+    .press-card--linked:hover {
+        transform: translateY(-4px);
+        border-color: var(--pe-line-strong);
+        box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.6);
+    }
+    /* Any card (linked or not) gets its original color back on hover. */
+    .press-card:hover .press-card__img {
+        filter: grayscale(0) contrast(1);
+    }
+    .press-card--linked:hover .press-card__img {
+        transform: scale(1.04);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .press-card,
+    .press-card__img { transition: none; }
+    .press-events__item.is-revealed { animation: none; }
+    .press-card--linked:hover,
+    .press-card--linked:hover .press-card__img { transform: none; }
+}

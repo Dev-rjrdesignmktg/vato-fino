@@ -1,0 +1,396 @@
+{% comment %}
+  Custom section — not part of the base theme. Safe to keep across theme updates.
+  Press & Events: notas de prensa, cobertura de medios y eventos pasados.
+  - Card markup: snippets/custom-block-press-events.liquid
+  - Styles:      assets/custom-press-events.css
+  - JS:          assets/custom-press-events.js (infinite scroll + category filter)
+{% endcomment %}
+{%- liquid
+  assign section_color = section.settings.color_scheme | default: 'scheme1'
+  assign columns = section.settings.columns | default: '3'
+
+  comment
+    Categories: digital = Medios digitales, social = Redes sociales,
+    stations = Medios y estaciones. The filter only shows when at least two
+    categories have entries; empty categories don't get a button.
+  endcomment
+  assign digital_count = 0
+  assign social_count = 0
+  assign stations_count = 0
+  for block in section.blocks
+    case block.settings.kind
+      when 'social'
+        assign social_count = social_count | plus: 1
+      when 'stations'
+        assign stations_count = stations_count | plus: 1
+      else
+        assign digital_count = digital_count | plus: 1
+    endcase
+  endfor
+
+  assign used_categories = 0
+  if digital_count > 0
+    assign used_categories = used_categories | plus: 1
+  endif
+  if social_count > 0
+    assign used_categories = used_categories | plus: 1
+  endif
+  if stations_count > 0
+    assign used_categories = used_categories | plus: 1
+  endif
+
+  assign show_filter = false
+  if section.settings.enable_filter and used_categories > 1
+    assign show_filter = true
+  endif
+
+  comment
+    Infinite scroll: the first `batch` cards render visible; the rest carry
+    data-deferred (hidden by CSS, so no layout shift and their lazy images
+    don't download) and the JS reveals the next batch as the visitor nears
+    the end of the grid. Without JS a <noscript> rule shows every card.
+    In the theme editor everything is shown so every block can be edited.
+  endcomment
+  assign batch = section.settings.batch_size | default: 6
+  assign use_infinite = false
+  if section.blocks.size > batch and request.design_mode == false
+    assign use_infinite = true
+  endif
+
+  comment
+    Image sizes, mobile-first: full width → half on tablet → 1/columns of the
+    site container on desktop (--max-site-width 1820px, 2.5rem padding per side).
+  endcomment
+  comment
+    Exact slot width per breakpoint (matches assets/custom-press-events.css):
+    - < 750px:  1 column, 1.25rem side padding        → 100vw - 2.5rem
+    - 750–989:  2 columns, 1.5rem gap, 1.25rem padding → (100vw - 4rem) / 2
+    - ≥ 990px:  container min(100vw, 1820px) - 5rem padding, minus column gaps
+                3 cols: 2 × 2rem gap   → (… - 9rem) / 3
+                2 cols: 1 × 2.5rem gap → (… - 7.5rem) / 2
+  endcomment
+  if columns == '2'
+    assign desktop_slot = 'calc((min(100vw, 1820px) - 7.5rem) / 2)'
+  else
+    assign desktop_slot = 'calc((min(100vw, 1820px) - 9rem) / 3)'
+  endif
+  assign image_sizes = '(min-width: 990px) ' | append: desktop_slot | append: ', (min-width: 750px) calc(50vw - 2rem), calc(100vw - 2.5rem)'
+
+  comment
+    Mobile-first: only the first card is above the fold on a phone, so only it
+    loads eagerly. The rest are lazy (browsers still fetch lazy images that are
+    already in the viewport, e.g. the rest of the first row on desktop).
+  endcomment
+  assign eager_limit = 1
+
+  assign heading_id = 'PressEventsHeading-' | append: section.id
+-%}
+
+{{ 'custom-press-events.css' | asset_url | stylesheet_tag }}
+{%- if use_infinite or show_filter -%}
+  <script src="{{ 'custom-press-events.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+<section
+  id="PressEvents-{{ section.id }}"
+  class="press-events {% unless section.settings.remove_top_padding %}pt-section{% endunless %} {% unless section.settings.remove_bottom_padding %}pb-section{% endunless %} bg-scheme-background text-scheme-text {% if section.settings.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+  {% if section.settings.title != blank %}
+    aria-labelledby="{{ heading_id }}"
+  {% else %}
+    aria-label="Prensa y eventos"
+  {% endif %}
+  style="--pe-ratio-m: {{ section.settings.image_ratio_mobile }}; --pe-ratio: {{ section.settings.image_ratio }}; --pe-columns: {{ columns }};"
+>
+  <div class="mx-auto max-w-site px-5 lg:px-10">
+    {%- if section.settings.eyebrow != blank
+      or section.settings.title != blank
+      or section.settings.subtitle != blank
+    -%}
+      <header class="press-events__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="press-events__eyebrow font-secondary">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 id="{{ heading_id }}" class="press-events__title font-heading text-heading-standard break-word">
+            {{ section.settings.title | escape }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="press-events__subtitle rte rte--content-only rte--compact break-word">
+            {{ section.settings.subtitle }}
+          </div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <press-events class="press-events__body">
+      {%- if show_filter -%}
+        <div class="press-events__filters" role="group" aria-label="Filtrar publicaciones">
+          <button type="button" class="press-events__filter theme-button theme-button--solid" data-filter="all" aria-pressed="true">
+            Todo <span class="press-events__count">{{ section.blocks.size }}</span>
+          </button>
+          {%- if digital_count > 0 -%}
+            <button type="button" class="press-events__filter theme-button" data-filter="digital" aria-pressed="false">
+              Medios digitales <span class="press-events__count">{{ digital_count }}</span>
+            </button>
+          {%- endif -%}
+          {%- if social_count > 0 -%}
+            <button type="button" class="press-events__filter theme-button" data-filter="social" aria-pressed="false">
+              Redes sociales <span class="press-events__count">{{ social_count }}</span>
+            </button>
+          {%- endif -%}
+          {%- if stations_count > 0 -%}
+            <button type="button" class="press-events__filter theme-button" data-filter="stations" aria-pressed="false">
+              Medios y estaciones <span class="press-events__count">{{ stations_count }}</span>
+            </button>
+          {%- endif -%}
+        </div>
+        <p class="sr-only" aria-live="polite" data-filter-status></p>
+      {%- endif -%}
+
+      {%- capture cards -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign loading = 'lazy'
+            if section.index <= 2 and forloop.index <= eager_limit
+              assign loading = 'eager'
+            endif
+
+            assign deferred = false
+            if use_infinite and forloop.index > batch
+              assign deferred = true
+            endif
+
+            render 'custom-block-press-events', block: block, sizes: image_sizes, loading: loading, deferred: deferred
+          -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+
+      {%- if section.blocks.size == 0 -%}
+        {%- if request.design_mode -%}
+          <p class="press-events__empty font-secondary">Agrega bloques de “Nota de prensa” para llenar esta sección.</p>
+        {%- endif -%}
+      {%- else -%}
+        <ul
+          class="press-events__grid press-events__grid--{{ columns }}"
+          role="list"
+          data-list
+          {% if use_infinite %}data-batch="{{ batch }}"{% endif %}
+        >
+          {{ cards }}
+        </ul>
+
+        {%- if use_infinite -%}
+          <noscript>
+            <style>
+              #PressEvents-{{ section.id }} [data-deferred] { display: block; }
+            </style>
+          </noscript>
+          <div class="press-events__sentinel" data-sentinel aria-hidden="true"></div>
+          <p class="sr-only" aria-live="polite" data-scroll-status></p>
+        {%- endif -%}
+      {%- endif -%}
+    </press-events>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Prensa y eventos",
+  "tag": "div",
+  "class": "press-events-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "VATOFINO — Archivo"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Prensa & Eventos"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "<p>Cobertura de medios, entrevistas y noches que ya son historia.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "range",
+      "id": "batch_size",
+      "label": "Tarjetas por carga",
+      "info": "Se muestran estas tarjetas al inicio y se cargan más automáticamente al hacer scroll.",
+      "min": 3,
+      "max": 12,
+      "step": 3,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columnas en desktop",
+      "options": [
+        { "value": "2", "label": "2 columnas" },
+        { "value": "3", "label": "3 columnas" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio_mobile",
+      "label": "Proporción de imagen en móvil",
+      "options": [
+        { "value": "4 / 5", "label": "Vertical (4:5)" },
+        { "value": "3 / 4", "label": "Retrato (3:4)" },
+        { "value": "1 / 1", "label": "Cuadrada (1:1)" },
+        { "value": "3 / 2", "label": "Horizontal (3:2)" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Proporción de imagen en desktop",
+      "options": [
+        { "value": "4 / 5", "label": "Vertical (4:5)" },
+        { "value": "1 / 1", "label": "Cuadrada (1:1)" },
+        { "value": "3 / 2", "label": "Horizontal (3:2)" },
+        { "value": "16 / 9", "label": "Panorámica (16:9)" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filter",
+      "label": "Mostrar filtro por categoría",
+      "info": "Solo aparece si hay tarjetas en al menos dos categorías.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable transition",
+      "info": "Overrides section color transitions theme setting."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_top_padding",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_bottom_padding",
+      "label": "Remove bottom padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Nota de prensa",
+      "settings": [
+        {
+          "type": "select",
+          "id": "kind",
+          "label": "Categoría",
+          "info": "Define en qué botón del filtro aparece la tarjeta.",
+          "options": [
+            { "value": "digital", "label": "Medios digitales" },
+            { "value": "social", "label": "Redes sociales" },
+            { "value": "stations", "label": "Medios y estaciones" }
+          ],
+          "default": "digital"
+        },
+        {
+          "type": "text",
+          "id": "outlet",
+          "label": "Medio / Cuenta / Estación",
+          "default": "Nombre del medio"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Fecha",
+          "info": "Texto visible. Ej: Marzo 2026",
+          "default": "Marzo 2026"
+        },
+        {
+          "type": "text",
+          "id": "date_iso",
+          "label": "Fecha (formato máquina)",
+          "info": "Opcional, para SEO. Formato AAAA-MM-DD o AAAA-MM. Ej: 2026-03-14"
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Titular",
+          "default": "Titular de la nota de prensa"
+        },
+        {
+          "type": "textarea",
+          "id": "excerpt",
+          "label": "Extracto",
+          "info": "Resumen corto. Se recorta a 4 líneas."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen",
+          "info": "Se usa en desktop y tablet. El texto alternativo se toma de la imagen; si está vacío se usa el titular. Define el punto focal en Archivos para controlar el recorte."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Imagen móvil (opcional)",
+          "info": "Recorte vertical pensado para teléfono. Si está vacía se usa la imagen principal."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace",
+          "info": "Los enlaces externos se abren en una pestaña nueva."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto del botón",
+          "info": "Vacío = “Leer nota completa” (medios digitales), “Ver publicación” (redes sociales) o “Ver cobertura” (medios y estaciones)."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Prensa y eventos",
+      "blocks": [
+        { "type": "entry", "settings": { "kind": "digital" } },
+        { "type": "entry", "settings": { "kind": "social", "outlet": "@cuenta", "headline": "Publicación destacada" } },
+        { "type": "entry", "settings": { "kind": "stations", "outlet": "Nombre de la estación", "headline": "Entrevista en cabina" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

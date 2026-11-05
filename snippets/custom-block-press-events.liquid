@@ -1,0 +1,204 @@
+{% comment %}
+  Custom snippet — not part of the base theme. Paired with sections/custom-press-events.liquid.
+  Renders a single press / event card: responsive image, type badge, outlet + date,
+  headline, excerpt, theme 3D CTA and a mouse-only overlay link (whole card clickable).
+
+  Images are mobile-first:
+  - <img> carries the mobile image (block.settings.image_mobile, or the main image).
+  - <source media="(min-width: 750px)"> swaps in the main image when a mobile one is set.
+  - object-position follows each image's focal point set in Shopify admin.
+
+  Accepts:
+  - block: {Object} Section block
+  - sizes: {String} Image sizes attribute
+  - loading: {String} 'lazy' | 'eager'
+  - deferred: {Boolean} Not yet revealed by the infinite scroll (hidden via CSS)
+{% endcomment %}
+{%- liquid
+  assign loading = loading | default: 'lazy'
+
+  assign kind = block.settings.kind | default: 'digital'
+  assign link = block.settings.link
+  assign headline = block.settings.headline | default: block.settings.outlet
+
+  assign is_external = false
+  if link != blank and link contains '://'
+    unless link contains request.host or link contains shop.permanent_domain
+      assign is_external = true
+    endunless
+  endif
+
+  case kind
+    when 'social'
+      assign kind_label = 'Redes sociales'
+      assign default_button_label = 'Ver publicación'
+    when 'stations'
+      assign kind_label = 'Medios y estaciones'
+      assign default_button_label = 'Ver cobertura'
+    else
+      assign kind = 'digital'
+      assign kind_label = 'Medios digitales'
+      assign default_button_label = 'Leer nota completa'
+  endcase
+
+  assign button_label = block.settings.button_label | default: default_button_label
+
+  assign image_desktop = block.settings.image | default: block.settings.image_mobile
+  assign image_mobile = block.settings.image_mobile | default: block.settings.image
+
+  assign art_direction = false
+  if image_desktop != blank and image_mobile != blank and image_desktop.src != image_mobile.src
+    assign art_direction = true
+  endif
+
+  comment
+    image_tag escapes attribute values itself — don't pre-escape.
+  endcomment
+  assign image_alt = image_mobile.alt | default: image_desktop.alt
+  if image_alt == blank
+    assign image_alt = headline
+    if block.settings.outlet != blank
+      assign image_alt = image_alt | append: ' — ' | append: block.settings.outlet
+    endif
+  endif
+
+  comment
+    Responsive widths for srcset. Largest real need:
+    - mobile card ≈ 430 CSS px × 3 DPR ≈ 1290 → 1280
+    - desktop, 2 columns on a 1820px container ≈ 850 CSS px × 2 DPR ≈ 1700 → 1600
+    Widths larger than the uploaded file are dropped (no upscaled files
+    in the srcset); if the file is smaller than every step, its own width is used.
+    With a dedicated mobile image (art direction) the <img> only serves < 750px,
+    so its srcset stops at 1280.
+  endcomment
+  assign widths = '360,480,600,750,900,1080,1280,1600' | split: ','
+
+  assign mobile_max = 1600
+  if art_direction
+    assign mobile_max = 1280
+  endif
+
+  if image_mobile != blank
+    capture mobile_widths
+      for width in widths
+        assign w = width | plus: 0
+        if w <= image_mobile.width and w <= mobile_max
+          echo w | append: ','
+        endif
+      endfor
+    endcapture
+    assign mobile_widths = mobile_widths | strip | remove_last: ','
+    if mobile_widths == blank
+      assign mobile_widths = image_mobile.width | append: ''
+    endif
+
+    capture focal_style
+      echo '--pe-focal-m: ' | append: image_mobile.presentation.focal_point | append: ';'
+      echo ' --pe-focal-d: ' | append: image_desktop.presentation.focal_point | append: ';'
+    endcapture
+  endif
+
+  if art_direction
+    capture desktop_srcset
+      for width in widths
+        assign w = width | plus: 0
+        if w <= image_desktop.width
+          echo image_desktop | image_url: width: w | append: ' ' | append: w | append: 'w,'
+        endif
+      endfor
+    endcapture
+    assign desktop_srcset = desktop_srcset | strip | remove_last: ','
+    if desktop_srcset == blank
+      assign desktop_srcset = image_desktop | image_url: width: image_desktop.width | append: ' ' | append: image_desktop.width | append: 'w'
+    endif
+  endif
+-%}
+
+<li class="press-events__item" data-kind="{{ kind }}"{% if deferred %} data-deferred{% endif %} {{ block.shopify_attributes }}>
+  <article class="press-card{% if link != blank %} press-card--linked{% endif %}" aria-labelledby="PressCard-{{ block.id }}">
+    <div class="press-card__media">
+      {%- if image_mobile != blank -%}
+        <picture class="press-card__picture">
+          {%- if art_direction -%}
+            <source
+              media="(min-width: 750px)"
+              srcset="{{ desktop_srcset }}"
+              sizes="{{ sizes }}"
+              width="{{ image_desktop.width }}"
+              height="{{ image_desktop.height }}"
+            >
+          {%- endif -%}
+          {{
+            image_mobile
+            | image_url: width: 1080
+            | image_tag:
+              class: 'press-card__img',
+              alt: image_alt,
+              sizes: sizes,
+              widths: mobile_widths,
+              loading: loading,
+              decoding: 'async',
+              style: focal_style
+          }}
+        </picture>
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'press-card__img press-card__img--placeholder bg-scheme-placeholder-background text-scheme-placeholder-foreground fill-current' }}
+      {%- endif -%}
+      <span class="press-card__badge font-secondary">
+        {{- kind_label -}}
+      </span>
+    </div>
+
+    <div class="press-card__content">
+      <header class="press-card__meta font-secondary">
+        {%- if block.settings.outlet != blank -%}
+          <span class="press-card__outlet">{{ block.settings.outlet | escape }}</span>
+        {%- endif -%}
+        {%- if block.settings.date != blank -%}
+          <time
+            class="press-card__date"
+            {% if block.settings.date_iso != blank %}datetime="{{ block.settings.date_iso | escape }}"{% endif %}
+          >
+            {{- block.settings.date | escape -}}
+          </time>
+        {%- endif -%}
+      </header>
+
+      <h3 id="PressCard-{{ block.id }}" class="press-card__headline font-heading break-word">
+        {{ headline | escape }}
+      </h3>
+
+      {%- if block.settings.excerpt != blank -%}
+        <p class="press-card__excerpt">{{ block.settings.excerpt | escape }}</p>
+      {%- endif -%}
+
+      {%- if link != blank -%}
+        <div class="press-card__footer">
+          <a
+            class="press-card__cta theme-button theme-button--solid"
+            href="{{ link }}"
+            {% if is_external %}
+              target="_blank" rel="noopener noreferrer"
+            {% endif %}
+          >
+            <span>{{ button_label | escape }}</span>
+            <span class="sr-only">: {{ headline | escape }}{% if is_external %} (se abre en una pestaña nueva){% endif %}</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if link != blank -%}
+      {%- comment -%} Mouse-only shortcut; the CTA above is the accessible link. {%- endcomment -%}
+      <a
+        class="press-card__overlay"
+        href="{{ link }}"
+        tabindex="-1"
+        aria-hidden="true"
+        {% if is_external %}
+          target="_blank" rel="noopener noreferrer"
+        {% endif %}
+      ></a>
+    {%- endif -%}
+  </article>
+</li>
