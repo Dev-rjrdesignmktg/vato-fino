@@ -34,6 +34,47 @@
             "button_label": ""
           }
         },
+        "entry_PBY9XR": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": " Reporte Índigo",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-03",
+            "headline": "Conciertos en CDMX: cartelera del 3 de octubre de 2026.",
+            "excerpt": "",
+            "link": "https://www.reporteindigo.com/cdmx/conciertos-cdmx-hoy-3-de-octubre-de-2026-20261002-0123.html",
+            "button_label": ""
+          }
+        },
+        "entry_L3rAjm": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Milenio",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-02",
+            "headline": "Raúl Ramírez impulsa Brothers in Arms: el reto de llevar el rap peruano al público mexicano.",
+            "excerpt": "",
+            "image": "shopify://shop_images/brothers-in-arms-cortesia.webp",
+            "link": "https://www.milenio.com/espectaculos/musica/raul-ramirez-impulsa-rap-peruano-brothers-in-arms",
+            "button_label": ""
+          }
+        },
+        "entry_yx8UaK": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "El Capitalino",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-01",
+            "headline": "Rafaell Cocoa y Kevin Maraví traen el sonido peruano a México con Brothers in Arms.",
+            "excerpt": "",
+            "image": "shopify://shop_images/RAFAELL_COCOA_FLYER_INDIVIDUAL_VANS.webp",
+            "link": "https://elcapitalino.mx/farandula/carrousel-farandula/rafaell-cocoa-y-kevin-maravi-traen-el-sonido-peruano-a-mexico-con-brothers-in-arms/",
+            "button_label": ""
+          }
+        },
         "entry_jGkL9f": {
           "type": "entry",
           "settings": {
@@ -79,6 +120,9 @@
       },
       "block_order": [
         "entry_NxcKBt",
+        "entry_PBY9XR",
+        "entry_L3rAjm",
+        "entry_yx8UaK",
         "entry_jGkL9f",
         "entry_ReeekR",
         "entry_Ry8VYb"
