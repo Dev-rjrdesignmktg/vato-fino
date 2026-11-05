@@ -34,6 +34,20 @@
             "button_label": ""
           }
         },
+        "entry_KcLXck": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Edomex al Día",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-12",
+            "headline": "Brothers in Arms MX x PE forma parte de una etapa de crecimiento para Vato Fino Records.",
+            "excerpt": "",
+            "image": "shopify://shop_images/House_of_vans.webp",
+            "link": "https://edomexaldia.com/brothers-in-arms-mx-x-pe-forma-parte-de-una-etapa-de-crecimiento-para-vato-fino-records/",
+            "button_label": ""
+          }
+        },
         "entry_PBY9XR": {
           "type": "entry",
           "settings": {
@@ -121,6 +135,7 @@
       },
       "block_order": [
         "entry_NxcKBt",
+        "entry_KcLXck",
         "entry_PBY9XR",
         "entry_L3rAjm",
         "entry_yx8UaK",
