@@ -76,7 +76,7 @@
         "batch_size": 6,
         "columns": "3",
         "image_ratio_mobile": "4 / 5",
-        "image_ratio": "4 / 5",
+        "image_ratio": "1 / 1",
         "enable_filter": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
