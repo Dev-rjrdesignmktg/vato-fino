@@ -10,6 +10,9 @@
 {
   "current": {
     "modal_color_scheme": "scheme4",
+    "policy_terms_color_scheme": "scheme4",
+    "policy_refund_color_scheme": "scheme4",
+    "policy_color_scheme": "scheme4",
     "enable_section_color_transitions": false,
     "base_font_size": 15,
     "base_line_height": 1.4,
