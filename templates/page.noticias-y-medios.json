@@ -20,6 +20,20 @@
     "custom_press_events_bPRVEa": {
       "type": "custom-press-events",
       "blocks": {
+        "entry_NxcKBt": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "Instagram",
+            "date": "Septiembre 2026",
+            "date_iso": "2026-09-28",
+            "headline": "Giveaway Brothers in Arms",
+            "excerpt": "",
+            "image": "shopify://shop_images/Giveaway_Instagram.webp",
+            "link": "https://www.instagram.com/p/Dd2MBrDlMPc/",
+            "button_label": ""
+          }
+        },
         "entry_jGkL9f": {
           "type": "entry",
           "settings": {
@@ -64,6 +78,7 @@
         }
       },
       "block_order": [
+        "entry_NxcKBt",
         "entry_jGkL9f",
         "entry_ReeekR",
         "entry_Ry8VYb"
@@ -76,7 +91,7 @@
         "batch_size": 6,
         "columns": "3",
         "image_ratio_mobile": "4 / 5",
-        "image_ratio": "1 / 1",
+        "image_ratio": "4 / 5",
         "enable_filter": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
