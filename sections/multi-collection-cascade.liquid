@@ -135,11 +135,15 @@
               assign preload = false
               assign loading = 'lazy'
 
-              if global_product_index == 1
+              comment
+                Only preload / eager load when this section is the first one on the page;
+                otherwise these images compete with the LCP image above the fold
+              endcomment
+              if section.index == 1 and global_product_index == 1
                 assign preload = true
               endif
 
-              if global_product_index <= eager_loading_limit
+              if section.index == 1 and global_product_index <= eager_loading_limit
                 assign loading = 'eager'
               endif
 

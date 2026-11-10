@@ -110,7 +110,11 @@
               assign preload = true
             endif
 
-            if section.index <= 2 and forloop.index <= eager_loading_limit
+            comment
+              Only the first section is above the fold (the hero fills the viewport),
+              so images in later sections must not compete with the LCP image
+            endcomment
+            if section.index == 1 and forloop.index <= eager_loading_limit
               assign loading = 'eager'
             endif
 
