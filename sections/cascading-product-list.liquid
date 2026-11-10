@@ -16,26 +16,6 @@
     endif
   endif
 
-  if desktop_layout == 'two_columns'
-    assign half_width_desktop_sizes = '(min-width: 768px) 50vw'
-  else
-    assign half_width_desktop_sizes = '(min-width: 768px) 75vw'
-  endif
-
-  if enable_cascade_on_mobile
-    assign half_width_mobile_sizes = '75vw'
-  else
-    assign half_width_mobile_sizes = '100vw'
-  endif
-
-  assign half_width_sizes = half_width_desktop_sizes | append: ', ' | append: half_width_mobile_sizes
-
-  if enable_cascade_on_mobile
-    assign full_width_sizes = '80vw'
-  else
-    assign full_width_sizes = '(min-width: 768px) 80vw, 100vw'
-  endif
-
   if enable_cascade_on_mobile
     assign eager_loading_limit = 4
   else
@@ -44,6 +24,28 @@
 
   assign full_width_item_header = '||__cascade-item:full__||'
   assign item_separator = '||__cascade-item-end__||'
+
+  comment
+    Cascade width pattern (same values as snippets/cascade.liquid item_widths)
+  endcomment
+  if section.settings.use_global_settings
+    assign cascade_level = settings.cascade_default_level_of_media_size_variation
+    assign cascade_sequence = settings.cascade_default_sequence | default: 1
+  else
+    assign cascade_level = section.settings.level_of_media_size_variation
+    assign cascade_sequence = section.settings.sequence | default: 1
+  endif
+
+  case cascade_level
+    when 1
+      assign cascade_fractions = '1,0.8333,0.8333,1,0.8333' | split: ','
+    when 2
+      assign cascade_fractions = '1,0.6667,0.8333,1,0.6667' | split: ','
+    when 3
+      assign cascade_fractions = '1,0.5833,0.8333,0.4167,0.6667' | split: ','
+    when 4
+      assign cascade_fractions = '0.8333,0.3333,0.75,0.4167,0.5833' | split: ','
+  endcase
 -%}
 
 <section
@@ -69,16 +71,37 @@
         capture product_items
           assign placeholder_index = 0
 
-          for product in product_list
-            if section.settings.feature_full_width_products
-              cycle full_width_item_header, '', ''
+          assign half_item_index = 0
 
-              capture sizes
-                cycle full_width_sizes, half_width_sizes, half_width_sizes
+          for product in product_list
+            assign is_full_width_item = false
+
+            if section.settings.feature_full_width_products
+              capture item_header
+                cycle full_width_item_header, '', ''
               endcapture
-            else
-              assign sizes = half_width_sizes
+              echo item_header
+
+              if item_header == full_width_item_header
+                assign is_full_width_item = true
+              endif
             endif
+
+            comment
+              Mirror snippets/cascade.liquid width pattern so `sizes` matches the real rendered width
+            endcomment
+            assign item_fraction = 1
+            unless is_full_width_item
+              if cascade_level != 0
+                assign width_index = half_item_index | plus: cascade_sequence | minus: 1 | modulo: 5
+                assign item_fraction = cascade_fractions[width_index]
+              endif
+              assign half_item_index = half_item_index | plus: 1
+            endunless
+
+            capture sizes
+              render 'cascade-image-sizes', fraction: item_fraction, desktop_layout: desktop_layout, enable_cascade_on_mobile: enable_cascade_on_mobile, full_width: is_full_width_item
+            endcapture
 
             assign preload = false
             assign loading = 'lazy'

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Outputs an accurate `sizes` attribute value for media rendered inside snippets/cascade.liquid.
+
+  It mirrors the cascade layout:
+  - Container: max-w-site (--max-site-width: 1820px) with px-5 (20px) / lg:px-10 (40px)
+  - Two-column grid gap: --grid-gutter (60px, 80px from 1400px)
+  - Half items take a fraction of their column (md:w-full, md:w-10/12, md:w-8/12...)
+  - Single column / mobile items: w-5/6 (cascade on mobile) and lg:w-8/12
+  - Full width items: mobile width and lg:w-5/6 of the container
+
+  Accepts:
+  - fraction: {Number} item width relative to its column (1, 0.8333, 0.6667...)
+  - desktop_layout: {String} 'two_columns' | 'single_column'
+  - enable_cascade_on_mobile: {Boolean}
+  - full_width: {Boolean} item is a full width cascade item
+
+  Usage:
+  {%- capture sizes -%}{% render 'cascade-image-sizes', fraction: 0.6667, desktop_layout: 'two_columns', enable_cascade_on_mobile: true %}{%- endcapture -%}
+{%- endcomment -%}
+{%- liquid
+  assign f = fraction | default: 1 | times: 1.0
+
+  if enable_cascade_on_mobile
+    assign mobile_f = 0.8333
+  else
+    assign mobile_f = 1.0
+  endif
+
+  comment
+    Content width (container minus padding) per breakpoint
+  endcomment
+  assign content_xl = 'min(100vw, 1820px) - 80px'
+  assign content_lg = '100vw - 80px'
+  assign content_md = '100vw - 40px'
+
+  if full_width
+    assign sizes_xl = 'calc((' | append: content_xl | append: ') * 0.8333)'
+    assign sizes_lg = 'calc((' | append: content_lg | append: ') * 0.8333)'
+    assign sizes_md = 'calc((' | append: content_md | append: ') * ' | append: mobile_f | append: ')'
+  elsif desktop_layout == 'single_column'
+    assign desk_f = f | times: 0.6667
+    assign md_f = f | times: mobile_f
+    assign sizes_xl = 'calc((' | append: content_xl | append: ') * ' | append: desk_f | append: ')'
+    assign sizes_lg = 'calc((' | append: content_lg | append: ') * ' | append: desk_f | append: ')'
+    assign sizes_md = 'calc((' | append: content_md | append: ') * ' | append: md_f | append: ')'
+  else
+    assign half_f = f | times: 0.5
+    assign sizes_xl = 'calc((' | append: content_xl | append: ' - 80px) * ' | append: half_f | append: ')'
+    assign sizes_lg = 'calc((' | append: content_lg | append: ' - 60px) * ' | append: half_f | append: ')'
+    assign sizes_md = 'calc((' | append: content_md | append: ' - 60px) * ' | append: half_f | append: ')'
+  endif
+
+  assign sizes_sm = 'calc((100vw - 40px) * ' | append: mobile_f | append: ')'
+
+  echo '(min-width: 1400px) ' | append: sizes_xl
+  echo ', (min-width: 990px) ' | append: sizes_lg
+  echo ', (min-width: 768px) ' | append: sizes_md
+  echo ', ' | append: sizes_sm
+-%}

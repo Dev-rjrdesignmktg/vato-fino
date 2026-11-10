@@ -7,6 +7,13 @@
     assign sizes = '50vw, (min-width: 768px) 33vw'
   endunless
 
+  comment
+    Fine-grained srcset steps so the browser can pick a file close to the rendered size
+  endcomment
+  unless widths
+    assign widths = '300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000'
+  endunless
+
   unless preload
     assign preload = false
   endunless
@@ -116,6 +123,7 @@
               preload: preload,
               loading: loading,
               sizes: sizes,
+              widths: widths,
               decoding: 'async'
           }}
         </div>
@@ -129,7 +137,8 @@
                 class: hover_class,
                 preload: false,
                 loading: loading,
-                sizes: sizes
+                sizes: sizes,
+                widths: widths
             }}
           </div>
         {% endif %}
