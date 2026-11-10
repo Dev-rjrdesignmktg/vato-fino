@@ -38,7 +38,7 @@
     --pt-pt: {{ s.padding_top }}px;
     --pt-pb: {{ s.padding_bottom }}px;
     --pt-mscale: {{ s.mobile_padding_scale | divided_by: 100.0 }};
-    --pt-width: {{ s.content_width }}px;
+    --pt-width: {% if s.full_width %}100%{% else %}{{ s.content_width }}px{% endif %};
     --pt-gap: {{ s.gap }}px;
     --pt-stagger: {{ s.stagger }}ms;
     --pt-overlay: {{ s.overlay_color }};
@@ -250,6 +250,15 @@
   /* Drop cap & columns */
   .premium-text .pt-dropcap > p:first-child::first-letter { float: left; font-family: 'CSClaes-Regular', var(--heading-font-stack); font-weight: 400; font-size: 3.6em; line-height: .82;
     padding: .06em .12em 0 0; color: var(--pt-accent, inherit); font-style: normal; }
+  /* Drop cap follows text alignment (mobile, then desktop) */
+  .premium-text .pt-ma-right .pt-dropcap > p:first-child::first-letter { float: right; padding: .06em 0 0 .12em; }
+  .premium-text .pt-ma-center .pt-dropcap > p:first-child::first-letter { float: none; font-size: 2.4em; line-height: 1; vertical-align: -.12em; padding: 0 .04em 0 0; }
+  @media (min-width: 990px) {
+    .premium-text .pt-da-left .pt-dropcap > p:first-child::first-letter { float: left; font-size: 3.6em; line-height: .82; vertical-align: baseline; padding: .06em .12em 0 0; }
+    .premium-text .pt-da-right .pt-dropcap > p:first-child::first-letter { float: right; font-size: 3.6em; line-height: .82; vertical-align: baseline; padding: .06em 0 0 .12em; }
+    .premium-text .pt-da-center .pt-dropcap > p:first-child::first-letter { float: none; font-size: 2.4em; line-height: 1; vertical-align: -.12em; padding: 0 .04em 0 0; }
+    .premium-text .pt-cols-2.pt-dropcap > p:first-child::first-letter { float: left; font-size: 3.6em; line-height: .82; vertical-align: baseline; padding: .06em .12em 0 0; }
+  }
   @media (min-width: 990px) { .premium-text .pt-cols-2 { columns: 2; column-gap: 3rem; text-align: left; } .premium-text .pt-cols-2 > p { break-inside: avoid; } }
 
   /* Quote */
@@ -295,6 +304,13 @@
       "content": "Layout"
     },
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true,
+      "info": "Content spans the full site width."
+    },
+    {
       "type": "range",
       "id": "content_width",
       "label": "Content width",
@@ -302,7 +318,8 @@
       "max": 1600,
       "step": 20,
       "unit": "px",
-      "default": 1100
+      "default": 1100,
+      "info": "Only applies when Full width is off."
     },
     {
       "type": "select",
