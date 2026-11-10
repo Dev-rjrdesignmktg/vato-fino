@@ -9,6 +9,101 @@
  */
 {
   "sections": {
+    "premium_text_WmbGQM": {
+      "type": "premium-text",
+      "blocks": {
+        "eyebrow_XarRYi": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Colección *exclusiva*",
+            "decoration": "lines",
+            "font_source": "body",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 13,
+            "size_mobile": 11,
+            "weight": "500",
+            "line_height": 120,
+            "letter_spacing": 30,
+            "text_transform": "uppercase",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": "",
+            "accent_style": "italic",
+            "accent_color": ""
+          }
+        },
+        "heading_eE4V97": {
+          "type": "heading",
+          "settings": {
+            "text": "El arte de *vestir* con carácter",
+            "tag": "h2",
+            "font_source": "brand_csclaes",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 72,
+            "size_mobile": 40,
+            "weight": "400",
+            "line_height": 105,
+            "letter_spacing": -2,
+            "text_transform": "none",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": "",
+            "accent_style": "italic",
+            "accent_color": ""
+          }
+        },
+        "text_AinYFV": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Cada pieza está pensada para quien entiende que el detalle lo es todo. Materiales nobles, cortes precisos y una actitud que no pasa desapercibida.</p>",
+            "drop_cap": true,
+            "columns": "1",
+            "font_source": "body",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 26,
+            "size_mobile": 16,
+            "weight": "400",
+            "line_height": 165,
+            "letter_spacing": 0,
+            "text_transform": "uppercase",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": ""
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow_XarRYi",
+        "heading_eE4V97",
+        "text_AinYFV"
+      ],
+      "name": "Premium text",
+      "settings": {
+        "content_width": 1100,
+        "position": "start",
+        "text_align": "left",
+        "mobile_text_align": "inherit",
+        "gap": 24,
+        "frame": "none",
+        "animation": "fade-up",
+        "stagger": 120,
+        "color_scheme": "scheme4",
+        "background_gradient": "",
+        "overlay_color": "#000000",
+        "overlay_opacity": 50,
+        "grain": false,
+        "disable_color_transition": false,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "mobile_padding_scale": 60
+      }
+    },
     "collections-list": {
       "type": "main-list-collections-list",
       "settings": {
@@ -30,6 +125,7 @@
     }
   },
   "order": [
+    "premium_text_WmbGQM",
     "collections-list"
   ]
 }
