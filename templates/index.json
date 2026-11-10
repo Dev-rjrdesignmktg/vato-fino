@@ -104,9 +104,9 @@
       "name": "Rich text",
       "settings": {
         "title": "La Lealtad no se Devalua",
-        "richtext": "<h1>Las masas buscan inmediatez; los gobernantes de su destino buscan sentido. Hoy todos siguen tendencias vacias, por eso elegir lo auténtico es un acto de honor. </h1><h1>No Seguimos reglas ni fórmulas ajenas; fijamos las nuestras.</h1><h1>Si buscas una prenda para encajar, sigue tu camino. Si entiendes el valor del respeto que pocos logran alcanzar, estás en el lugar correcto.<br/><br/><em><strong>La lealtad es nuestra divisa. La clase, nuestra firma.</strong></em></h1>",
+        "richtext": "<h4>Las masas buscan inmediatez; los gobernantes de su destino buscan sentido. Hoy todos siguen tendencias vacias, por eso elegir lo auténtico es un acto de honor.&nbsp;</h4><h4>No Seguimos reglas ni fórmulas ajenas; fijamos las nuestras.</h4><h4>Si buscas una prenda para encajar, sigue tu camino. Si entiendes el valor del respeto que pocos logran alcanzar, estás en el lugar correcto.<br/><br/><em><strong>La lealtad es nuestra divisa. La clase, nuestra firma.</strong></em></h4>",
         "font": "font-body",
-        "text_size": "text-heading-feature",
+        "text_size": "text-base",
         "text_alignment": "text-left",
         "cta_link": "shopify://collections",
         "cta_label": "Ver colecciones",

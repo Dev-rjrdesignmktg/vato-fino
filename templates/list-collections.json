@@ -9,26 +9,6 @@
  */
 {
   "sections": {
-    "rich_text_6cfVkn": {
-      "type": "rich-text",
-      "name": "Rich text",
-      "settings": {
-        "title": "Colecciones de Vato Fino",
-        "richtext": "<p>Colecciones inspiradas en el movimiento urbano del rap y hip-hop hispano. Cada pieza esta inspirada en historias y vivencias que refleja la cultura underground sobre la calle y sus códigos como el honor, lealtad y poder.</p>",
-        "font": "font-body",
-        "text_size": "text-base",
-        "text_alignment": "text-center",
-        "cta_link": "",
-        "cta_label": "",
-        "button_style": "solid",
-        "desktop_width": "full",
-        "desktop_alignment": "center",
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
-    },
     "collections-list": {
       "type": "main-list-collections-list",
       "settings": {
@@ -50,7 +30,6 @@
     }
   },
   "order": [
-    "rich_text_6cfVkn",
     "collections-list"
   ]
 }
