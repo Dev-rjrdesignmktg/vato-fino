@@ -5,7 +5,6 @@
 */
 
 .vf-hero__image{
-    object-position:var(--vf-focal-desktop, 50% 50%);
     transition:transform 12s ease;
     will-change:auto;
 }
@@ -154,10 +153,6 @@
 .vf-hero.is-paused .vf-hero__icon-pause{ display:none; }
 
 @media (max-width:768px){
-
-    .vf-hero__image{
-        object-position:var(--vf-focal-mobile, 50% 50%);
-    }
 
     .vf-hero__text{
         margin:auto;

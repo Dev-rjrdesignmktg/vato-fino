@@ -1,0 +1,29 @@
+{%- comment -%}
+  VATOFINO Hero — <source> con srcset recortado. Uso interno de vf-hero-crop.
+{%- endcomment -%}
+
+{%- liquid
+  # Ancho máximo servido: el del recorte (sin escalar hacia arriba),
+  # limitado al mayor candidato
+  assign width_list = widths | split: ','
+  assign max_w = crop_w
+  assign largest = width_list.last | plus: 0
+  if max_w > largest
+    assign max_w = largest
+  endif
+  assign max_h = max_w | times: ratio_h | divided_by: ratio_w
+
+  capture srcset
+    for w in width_list
+      assign w_num = w | plus: 0
+      if w_num < max_w
+        assign h_num = w_num | times: ratio_h | divided_by: ratio_w
+        echo image | image_url: width: w_num, height: h_num, crop: 'region', crop_left: crop_left, crop_top: crop_top, crop_width: crop_w, crop_height: crop_h
+        echo ' ' | append: w_num | append: 'w, '
+      endif
+    endfor
+    echo image | image_url: width: max_w, height: max_h, crop: 'region', crop_left: crop_left, crop_top: crop_top, crop_width: crop_w, crop_height: crop_h
+    echo ' ' | append: max_w | append: 'w'
+  endcapture
+-%}
+<source media="{{ media }}" srcset="{{ srcset | strip }}" sizes="100vw" width="{{ max_w }}" height="{{ max_h }}">

@@ -1,0 +1,69 @@
+{%- comment -%}
+  VATOFINO Hero — recorte dirigido por punto focal.
+
+  Recorta `image` en el CDN de Shopify a la proporción ratio_w:ratio_h,
+  centrando el recorte en el punto focal definido en el admin (y
+  ajustándolo a los bordes de la imagen). Nunca escala hacia arriba.
+
+  Parámetros:
+  - image:   objeto image
+  - ratio_w: ancho de la proporción (ej. 9)
+  - ratio_h: alto de la proporción (ej. 16)
+  - widths:  anchos candidatos separados por coma (ej. '360,540,720,1080')
+  - media:   media query del <source> (solo output 'source')
+  - output:  'source'   → imprime el <source> con su srcset
+             'position' → imprime el object-position ("X% Y%") del punto
+                          focal dentro del recorte, para que siga visible
+                          cuando object-fit:cover recorta un poco más.
+
+  Uso:
+  {% render 'vf-hero-crop', image: img, ratio_w: 9, ratio_h: 16, widths: '360,720', media: '(max-width: 768px)', output: 'source' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign img_w = image.width
+  assign img_h = image.height
+
+  # Recorte más grande posible con la proporción pedida
+  assign crop_w = img_h | times: ratio_w | divided_by: ratio_h
+  if crop_w > img_w
+    assign crop_w = img_w
+    assign crop_h = img_w | times: ratio_h | divided_by: ratio_w
+  else
+    assign crop_h = img_h
+  endif
+
+  # Punto focal en píxeles (Shopify devuelve 50 / 50 si no hay uno definido)
+  assign focal_x = image.presentation.focal_point.x | default: 50
+  assign focal_y = image.presentation.focal_point.y | default: 50
+  assign fx = img_w | times: focal_x | divided_by: 100.0 | round
+  assign fy = img_h | times: focal_y | divided_by: 100.0 | round
+
+  # Centrar el recorte en el punto focal sin salir de la imagen
+  assign half_w = crop_w | divided_by: 2
+  assign half_h = crop_h | divided_by: 2
+  assign max_left = img_w | minus: crop_w
+  assign max_top = img_h | minus: crop_h
+
+  assign crop_left = fx | minus: half_w
+  if crop_left < 0
+    assign crop_left = 0
+  elsif crop_left > max_left
+    assign crop_left = max_left
+  endif
+
+  assign crop_top = fy | minus: half_h
+  if crop_top < 0
+    assign crop_top = 0
+  elsif crop_top > max_top
+    assign crop_top = max_top
+  endif
+
+  if output == 'position'
+    assign pos_x = fx | minus: crop_left | times: 100.0 | divided_by: crop_w | round: 2
+    assign pos_y = fy | minus: crop_top | times: 100.0 | divided_by: crop_h | round: 2
+    echo pos_x | append: '% ' | append: pos_y | append: '%'
+  else
+    render 'vf-hero-crop-source', image: image, ratio_w: ratio_w, ratio_h: ratio_h, widths: widths, media: media, crop_left: crop_left, crop_top: crop_top, crop_w: crop_w, crop_h: crop_h
+  endif
+-%}

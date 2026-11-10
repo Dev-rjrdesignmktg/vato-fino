@@ -4,25 +4,34 @@
   - CSS crítico inline (sin solicitud que bloquee el renderizado).
   - Solo el primer slide se descarga con prioridad alta; el resto queda en
     display:none hasta que la página termina de cargar (ver custom-hero.js).
-  - Móvil usa un recorte vertical 9:16 servido por el CDN de Shopify en vez
-    de reescalar la imagen horizontal de escritorio.
+  - Imágenes dirigidas por dispositivo (<picture> + recortes en el CDN de
+    Shopify centrados en el punto focal, ver snippets/vf-hero-crop.liquid):
+      · Móvil vertical  (≤768px, portrait) → 9:16
+      · Tablet vertical (≥769px, portrait) → 3:4
+      · Desktop / tablet y móvil horizontales → imagen horizontal
+    Así cada pantalla descarga solo los píxeles que muestra.
 {%- endcomment -%}
 
 {%- liquid
   assign slide_count = section.blocks.size
   assign autoplay_speed = section.settings.autoplay_speed | times: 1000
-  assign mobile_widths = '375,540,720,900,1080' | split: ','
-  assign desktop_widths = '960,1280,1600,1920,2400'
+  assign mobile_widths = '360,540,720,900,1080,1290'
+  assign tablet_widths = '768,1024,1280,1536,2048'
+  assign desktop_widths = '960,1280,1600,1920,2400,3000'
+  assign mobile_media = '(max-width: 768px) and (orientation: portrait)'
+  assign tablet_media = '(min-width: 769px) and (orientation: portrait)'
 -%}
 
 <style>
-  #vf-hero-{{ section.id }}{position:relative;height:90vh;height:90svh;overflow:hidden;background:#000;color:#fff}
+  #vf-hero-{{ section.id }}{position:relative;height:calc(100vh - var(--header-group-height,0px));height:calc(100svh - var(--header-group-height,0px));min-height:480px;overflow:hidden;background:#000;color:#fff}
   #vf-hero-{{ section.id }} .vf-hero__slider{height:100%}
   #vf-hero-{{ section.id }} .vf-hero__slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility 0s linear .8s}
   #vf-hero-{{ section.id }} .vf-hero__slide.is-active{opacity:1;visibility:visible;transition:opacity .8s ease}
   #vf-hero-{{ section.id }}:not(.is-ready) .vf-hero__slide:not(.is-active){display:none}
   #vf-hero-{{ section.id }} .vf-hero__media,#vf-hero-{{ section.id }} .vf-hero__image{display:block;width:100%;height:100%}
-  #vf-hero-{{ section.id }} .vf-hero__image{object-fit:cover}
+  #vf-hero-{{ section.id }} .vf-hero__image{object-fit:cover;object-position:var(--vf-pos-desktop,50% 50%)!important}
+  @media (max-width:768px) and (orientation:portrait){#vf-hero-{{ section.id }} .vf-hero__image{object-position:var(--vf-pos-mobile,50% 50%)!important}}
+  @media (min-width:769px) and (orientation:portrait){#vf-hero-{{ section.id }} .vf-hero__image{object-position:var(--vf-pos-tablet,50% 50%)!important}}
   #vf-hero-{{ section.id }} .vf-hero__overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.3) 40%,rgba(0,0,0,.05) 100%)}
   #vf-hero-{{ section.id }} .vf-hero__content{position:absolute;left:8%;bottom:12%;z-index:10;max-width:900px}
   #vf-hero-{{ section.id }} .vf-hero__title{font-family:'CSClaes-Regular',serif;color:#fff;font-size:clamp(2.5rem,4vw,4.5rem);line-height:1.2;letter-spacing:-.05em;margin:1rem 0;text-transform:none}
@@ -31,7 +40,6 @@
   #vf-hero-{{ section.id }} .vf-hero__button{margin-top:2rem;display:inline-flex;align-items:center;min-height:44px;padding:1rem 2rem;line-height:1.2;border:1px solid rgba(255,255,255,.6);color:#fff;text-decoration:none}
   @media (max-width:768px){
     #vf-hero-{{ section.id }} .vf-hero__text{margin:auto}
-    #vf-hero-{{ section.id }}{height:85vh;height:85svh}
     #vf-hero-{{ section.id }} .vf-hero__overlay{background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,.1) 100%)}
     #vf-hero-{{ section.id }} .vf-hero__content{left:0;right:0;padding:0 2rem;text-align:center;bottom:5rem}
   }
@@ -52,7 +60,8 @@
     {%- for block in section.blocks -%}
       {%- liquid
         assign desktop_image = block.settings.image
-        assign mobile_image = block.settings.image_mobile | default: block.settings.image
+        assign mobile_image = block.settings.image_mobile | default: desktop_image
+        assign tablet_image = block.settings.image_tablet | default: block.settings.image_mobile | default: desktop_image
         assign image_alt = block.settings.image_alt | default: block.settings.title | escape
 
         if forloop.first
@@ -63,23 +72,21 @@
           assign image_priority = 'low'
         endif
 
-        assign focal = desktop_image.presentation.focal_point | default: '50% 50%'
-        assign mobile_focal = mobile_image.presentation.focal_point | default: focal
-        assign img_style = '--vf-focal-desktop:' | append: focal | append: ';--vf-focal-mobile:' | append: mobile_focal | append: ';'
-
-        comment
-          Ancho máximo real para un recorte 9:16 sin reescalar hacia arriba
-        endcomment
-        assign mobile_max_w = mobile_image.height | times: 9 | divided_by: 16
-        if mobile_image.width < mobile_max_w
-          assign mobile_max_w = mobile_image.width
-        endif
-        if mobile_max_w > 1080
-          assign mobile_max_w = 1080
+        if desktop_image != blank
+          assign pos_desktop = desktop_image.presentation.focal_point | default: '50% 50%'
+          capture pos_mobile
+            render 'vf-hero-crop', image: mobile_image, ratio_w: 9, ratio_h: 16, output: 'position'
+          endcapture
+          capture pos_tablet
+            render 'vf-hero-crop', image: tablet_image, ratio_w: 3, ratio_h: 4, output: 'position'
+          endcapture
+          assign pos_mobile = pos_mobile | strip
+          assign pos_tablet = pos_tablet | strip
+          assign img_style = '--vf-pos-desktop:' | append: pos_desktop | append: ';--vf-pos-mobile:' | append: pos_mobile | append: ';--vf-pos-tablet:' | append: pos_tablet | append: ';'
         endif
       -%}
 
-      <article
+      <div
         class="vf-hero__slide{% if forloop.first %} is-active{% endif %}"
         role="group"
         aria-roledescription="diapositiva"
@@ -89,29 +96,25 @@
       >
         {%- if desktop_image != blank -%}
           <picture class="vf-hero__media">
-            {%- if mobile_image != blank -%}
-              {%- capture mobile_srcset -%}
-                {%- for w in mobile_widths -%}
-                  {%- assign w_num = w | plus: 0 -%}
-                  {%- if w_num < mobile_max_w -%}
-                    {%- assign h_num = w_num | times: 16 | divided_by: 9 -%}
-                    {{ mobile_image | image_url: width: w_num, height: h_num, crop: 'center' }} {{ w_num }}w,
-                  {%- endif -%}
-                {%- endfor -%}
-                {%- assign mobile_max_h = mobile_max_w | times: 16 | divided_by: 9 -%}
-                {{ mobile_image | image_url: width: mobile_max_w, height: mobile_max_h, crop: 'center' }} {{ mobile_max_w }}w
-              {%- endcapture -%}
-              <source
-                media="(max-width: 768px)"
-                srcset="{{ mobile_srcset | strip }}"
-                sizes="100vw"
-                width="900"
-                height="1600"
-              >
-            {%- endif -%}
+            {%- render 'vf-hero-crop',
+              image: mobile_image,
+              ratio_w: 9,
+              ratio_h: 16,
+              widths: mobile_widths,
+              media: mobile_media,
+              output: 'source'
+            -%}
+            {%- render 'vf-hero-crop',
+              image: tablet_image,
+              ratio_w: 3,
+              ratio_h: 4,
+              widths: tablet_widths,
+              media: tablet_media,
+              output: 'source'
+            -%}
             {{
               desktop_image
-              | image_url: width: 2400
+              | image_url: width: 3000
               | image_tag:
                 class: 'vf-hero__image',
                 widths: desktop_widths,
@@ -152,7 +155,7 @@
             </a>
           {%- endif -%}
         </div>
-      </article>
+      </div>
     {%- endfor -%}
   </div>
 
@@ -242,13 +245,19 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image",
-          "info": "Recomendado: 2400 × 1350 px (horizontal)."
+          "info": "Desktop y pantallas horizontales. Recomendado: 3000 × 1688 px (16:9). Define el punto focal para controlar los recortes en móvil y tablet."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_tablet",
+          "label": "Tablet image",
+          "info": "Opcional. Para tablets en vertical. Recomendado: 1536 × 2048 px (3:4). Si se deja vacío se usa la imagen móvil o, en su defecto, la principal, recortada alrededor de su punto focal."
         },
         {
           "type": "image_picker",
           "id": "image_mobile",
           "label": "Mobile image",
-          "info": "Opcional. Recomendado: 1080 × 1920 px (vertical). Si se deja vacío se recorta la imagen principal. Usa el punto focal para controlar el recorte."
+          "info": "Opcional. Para móviles en vertical. Recomendado: 1290 × 2293 px (9:16). Si se deja vacío se recorta la imagen principal alrededor de su punto focal."
         },
         {
           "type": "text",
