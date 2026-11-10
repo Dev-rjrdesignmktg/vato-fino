@@ -59,7 +59,7 @@
         "text_AinYFV": {
           "type": "text",
           "settings": {
-            "text": "<p>Cada pieza está pensada para quien entiende que el detalle lo es todo. Materiales nobles, cortes precisos y una actitud que no pasa desapercibida.</p>",
+            "text": "<p>No vestimos a cualquiera<strong>.</strong> Esto es para los que imponen presencia sin decir una sola palabra. Cortes limpios, materiales nobles y la actitud pesada de quien sabe que el detalle lo es todo. Si buscas pasar desapercibido, estás en el lugar equivocado.</p>",
             "drop_cap": true,
             "columns": "1",
             "font_source": "body",
@@ -85,6 +85,7 @@
       ],
       "name": "Premium text",
       "settings": {
+        "full_width": true,
         "content_width": 1100,
         "position": "start",
         "text_align": "left",
