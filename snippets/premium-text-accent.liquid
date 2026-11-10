@@ -1,0 +1,14 @@
+{%- comment -%}
+  Renders plain text, wrapping *words between asterisks* in an accent span.
+  Line breaks in the source become <br>.
+  Usage: {% render 'premium-text-accent', text: block.settings.text %}
+{%- endcomment -%}
+{%- assign pt_parts = text | escape | newline_to_br | split: '*' -%}
+{%- for part in pt_parts -%}
+  {%- assign pt_odd = forloop.index0 | modulo: 2 -%}
+  {%- if pt_odd == 1 -%}
+    <span class="pt-accent">{{ part }}</span>
+  {%- else -%}
+    {{ part }}
+  {%- endif -%}
+{%- endfor -%}

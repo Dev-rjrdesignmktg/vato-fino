@@ -1,0 +1,1701 @@
+{%- liquid
+  assign s = section.settings
+  assign section_color = s.color_scheme | default: 'scheme1'
+  assign sid = 'pt-' | append: section.id
+
+  assign anim_class = ''
+  if s.animation != 'none'
+    assign anim_class = 'pt--anim pt--anim-' | append: s.animation
+  endif
+
+  if s.mobile_text_align == 'inherit'
+    assign mobile_align = s.text_align
+  else
+    assign mobile_align = s.mobile_text_align
+  endif
+-%}
+
+{% style %}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.font_source == 'custom' -%}
+      {%- assign f = block.settings.custom_font -%}
+      {{ f | font_face: font_display: 'swap' }}
+      {%- assign f_italic = f | font_modify: 'style', 'italic' -%}
+      {%- if f_italic %}{{ f_italic | font_face: font_display: 'swap' }}{% endif -%}
+      {%- assign f_bold = f | font_modify: 'weight', 'bold' -%}
+      {%- if f_bold %}{{ f_bold | font_face: font_display: 'swap' }}{% endif -%}
+      {%- comment -%} Load the exact weight chosen in the block so the browser doesn't fake it {%- endcomment -%}
+      {%- assign f_weight = f | font_modify: 'weight', block.settings.weight -%}
+      {%- if f_weight and f_weight.weight != f.weight -%}
+        {{ f_weight | font_face: font_display: 'swap' }}
+        {%- assign f_weight_italic = f_weight | font_modify: 'style', 'italic' -%}
+        {%- if f_weight_italic %}{{ f_weight_italic | font_face: font_display: 'swap' }}{% endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  #{{ sid }} {
+    --pt-pt: {{ s.padding_top }}px;
+    --pt-pb: {{ s.padding_bottom }}px;
+    --pt-mscale: {{ s.mobile_padding_scale | divided_by: 100.0 }};
+    --pt-width: {{ s.content_width }}px;
+    --pt-gap: {{ s.gap }}px;
+    --pt-stagger: {{ s.stagger }}ms;
+    --pt-overlay: {{ s.overlay_color }};
+    --pt-overlay-o: {{ s.overlay_opacity | divided_by: 100.0 }};
+    --pt-align: {{ s.text_align }};
+    --pt-align-m: {{ mobile_align }};
+    {%- if s.background_gradient != blank %} --pt-bg: {{ s.background_gradient }};{% endif %}
+  }
+{% endstyle %}
+
+<div
+  id="{{ sid }}"
+  class="premium-text bg-scheme-background text-scheme-text {{ anim_class }} pt--pos-{{ s.position }} {% if s.disable_color_transition %}disable-section-color-transition disable-section-color-transition-source{% endif %}"
+  data-color-scheme="{{ section_color }}"
+  {% if s.animation != 'none' %}
+    x-data="{ shown: {% if request.design_mode %}true{% else %}false{% endif %} }"
+    x-init="$el.classList.add('pt-ready')"
+    x-intersect.once="shown = true"
+    :class="shown && 'is-shown'"
+  {% endif %}
+>
+  {%- if s.background_gradient != blank -%}
+    <div class="pt-bg" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {%- if s.background_image != blank -%}
+    <div class="pt-bg-image" aria-hidden="true">
+      {{
+        s.background_image
+        | image_url: width: 2400
+        | image_tag: sizes: '100vw', loading: 'lazy', class: 'pt-bg-image__img', alt: ''
+      }}
+    </div>
+    <div class="pt-overlay" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {%- if s.grain -%}<div class="pt-grain" aria-hidden="true"></div>{%- endif -%}
+
+  <div class="pt-container mx-auto max-w-site px-5 lg:px-10">
+    <div class="pt-content pt-frame--{{ s.frame }} pt-ma-{{ mobile_align }} pt-da-{{ s.text_align }}">
+      {%- if s.frame == 'corners' -%}
+        <span class="pt-corner pt-corner--tl" aria-hidden="true"></span>
+        <span class="pt-corner pt-corner--tr" aria-hidden="true"></span>
+        <span class="pt-corner pt-corner--bl" aria-hidden="true"></span>
+        <span class="pt-corner pt-corner--br" aria-hidden="true"></span>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign item_classes = 'pt-item pt-' | append: block.type
+          if b.gradient != blank
+            assign item_classes = item_classes | append: ' pt-has-gradient'
+          endif
+          if b.accent_style != blank
+            assign item_classes = item_classes | append: ' pt-accent--' | append: b.accent_style
+          endif
+          assign delay = forloop.index0
+        -%}
+
+        {%- case block.type -%}
+          {%- when 'eyebrow' -%}
+            {%- if b.text != blank -%}
+              <div class="{{ item_classes }}" style="--pt-i: {{ delay }}; {% render 'premium-text-typo', block: block %}" {{ block.shopify_attributes }}>
+                <p class="pt-type pt-eyebrow__text pt-eyebrow--{{ b.decoration }}">
+                  <span>{% render 'premium-text-accent', text: b.text %}</span>
+                </p>
+              </div>
+            {%- endif -%}
+
+          {%- when 'heading' -%}
+            {%- if b.text != blank -%}
+              <div class="{{ item_classes }}" style="--pt-i: {{ delay }}; {% render 'premium-text-typo', block: block %}" {{ block.shopify_attributes }}>
+                <{{ b.tag }} class="pt-type pt-heading__text break-word">
+                  {%- render 'premium-text-accent', text: b.text -%}
+                </{{ b.tag }}>
+              </div>
+            {%- endif -%}
+
+          {%- when 'text' -%}
+            {%- if b.text != blank -%}
+              <div class="{{ item_classes }}" style="--pt-i: {{ delay }}; {% render 'premium-text-typo', block: block %}" {{ block.shopify_attributes }}>
+                <div class="pt-type rte rte--content-only rte--full-width-content break-word [&_a[href]]:underline {% if b.drop_cap %}pt-dropcap{% endif %} {% if b.columns == '2' %}pt-cols-2{% endif %}">
+                  {{ b.text }}
+                </div>
+              </div>
+            {%- endif -%}
+
+          {%- when 'quote' -%}
+            {%- if b.text != blank -%}
+              <figure class="{{ item_classes }} pt-quote--{{ b.quote_layout }}" style="--pt-i: {{ delay }}; {% render 'premium-text-typo', block: block %}" {{ block.shopify_attributes }}>
+                {%- if b.show_marks -%}<span class="pt-quote__mark" aria-hidden="true">&ldquo;</span>{%- endif -%}
+                <blockquote class="pt-type pt-quote__text break-word">
+                  {%- render 'premium-text-accent', text: b.text -%}
+                </blockquote>
+                {%- if b.author != blank -%}
+                  <figcaption class="pt-quote__author">— {{ b.author | escape }}</figcaption>
+                {%- endif -%}
+              </figure>
+            {%- endif -%}
+
+          {%- when 'divider' -%}
+            <div
+              class="pt-item pt-divider pt-divider--{{ b.style }}"
+              style="--pt-i: {{ delay }}; --pt-dw: {{ b.width }}px; --pt-dt: {{ b.thickness }}px; {% if b.color != blank and b.color.alpha > 0 %}--pt-dc: {{ b.color }};{% endif %}"
+              role="presentation"
+              {{ block.shopify_attributes }}
+            >
+              {%- if b.style == 'ornament' -%}
+                <span class="pt-divider__line"></span><span class="pt-divider__gem">&#9670;</span><span class="pt-divider__line"></span>
+              {%- elsif b.style == 'dots' -%}
+                <span class="pt-divider__dot"></span><span class="pt-divider__dot"></span><span class="pt-divider__dot"></span>
+              {%- else -%}
+                <span class="pt-divider__line"></span>
+              {%- endif -%}
+            </div>
+
+          {%- when 'button' -%}
+            {%- if b.label != blank -%}
+              <div class="pt-item pt-button" style="--pt-i: {{ delay }};" {{ block.shopify_attributes }}>
+                <a
+                  class="theme-cta {% unless b.style == 'border-only' %}theme-cta--solid{% endunless %}"
+                  {% if b.link %}href="{{ b.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                >
+                  {{ b.label | escape }}
+                </a>
+              </div>
+            {%- endif -%}
+
+          {%- when 'spacer' -%}
+            <div class="pt-spacer" style="--pt-sd: {{ b.height_desktop }}px; --pt-sm: {{ b.height_mobile }}px;" aria-hidden="true" {{ block.shopify_attributes }}></div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .premium-text { position: relative; isolation: isolate; overflow: hidden;
+    padding-top: calc(var(--pt-pt) * var(--pt-mscale)); padding-bottom: calc(var(--pt-pb) * var(--pt-mscale)); }
+  @media (min-width: 990px) { .premium-text { padding-top: var(--pt-pt); padding-bottom: var(--pt-pb); } }
+
+  .premium-text .pt-bg { position: absolute; inset: 0; z-index: -3; background: var(--pt-bg); }
+  .premium-text .pt-bg-image { position: absolute; inset: 0; z-index: -3; }
+  .premium-text .pt-bg-image__img { width: 100%; height: 100%; object-fit: cover; }
+  .premium-text .pt-overlay { position: absolute; inset: 0; z-index: -2; background: var(--pt-overlay); opacity: var(--pt-overlay-o); }
+  .premium-text .pt-grain { position: absolute; inset: -50%; z-index: -1; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .premium-text .pt-container { display: flex; }
+  .premium-text.pt--pos-start .pt-container { justify-content: flex-start; }
+  .premium-text.pt--pos-center .pt-container { justify-content: center; }
+  .premium-text.pt--pos-end .pt-container { justify-content: flex-end; }
+
+  .premium-text .pt-content { position: relative; width: 100%; max-width: var(--pt-width);
+    display: flex; flex-direction: column; gap: var(--pt-gap); text-align: var(--pt-align-m); }
+  @media (min-width: 990px) { .premium-text .pt-content { text-align: var(--pt-align); } }
+  .premium-text .pt-content > * { margin: 0; }
+
+  /* Alignment of width-limited items (mobile first, then desktop) */
+  .premium-text .pt-type, .premium-text .pt-divider { margin-inline: auto; max-width: min(var(--pt-max), 100%); }
+  .premium-text .pt-divider { max-width: 100%; }
+  .premium-text .pt-ma-left :is(.pt-type, .pt-divider) { margin-left: 0; margin-right: auto; }
+  .premium-text .pt-ma-right :is(.pt-type, .pt-divider) { margin-left: auto; margin-right: 0; }
+  @media (min-width: 990px) {
+    .premium-text .pt-da-left :is(.pt-type, .pt-divider) { margin-left: 0; margin-right: auto; }
+    .premium-text .pt-da-center :is(.pt-type, .pt-divider) { margin-left: auto; margin-right: auto; }
+    .premium-text .pt-da-right :is(.pt-type, .pt-divider) { margin-left: auto; margin-right: 0; }
+  }
+
+  /* Frames */
+  .premium-text .pt-frame--line { border: 1px solid currentColor; padding: clamp(24px, 5vw, 64px); }
+  .premium-text .pt-frame--double { border: 1px solid currentColor; outline: 1px solid currentColor; outline-offset: 6px; padding: clamp(24px, 5vw, 64px); margin: 7px; }
+  .premium-text .pt-frame--corners { padding: clamp(24px, 5vw, 64px); }
+  .premium-text .pt-corner { position: absolute; width: 28px; height: 28px; border: 0 solid currentColor; }
+  .premium-text .pt-corner--tl { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+  .premium-text .pt-corner--tr { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+  .premium-text .pt-corner--bl { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+  .premium-text .pt-corner--br { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+
+  /* Typography core */
+  .premium-text .pt-type { font-family: var(--pt-font); font-size: var(--pt-size-m); font-weight: var(--pt-weight);
+    line-height: var(--pt-lh); letter-spacing: var(--pt-ls); text-transform: var(--pt-transform); font-style: var(--pt-style);
+    color: var(--pt-color, currentColor); text-wrap: balance; }
+  .premium-text .pt-text .pt-type { text-wrap: pretty; }
+  @media (min-width: 990px) { .premium-text .pt-type { font-size: var(--pt-size-d); } }
+  .premium-text .pt-type :is(p, li, strong, em, span) { font: inherit; letter-spacing: inherit; }
+  .premium-text .pt-type strong { font-weight: 700; }
+  .premium-text .pt-type em { font-style: italic; }
+  .premium-text .pt-has-gradient .pt-type { background: var(--pt-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* Accents */
+  .premium-text .pt-accent { --_ac: var(--pt-accent, var(--color-scheme-accent, currentColor)); }
+  .premium-text .pt-accent--italic .pt-accent { font-style: italic; color: var(--_ac); }
+  .premium-text .pt-accent--color .pt-accent { color: var(--_ac); }
+  .premium-text .pt-accent--underline .pt-accent { background: linear-gradient(var(--_ac), var(--_ac)) left 92% / 100% .06em no-repeat; padding-bottom: .04em; }
+  .premium-text .pt-accent--marker .pt-accent { background: linear-gradient(transparent 58%, color-mix(in srgb, var(--_ac) 45%, transparent) 58%); padding: 0 .1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .premium-text .pt-accent--outline .pt-accent { color: transparent; -webkit-text-stroke: max(1px, .02em) var(--pt-accent, currentColor); }
+  .premium-text .pt-accent--shine .pt-accent { background: linear-gradient(110deg, var(--_ac) 35%, #fff8e1 50%, var(--_ac) 65%) 0 0 / 250% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent; animation: pt-shine 4s linear infinite; }
+  @keyframes pt-shine { to { background-position: -250% 0; } }
+
+  /* Eyebrow */
+  .premium-text .pt-eyebrow__text { display: inline-flex; align-items: center; gap: .9em; }
+  .premium-text .pt-eyebrow--lines::before, .premium-text .pt-eyebrow--lines::after { content: ""; width: 2.5em; height: 1px; background: currentColor; opacity: .6; }
+  .premium-text .pt-eyebrow--dot::before { content: ""; width: .45em; height: .45em; border-radius: 50%; background: var(--pt-accent, currentColor); }
+  .premium-text .pt-eyebrow--pill { border: 1px solid currentColor; border-radius: 999px; padding: .55em 1.3em; }
+
+  /* Drop cap & columns */
+  .premium-text .pt-dropcap > p:first-child::first-letter { float: left; font-family: 'CSClaes-Regular', var(--heading-font-stack); font-weight: 400; font-size: 3.6em; line-height: .82;
+    padding: .06em .12em 0 0; color: var(--pt-accent, inherit); font-style: normal; }
+  @media (min-width: 990px) { .premium-text .pt-cols-2 { columns: 2; column-gap: 3rem; text-align: left; } .premium-text .pt-cols-2 > p { break-inside: avoid; } }
+
+  /* Quote */
+  .premium-text .pt-quote { position: relative; margin: 0; }
+  .premium-text .pt-quote__mark { display: block; font-family: var(--heading-font-stack); font-size: 5em; line-height: .6; height: .4em; opacity: .35; color: var(--pt-accent, currentColor); }
+  .premium-text .pt-quote__text { margin: 0 auto; }
+  .premium-text .pt-quote__author { margin-top: 1.25rem; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; opacity: .75; }
+  .premium-text .pt-quote--bar { border-left: 2px solid var(--pt-accent, currentColor); padding-left: 1.5rem; text-align: left; }
+  .premium-text .pt-quote--boxed { border: 1px solid color-mix(in srgb, currentColor 25%, transparent); padding: clamp(24px, 4vw, 48px); }
+
+  /* Divider */
+  .premium-text .pt-divider { display: flex; align-items: center; gap: 12px; width: var(--pt-dw); max-width: 100%; color: var(--pt-dc, currentColor); }
+  .premium-text .pt-divider__line { flex: 1; height: var(--pt-dt); background: currentColor; opacity: .7; }
+  .premium-text .pt-divider--gradient .pt-divider__line { opacity: 1; background: linear-gradient(90deg, transparent, currentColor, transparent); }
+  .premium-text .pt-divider__gem { font-size: 10px; line-height: 1; }
+  .premium-text .pt-divider--dots { justify-content: center; gap: 8px; }
+  .premium-text .pt-divider__dot { width: calc(var(--pt-dt) * 4); height: calc(var(--pt-dt) * 4); border-radius: 50%; background: currentColor; }
+
+  .premium-text .pt-spacer { height: calc(var(--pt-sm) - var(--pt-gap)); min-height: 0; }
+  @media (min-width: 990px) { .premium-text .pt-spacer { height: calc(var(--pt-sd) - var(--pt-gap)); } }
+
+  /* Scroll animations */
+  .premium-text.pt--anim.pt-ready .pt-item { transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s ease, clip-path 1.1s cubic-bezier(.7,0,.2,1);
+    transition-delay: calc(var(--pt-i, 0) * var(--pt-stagger)); }
+  .premium-text.pt--anim-fade-up.pt-ready:not(.is-shown) .pt-item { opacity: 0; transform: translateY(28px); }
+  .premium-text.pt--anim-blur.pt-ready:not(.is-shown) .pt-item { opacity: 0; filter: blur(12px); transform: scale(1.02); }
+  .premium-text.pt--anim-reveal.pt-ready:not(.is-shown) .pt-item { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateY(16px); }
+  .premium-text.pt--anim-reveal.pt-ready .pt-item { clip-path: inset(0 0 -10% 0); }
+  @media (prefers-reduced-motion: reduce) {
+    .premium-text .pt-item { transition: none !important; opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important; }
+    .premium-text .pt-accent--shine .pt-accent { animation: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Premium text",
+  "tag": "section",
+  "class": "premium-text-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 400,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1100
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_align",
+      "label": "Mobile text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Block spacing",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "frame",
+      "label": "Decorative frame",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "line",
+          "label": "Thin line"
+        },
+        {
+          "value": "double",
+          "label": "Double line"
+        },
+        {
+          "value": "corners",
+          "label": "Corners"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "Scroll entrance",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fade-up",
+          "label": "Fade up"
+        },
+        {
+          "value": "blur",
+          "label": "Blur in"
+        },
+        {
+          "value": "reveal",
+          "label": "Mask reveal"
+        }
+      ],
+      "default": "fade-up"
+    },
+    {
+      "type": "range",
+      "id": "stagger",
+      "label": "Stagger delay",
+      "min": 0,
+      "max": 400,
+      "step": 20,
+      "unit": "ms",
+      "default": 120
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme1"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient",
+      "info": "Optional. Overrides the color scheme background."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "grain",
+      "label": "Grain texture",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_color_transition",
+      "label": "Disable color transition",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 240,
+      "step": 8,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 240,
+      "step": 8,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_scale",
+      "label": "Mobile padding scale",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Eyebrow",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Colección *exclusiva*"
+        },
+        {
+          "type": "select",
+          "id": "decoration",
+          "label": "Decoration",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "lines",
+              "label": "Side lines"
+            },
+            {
+              "value": "dot",
+              "label": "Dot"
+            },
+            {
+              "value": "pill",
+              "label": "Pill"
+            }
+          ],
+          "default": "lines"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_source",
+          "label": "Font",
+          "options": [
+            {
+              "value": "body",
+              "label": "Body (theme)"
+            },
+            {
+              "value": "heading",
+              "label": "Heading (theme)"
+            },
+            {
+              "value": "brand_csclaes",
+              "label": "CS Claes (brand)"
+            },
+            {
+              "value": "brand_ancient",
+              "label": "Ancient Medium (brand)"
+            },
+            {
+              "value": "custom",
+              "label": "Shopify font library"
+            },
+            {
+              "value": "css",
+              "label": "Other uploaded font (CSS name)"
+            }
+          ],
+          "default": "body"
+        },
+        {
+          "type": "font_picker",
+          "id": "custom_font",
+          "label": "Shopify library font",
+          "default": "playfair_display_n4",
+          "info": "Only applies when Font is set to Shopify font library."
+        },
+        {
+          "type": "text",
+          "id": "css_font_family",
+          "label": "Uploaded font name (CSS)",
+          "placeholder": "CSClaes-Regular",
+          "info": "Only applies when Font is set to Other uploaded font. Use the font-family name from its @font-face."
+        },
+        {
+          "type": "range",
+          "id": "size_desktop",
+          "label": "Desktop size",
+          "min": 12,
+          "max": 112,
+          "step": 1,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "size_mobile",
+          "label": "Mobile size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 11
+        },
+        {
+          "type": "select",
+          "id": "weight",
+          "label": "Weight",
+          "options": [
+            {
+              "value": "200",
+              "label": "Extra light"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semibold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "800",
+              "label": "Extra bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "label": "Line height",
+          "min": 80,
+          "max": 220,
+          "step": 5,
+          "unit": "%",
+          "default": 120
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "label": "Letter spacing",
+          "min": -10,
+          "max": 50,
+          "step": 1,
+          "unit": "%",
+          "default": 30,
+          "info": "In hundredths of an em."
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text case",
+          "options": [
+            {
+              "value": "none",
+              "label": "Regular"
+            },
+            {
+              "value": "uppercase",
+              "label": "UPPERCASE"
+            },
+            {
+              "value": "lowercase",
+              "label": "lowercase"
+            },
+            {
+              "value": "capitalize",
+              "label": "Capitalize"
+            }
+          ],
+          "default": "uppercase"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic",
+          "label": "Italic",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "label": "Max line width",
+          "min": 0,
+          "max": 120,
+          "step": 2,
+          "unit": "ch",
+          "default": 0,
+          "info": "0 = no limit."
+        },
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "info": "Leave empty to use the color scheme."
+        },
+        {
+          "type": "color_background",
+          "id": "gradient",
+          "label": "Text gradient",
+          "info": "E.g. linear-gradient(90deg, #c9a24b, #f5e6b8, #c9a24b). Overrides text color."
+        },
+        {
+          "type": "header",
+          "content": "Highlighted words",
+          "info": "Wrap words in *asterisks* to highlight them."
+        },
+        {
+          "type": "select",
+          "id": "accent_style",
+          "label": "Highlight style",
+          "options": [
+            {
+              "value": "italic",
+              "label": "Serif italic"
+            },
+            {
+              "value": "color",
+              "label": "Color only"
+            },
+            {
+              "value": "underline",
+              "label": "Elegant underline"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "shine",
+              "label": "Animated shine"
+            }
+          ],
+          "default": "italic"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Highlight color"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "El arte de *vestir* con carácter",
+          "info": "Use *asterisks* to highlight. Line breaks are kept."
+        },
+        {
+          "type": "select",
+          "id": "tag",
+          "label": "HTML tag (SEO)",
+          "options": [
+            {
+              "value": "h1",
+              "label": "H1"
+            },
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            },
+            {
+              "value": "p",
+              "label": "P"
+            }
+          ],
+          "default": "h2"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_source",
+          "label": "Font",
+          "options": [
+            {
+              "value": "body",
+              "label": "Body (theme)"
+            },
+            {
+              "value": "heading",
+              "label": "Heading (theme)"
+            },
+            {
+              "value": "brand_csclaes",
+              "label": "CS Claes (brand)"
+            },
+            {
+              "value": "brand_ancient",
+              "label": "Ancient Medium (brand)"
+            },
+            {
+              "value": "custom",
+              "label": "Shopify font library"
+            },
+            {
+              "value": "css",
+              "label": "Other uploaded font (CSS name)"
+            }
+          ],
+          "default": "brand_csclaes"
+        },
+        {
+          "type": "font_picker",
+          "id": "custom_font",
+          "label": "Shopify library font",
+          "default": "playfair_display_n4",
+          "info": "Only applies when Font is set to Shopify font library."
+        },
+        {
+          "type": "text",
+          "id": "css_font_family",
+          "label": "Uploaded font name (CSS)",
+          "placeholder": "CSClaes-Regular",
+          "info": "Only applies when Font is set to Other uploaded font. Use the font-family name from its @font-face."
+        },
+        {
+          "type": "range",
+          "id": "size_desktop",
+          "label": "Desktop size",
+          "min": 12,
+          "max": 112,
+          "step": 1,
+          "unit": "px",
+          "default": 72
+        },
+        {
+          "type": "range",
+          "id": "size_mobile",
+          "label": "Mobile size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 40
+        },
+        {
+          "type": "select",
+          "id": "weight",
+          "label": "Weight",
+          "options": [
+            {
+              "value": "200",
+              "label": "Extra light"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semibold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "800",
+              "label": "Extra bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "label": "Line height",
+          "min": 80,
+          "max": 220,
+          "step": 5,
+          "unit": "%",
+          "default": 105
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "label": "Letter spacing",
+          "min": -10,
+          "max": 50,
+          "step": 1,
+          "unit": "%",
+          "default": -2,
+          "info": "In hundredths of an em."
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text case",
+          "options": [
+            {
+              "value": "none",
+              "label": "Regular"
+            },
+            {
+              "value": "uppercase",
+              "label": "UPPERCASE"
+            },
+            {
+              "value": "lowercase",
+              "label": "lowercase"
+            },
+            {
+              "value": "capitalize",
+              "label": "Capitalize"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic",
+          "label": "Italic",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "label": "Max line width",
+          "min": 0,
+          "max": 120,
+          "step": 2,
+          "unit": "ch",
+          "default": 0,
+          "info": "0 = no limit."
+        },
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "info": "Leave empty to use the color scheme."
+        },
+        {
+          "type": "color_background",
+          "id": "gradient",
+          "label": "Text gradient",
+          "info": "E.g. linear-gradient(90deg, #c9a24b, #f5e6b8, #c9a24b). Overrides text color."
+        },
+        {
+          "type": "header",
+          "content": "Highlighted words",
+          "info": "Wrap words in *asterisks* to highlight them."
+        },
+        {
+          "type": "select",
+          "id": "accent_style",
+          "label": "Highlight style",
+          "options": [
+            {
+              "value": "italic",
+              "label": "Serif italic"
+            },
+            {
+              "value": "color",
+              "label": "Color only"
+            },
+            {
+              "value": "underline",
+              "label": "Elegant underline"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "shine",
+              "label": "Animated shine"
+            }
+          ],
+          "default": "italic"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Highlight color"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Cada pieza está pensada para quien entiende que el detalle lo es todo. Materiales nobles, cortes precisos y una actitud que no pasa desapercibida.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "drop_cap",
+          "label": "Drop cap",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "columns",
+          "label": "Desktop columns",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            }
+          ],
+          "default": "1"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_source",
+          "label": "Font",
+          "options": [
+            {
+              "value": "body",
+              "label": "Body (theme)"
+            },
+            {
+              "value": "heading",
+              "label": "Heading (theme)"
+            },
+            {
+              "value": "brand_csclaes",
+              "label": "CS Claes (brand)"
+            },
+            {
+              "value": "brand_ancient",
+              "label": "Ancient Medium (brand)"
+            },
+            {
+              "value": "custom",
+              "label": "Shopify font library"
+            },
+            {
+              "value": "css",
+              "label": "Other uploaded font (CSS name)"
+            }
+          ],
+          "default": "body"
+        },
+        {
+          "type": "font_picker",
+          "id": "custom_font",
+          "label": "Shopify library font",
+          "default": "playfair_display_n4",
+          "info": "Only applies when Font is set to Shopify font library."
+        },
+        {
+          "type": "text",
+          "id": "css_font_family",
+          "label": "Uploaded font name (CSS)",
+          "placeholder": "CSClaes-Regular",
+          "info": "Only applies when Font is set to Other uploaded font. Use the font-family name from its @font-face."
+        },
+        {
+          "type": "range",
+          "id": "size_desktop",
+          "label": "Desktop size",
+          "min": 12,
+          "max": 112,
+          "step": 1,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "size_mobile",
+          "label": "Mobile size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "weight",
+          "label": "Weight",
+          "options": [
+            {
+              "value": "200",
+              "label": "Extra light"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semibold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "800",
+              "label": "Extra bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "label": "Line height",
+          "min": 80,
+          "max": 220,
+          "step": 5,
+          "unit": "%",
+          "default": 165
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "label": "Letter spacing",
+          "min": -10,
+          "max": 50,
+          "step": 1,
+          "unit": "%",
+          "default": 0,
+          "info": "In hundredths of an em."
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text case",
+          "options": [
+            {
+              "value": "none",
+              "label": "Regular"
+            },
+            {
+              "value": "uppercase",
+              "label": "UPPERCASE"
+            },
+            {
+              "value": "lowercase",
+              "label": "lowercase"
+            },
+            {
+              "value": "capitalize",
+              "label": "Capitalize"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic",
+          "label": "Italic",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "label": "Max line width",
+          "min": 0,
+          "max": 120,
+          "step": 2,
+          "unit": "ch",
+          "default": 0,
+          "info": "0 = full content width."
+        },
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "info": "Leave empty to use the color scheme."
+        },
+        {
+          "type": "color_background",
+          "id": "gradient",
+          "label": "Text gradient",
+          "info": "E.g. linear-gradient(90deg, #c9a24b, #f5e6b8, #c9a24b). Overrides text color."
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Quote",
+          "default": "La elegancia no es destacar, es *ser recordado*."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Vato Fino"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_marks",
+          "label": "Show decorative quote marks",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "quote_layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "plain",
+              "label": "Plain"
+            },
+            {
+              "value": "bar",
+              "label": "Side bar"
+            },
+            {
+              "value": "boxed",
+              "label": "Boxed"
+            }
+          ],
+          "default": "plain"
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "select",
+          "id": "font_source",
+          "label": "Font",
+          "options": [
+            {
+              "value": "body",
+              "label": "Body (theme)"
+            },
+            {
+              "value": "heading",
+              "label": "Heading (theme)"
+            },
+            {
+              "value": "brand_csclaes",
+              "label": "CS Claes (brand)"
+            },
+            {
+              "value": "brand_ancient",
+              "label": "Ancient Medium (brand)"
+            },
+            {
+              "value": "custom",
+              "label": "Shopify font library"
+            },
+            {
+              "value": "css",
+              "label": "Other uploaded font (CSS name)"
+            }
+          ],
+          "default": "heading"
+        },
+        {
+          "type": "font_picker",
+          "id": "custom_font",
+          "label": "Shopify library font",
+          "default": "playfair_display_n4",
+          "info": "Only applies when Font is set to Shopify font library."
+        },
+        {
+          "type": "text",
+          "id": "css_font_family",
+          "label": "Uploaded font name (CSS)",
+          "placeholder": "CSClaes-Regular",
+          "info": "Only applies when Font is set to Other uploaded font. Use the font-family name from its @font-face."
+        },
+        {
+          "type": "range",
+          "id": "size_desktop",
+          "label": "Desktop size",
+          "min": 12,
+          "max": 112,
+          "step": 1,
+          "unit": "px",
+          "default": 34
+        },
+        {
+          "type": "range",
+          "id": "size_mobile",
+          "label": "Mobile size",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 24
+        },
+        {
+          "type": "select",
+          "id": "weight",
+          "label": "Weight",
+          "options": [
+            {
+              "value": "200",
+              "label": "Extra light"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semibold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "800",
+              "label": "Extra bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "label": "Line height",
+          "min": 80,
+          "max": 220,
+          "step": 5,
+          "unit": "%",
+          "default": 130
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "label": "Letter spacing",
+          "min": -10,
+          "max": 50,
+          "step": 1,
+          "unit": "%",
+          "default": 0,
+          "info": "In hundredths of an em."
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text case",
+          "options": [
+            {
+              "value": "none",
+              "label": "Regular"
+            },
+            {
+              "value": "uppercase",
+              "label": "UPPERCASE"
+            },
+            {
+              "value": "lowercase",
+              "label": "lowercase"
+            },
+            {
+              "value": "capitalize",
+              "label": "Capitalize"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic",
+          "label": "Italic",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "label": "Max line width",
+          "min": 0,
+          "max": 120,
+          "step": 2,
+          "unit": "ch",
+          "default": 0,
+          "info": "0 = no limit."
+        },
+        {
+          "type": "header",
+          "content": "Color"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text color",
+          "info": "Leave empty to use the color scheme."
+        },
+        {
+          "type": "color_background",
+          "id": "gradient",
+          "label": "Text gradient",
+          "info": "E.g. linear-gradient(90deg, #c9a24b, #f5e6b8, #c9a24b). Overrides text color."
+        },
+        {
+          "type": "header",
+          "content": "Highlighted words",
+          "info": "Wrap words in *asterisks* to highlight them."
+        },
+        {
+          "type": "select",
+          "id": "accent_style",
+          "label": "Highlight style",
+          "options": [
+            {
+              "value": "italic",
+              "label": "Serif italic"
+            },
+            {
+              "value": "color",
+              "label": "Color only"
+            },
+            {
+              "value": "underline",
+              "label": "Elegant underline"
+            },
+            {
+              "value": "marker",
+              "label": "Marker"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "shine",
+              "label": "Animated shine"
+            }
+          ],
+          "default": "italic"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Highlight color"
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "line",
+              "label": "Line"
+            },
+            {
+              "value": "ornament",
+              "label": "Ornament ◆"
+            },
+            {
+              "value": "gradient",
+              "label": "Gradient line"
+            },
+            {
+              "value": "dots",
+              "label": "Dots"
+            }
+          ],
+          "default": "ornament"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Width",
+          "min": 20,
+          "max": 600,
+          "step": 10,
+          "unit": "px",
+          "default": 120
+        },
+        {
+          "type": "range",
+          "id": "thickness",
+          "label": "Weight",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "unit": "px",
+          "default": 1
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Color",
+          "info": "Leave empty to use the color scheme."
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text",
+          "default": "Descubrir"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "border-only",
+              "label": "Border"
+            }
+          ],
+          "default": "solid"
+        }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": [
+        {
+          "type": "range",
+          "id": "height_desktop",
+          "label": "Desktop height",
+          "min": 0,
+          "max": 200,
+          "step": 4,
+          "unit": "px",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "height_mobile",
+          "label": "Mobile height",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "default": 24
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium text",
+      "blocks": [
+        {
+          "type": "eyebrow"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

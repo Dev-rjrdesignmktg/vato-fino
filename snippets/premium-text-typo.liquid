@@ -1,0 +1,39 @@
+{%- comment -%}
+  Outputs inline CSS custom properties for a premium-text block's typography.
+  Usage: style="{% render 'premium-text-typo', block: block %}"
+{%- endcomment -%}
+{%- liquid
+  assign s = block.settings
+
+  case s.font_source
+    when 'heading'
+      assign family = 'var(--heading-font-stack)'
+    when 'custom'
+      assign family = s.custom_font.family | append: ', ' | append: s.custom_font.fallback_families
+    when 'brand_csclaes'
+      assign family = "'CSClaes-Regular', serif"
+    when 'brand_ancient'
+      assign family = "'Ancient Medium', serif"
+    when 'css'
+      assign css_name = s.css_font_family | remove: '"' | remove: "'" | remove: ';' | remove: '<' | remove: '>' | strip
+      if css_name != blank
+        assign family = "'" | append: css_name | append: "', var(--heading-font-stack)"
+      else
+        assign family = 'var(--heading-font-stack)'
+      endif
+    else
+      assign family = 'var(--main-font-stack)'
+  endcase
+-%}
+--pt-font: {{ family }};
+--pt-size-d: {{ s.size_desktop }}px;
+--pt-size-m: {{ s.size_mobile }}px;
+--pt-weight: {{ s.weight }};
+--pt-lh: {{ s.line_height | divided_by: 100.0 }};
+--pt-ls: {{ s.letter_spacing | divided_by: 100.0 }}em;
+--pt-transform: {{ s.text_transform }};
+--pt-style: {% if s.italic %}italic{% else %}normal{% endif %};
+--pt-max: {% if s.max_width > 0 %}{{ s.max_width }}ch{% else %}100%{% endif %};
+{%- if s.color != blank and s.color.alpha > 0 %} --pt-color: {{ s.color }};{% endif -%}
+{%- if s.gradient != blank %} --pt-gradient: {{ s.gradient }};{% endif -%}
+{%- if s.accent_color != blank and s.accent_color.alpha > 0 %} --pt-accent: {{ s.accent_color }};{% endif -%}
