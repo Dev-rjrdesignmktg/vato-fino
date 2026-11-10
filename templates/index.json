@@ -181,26 +181,6 @@
         "mobile_padding_scale": 60
       }
     },
-    "rich_text_Yqfwzb": {
-      "type": "rich-text",
-      "name": "Rich text",
-      "settings": {
-        "title": "La Lealtad no se Devalua",
-        "richtext": "<h4>Las masas buscan inmediatez; los gobernantes de su destino buscan sentido. Hoy todos siguen tendencias vacias, por eso elegir lo auténtico es un acto de honor.&nbsp;</h4><h4>No Seguimos reglas ni fórmulas ajenas; fijamos las nuestras.</h4><h4>Si buscas una prenda para encajar, sigue tu camino. Si entiendes el valor del respeto que pocos logran alcanzar, estás en el lugar correcto.<br/><br/><em><strong>La lealtad es nuestra divisa. La clase, nuestra firma.</strong></em></h4>",
-        "font": "font-body",
-        "text_size": "text-base",
-        "text_alignment": "text-left",
-        "cta_link": "shopify://collections",
-        "cta_label": "Ver colecciones",
-        "button_style": "solid",
-        "desktop_width": "full",
-        "desktop_alignment": "center",
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
-    },
     "multi_collection_cascade_fg4F73": {
       "type": "multi-collection-cascade",
       "name": "Colecciones en cascada",
@@ -453,7 +433,6 @@
     "custom_hero_K6txQR",
     "cascading_product_list_HN6hYV",
     "premium_text_KnBcdB",
-    "rich_text_Yqfwzb",
     "multi_collection_cascade_fg4F73",
     "rich_text_4V9ejj",
     "featured-collection-1",
