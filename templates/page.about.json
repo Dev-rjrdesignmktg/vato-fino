@@ -60,15 +60,6 @@
             "accent_color": ""
           }
         },
-        "divider_ytkrNd": {
-          "type": "divider",
-          "settings": {
-            "style": "gradient",
-            "width": 600,
-            "thickness": 1,
-            "color": ""
-          }
-        },
         "text_bqPTQj": {
           "type": "text",
           "settings": {
@@ -93,7 +84,6 @@
       },
       "block_order": [
         "heading_qjjDNN",
-        "divider_ytkrNd",
         "text_bqPTQj"
       ],
       "name": "Premium text",
