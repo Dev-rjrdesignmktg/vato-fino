@@ -144,26 +144,6 @@
         "mobile_padding_scale": 60
       }
     },
-    "rich_text_hLmfgq": {
-      "type": "rich-text",
-      "name": "Rich text",
-      "settings": {
-        "title": "Rap Fino & Elegante",
-        "richtext": "<h1><strong>Un Mantra para los que caminan con propósito.</strong></h1><h1>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios términos.</h1>",
-        "font": "font-body",
-        "text_size": "text-base",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_label": "",
-        "button_style": "solid",
-        "desktop_width": "full",
-        "desktop_alignment": "center",
-        "color_scheme": "scheme4",
-        "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
-      }
-    },
     "main": {
       "type": "main-collection",
       "settings": {
@@ -193,7 +173,6 @@
     "image_with_text_overlay_xnJwWP",
     "banner",
     "premium_text_8y6LtJ",
-    "rich_text_hLmfgq",
     "main"
   ]
 }
