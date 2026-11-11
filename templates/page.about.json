@@ -35,24 +35,87 @@
         "color_scheme": "scheme4"
       }
     },
-    "rich_text_jCf9KX": {
-      "type": "rich-text",
-      "name": "Rich text",
+    "premium_text_aMTYMd": {
+      "type": "premium-text",
+      "blocks": {
+        "heading_qjjDNN": {
+          "type": "heading",
+          "settings": {
+            "text": "Sobre Nosotros:  El Peso del Criterio.",
+            "tag": "h2",
+            "font_source": "brand_csclaes",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 72,
+            "size_mobile": 40,
+            "weight": "400",
+            "line_height": 105,
+            "letter_spacing": -2,
+            "text_transform": "none",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": "",
+            "accent_style": "italic",
+            "accent_color": ""
+          }
+        },
+        "divider_ytkrNd": {
+          "type": "divider",
+          "settings": {
+            "style": "ornament",
+            "width": 120,
+            "thickness": 1,
+            "color": ""
+          }
+        },
+        "text_bqPTQj": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Si buscas moda sigue tu camino. Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</p><p>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</p><p>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</p>",
+            "drop_cap": true,
+            "columns": "1",
+            "font_source": "body",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 35,
+            "size_mobile": 16,
+            "weight": "400",
+            "line_height": 165,
+            "letter_spacing": 0,
+            "text_transform": "uppercase",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_qjjDNN",
+        "divider_ytkrNd",
+        "text_bqPTQj"
+      ],
+      "name": "Premium text",
       "settings": {
-        "title": "Sobre Nosotros:  El Peso del Criterio.",
-        "richtext": "<h1>Si buscas moda sigue tu camino.</h1><h1>Nacimos en el núcleo de la música independiente como una extensión de lo que somos: una forma de entender la vida a través de altos estándares, el honor y la disciplina.</h1><h1>Nada que sea fino es improvisado; todo lo que tocamos se hace con calidad, desde la precisión de un par de barras hasta la última costura de una prenda.</h1><h1>Somos el equilibrio exacto entre la crudeza de calle y la clase de quien entiende su valor.</h1>",
-        "font": "font-body",
-        "text_size": "text-base",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_label": "",
-        "button_style": "solid",
-        "desktop_width": "full",
-        "desktop_alignment": "left",
+        "full_width": true,
+        "content_width": 1100,
+        "position": "center",
+        "text_align": "left",
+        "mobile_text_align": "inherit",
+        "gap": 24,
+        "frame": "none",
+        "animation": "fade-up",
+        "stagger": 120,
         "color_scheme": "scheme4",
+        "background_gradient": "",
+        "overlay_color": "#000000",
+        "overlay_opacity": 50,
+        "grain": false,
         "disable_color_transition": false,
-        "remove_top_padding": false,
-        "remove_bottom_padding": false
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "mobile_padding_scale": 60
       }
     },
     "editorial_image_text_daY6eJ": {
@@ -87,7 +150,9 @@
       "type": "spotify-section",
       "name": "Spotify Player",
       "settings": {
+        "eyebrow": "VATOFINO",
         "heading": "Escucha en Spotify",
+        "subtitle": "",
         "spotify_url": "https://open.spotify.com/embed/playlist/6Optd2hazA48ausL64Coz8?utm_source=generator&theme=0",
         "color_scheme": "scheme4",
         "remove_top_padding": false,
@@ -98,7 +163,7 @@
   "order": [
     "image-with-text-overlay",
     "main",
-    "rich_text_jCf9KX",
+    "premium_text_aMTYMd",
     "editorial_image_text_daY6eJ",
     "editorial_image_text_h8XB9q",
     "spotify_section_e8YmtY"
