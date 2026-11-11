@@ -56,6 +56,15 @@
             "accent_color": ""
           }
         },
+        "divider_xejHtF": {
+          "type": "divider",
+          "settings": {
+            "style": "gradient",
+            "width": 600,
+            "thickness": 1,
+            "color": ""
+          }
+        },
         "text_AinYFV": {
           "type": "text",
           "settings": {
@@ -81,6 +90,7 @@
       "block_order": [
         "eyebrow_XarRYi",
         "heading_eE4V97",
+        "divider_xejHtF",
         "text_AinYFV"
       ],
       "name": "Premium text",
