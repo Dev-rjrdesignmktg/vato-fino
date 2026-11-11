@@ -124,15 +124,6 @@
             "accent_color": ""
           }
         },
-        "divider_tTwYq7": {
-          "type": "divider",
-          "settings": {
-            "style": "gradient",
-            "width": 600,
-            "thickness": 1,
-            "color": ""
-          }
-        },
         "text_zhEzXK": {
           "type": "text",
           "settings": {
@@ -165,7 +156,6 @@
       },
       "block_order": [
         "heading_WMkHJQ",
-        "divider_tTwYq7",
         "text_zhEzXK",
         "button_dUHX7w"
       ],
