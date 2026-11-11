@@ -63,8 +63,8 @@
         "divider_ytkrNd": {
           "type": "divider",
           "settings": {
-            "style": "ornament",
-            "width": 120,
+            "style": "gradient",
+            "width": 600,
             "thickness": 1,
             "color": ""
           }
