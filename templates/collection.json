@@ -39,6 +39,111 @@
         "collection_image_crop": "aspect-w-16 aspect-h-9"
       }
     },
+    "premium_text_8y6LtJ": {
+      "type": "premium-text",
+      "blocks": {
+        "eyebrow_Rtb9Y9": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Colecciones *exclusivas*",
+            "decoration": "lines",
+            "font_source": "body",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 13,
+            "size_mobile": 11,
+            "weight": "500",
+            "line_height": 120,
+            "letter_spacing": 30,
+            "text_transform": "uppercase",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": "",
+            "accent_style": "italic",
+            "accent_color": ""
+          }
+        },
+        "heading_8bNCaE": {
+          "type": "heading",
+          "settings": {
+            "text": "Rap Fino & *Elegante*",
+            "tag": "h2",
+            "font_source": "brand_csclaes",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 72,
+            "size_mobile": 40,
+            "weight": "400",
+            "line_height": 105,
+            "letter_spacing": -2,
+            "text_transform": "none",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": "",
+            "accent_style": "italic",
+            "accent_color": ""
+          }
+        },
+        "text_CKFyCy": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Un Mantra para los que caminan con propósito. </strong>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios&nbsp;</p>",
+            "drop_cap": true,
+            "columns": "1",
+            "font_source": "body",
+            "custom_font": "playfair_display_n4",
+            "css_font_family": "",
+            "size_desktop": 30,
+            "size_mobile": 16,
+            "weight": "400",
+            "line_height": 165,
+            "letter_spacing": 0,
+            "text_transform": "uppercase",
+            "italic": false,
+            "max_width": 0,
+            "color": "",
+            "gradient": ""
+          }
+        },
+        "button_3tx6dG": {
+          "type": "button",
+          "settings": {
+            "label": "Ver colecciones",
+            "link": "",
+            "style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow_Rtb9Y9",
+        "heading_8bNCaE",
+        "text_CKFyCy",
+        "button_3tx6dG"
+      ],
+      "name": "Premium text",
+      "settings": {
+        "full_width": true,
+        "content_width": 1100,
+        "position": "start",
+        "text_align": "left",
+        "mobile_text_align": "inherit",
+        "gap": 24,
+        "frame": "none",
+        "animation": "fade-up",
+        "stagger": 120,
+        "color_scheme": "scheme4",
+        "background_gradient": "",
+        "overlay_color": "#000000",
+        "overlay_opacity": 50,
+        "grain": false,
+        "disable_color_transition": false,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "mobile_padding_scale": 60
+      }
+    },
     "rich_text_hLmfgq": {
       "type": "rich-text",
       "name": "Rich text",
@@ -87,6 +192,7 @@
   "order": [
     "image_with_text_overlay_xnJwWP",
     "banner",
+    "premium_text_8y6LtJ",
     "rich_text_hLmfgq",
     "main"
   ]
