@@ -20,11 +20,39 @@
     "custom_press_events_bPRVEa": {
       "type": "custom-press-events",
       "blocks": {
+        "entry_46EUpe": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "@contrareplicamx",
+            "date": "Septiembre 2026",
+            "date_iso": "2026-09-30",
+            "headline": "¿Quieres asistir a Brother In Arms?",
+            "excerpt": "",
+            "image": "shopify://shop_images/BIA_Vato_FIno_2026.webp",
+            "link": "https://www.instagram.com/p/Dd7BUOhzCzM/?utm_source=chatgpt.com",
+            "button_label": ""
+          }
+        },
+        "entry_Q7xY4p": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "@radioipnoficial",
+            "date": "Septiembre 2026",
+            "date_iso": "2026-09-28",
+            "headline": "¡Se viene el escuadrón! Brothers in Arms!",
+            "excerpt": "",
+            "image": "shopify://shop_images/FLYER_GENERAL_800X800_BROTHERS_IN_ARMS_VANS.webp",
+            "link": "https://www.instagram.com/p/Dd11PUHjUWd/?utm_source=chatgpt.com",
+            "button_label": ""
+          }
+        },
         "entry_NxcKBt": {
           "type": "entry",
           "settings": {
             "kind": "social",
-            "outlet": "Instagram",
+            "outlet": "@flowiheartmx",
             "date": "Septiembre 2026",
             "date_iso": "2026-09-28",
             "headline": "Giveaway Brothers in Arms",
@@ -218,6 +246,8 @@
         }
       },
       "block_order": [
+        "entry_46EUpe",
+        "entry_Q7xY4p",
         "entry_NxcKBt",
         "entry_KepHRx",
         "entry_3HXMfJ",
