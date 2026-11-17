@@ -34,6 +34,20 @@
             "button_label": ""
           }
         },
+        "entry_KepHRx": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "MSN",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-02",
+            "headline": "Raúl Ramírez impulsa Brothers in Arms: el reto de llevar el rap peruano al público mexicano.",
+            "excerpt": "",
+            "image": "shopify://shop_images/brothers-in-arms-cortesia.webp",
+            "link": "https://www.msn.com/es-mx/noticias/otras/ra%C3%BAl-ram%C3%ADrez-impulsa-brothers-in-arms-el-reto-de-llevar-el-rap-peruano-al-p%C3%BAblico-mexicano/ar-AA2drIcZ",
+            "button_label": ""
+          }
+        },
         "entry_3HXMfJ": {
           "type": "entry",
           "settings": {
@@ -205,6 +219,7 @@
       },
       "block_order": [
         "entry_NxcKBt",
+        "entry_KepHRx",
         "entry_3HXMfJ",
         "entry_cd9bL3",
         "entry_pfcfHq",
