@@ -20,6 +20,20 @@
     "custom_press_events_bPRVEa": {
       "type": "custom-press-events",
       "blocks": {
+        "entry_qRXYfc": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "@celebsoficial",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-19",
+            "headline": "Brothers in Arms MX x PE: Vato Fino Records abre puentes entre México y Perú",
+            "excerpt": "",
+            "image": "shopify://shop_images/POST_4.webp",
+            "link": "https://www.instagram.com/p/Des6rWTFUK5/?utm_source=chatgpt.com",
+            "button_label": ""
+          }
+        },
         "entry_46EUpe": {
           "type": "entry",
           "settings": {
@@ -246,6 +260,7 @@
         }
       },
       "block_order": [
+        "entry_qRXYfc",
         "entry_46EUpe",
         "entry_Q7xY4p",
         "entry_NxcKBt",
@@ -270,8 +285,8 @@
         "subtitle": "<p>Cobertura de medios, entrevistas y noches que ya son historia.</p>",
         "batch_size": 6,
         "columns": "3",
-        "image_ratio_mobile": "4 / 5",
-        "image_ratio": "1 / 1",
+        "image_ratio_mobile": "1 / 1",
+        "image_ratio": "4 / 5",
         "enable_filter": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
