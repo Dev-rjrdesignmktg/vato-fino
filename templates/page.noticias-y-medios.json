@@ -20,6 +20,34 @@
     "custom_press_events_bPRVEa": {
       "type": "custom-press-events",
       "blocks": {
+        "entry_UQrPrB": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "@edomexaldia",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-12",
+            "headline": "Brothers in Arms MX x PE: talento peruano conquista la escena urbana de México",
+            "excerpt": "",
+            "image": "shopify://shop_images/House_of_vans.webp",
+            "link": "https://x.com/edomexaldia/status/2109721296254750877?s=46",
+            "button_label": ""
+          }
+        },
+        "entry_hYPncc": {
+          "type": "entry",
+          "settings": {
+            "kind": "social",
+            "outlet": "@ContraRéplica-t8b",
+            "date": "Septiembre 2026",
+            "date_iso": "2026-09-30",
+            "headline": "¿Quieres un par de entradas para ti?",
+            "excerpt": "",
+            "image": "shopify://shop_images/FLYER_GENERAL_1080X1440_BROTHERS_IN_ARMS_VANS_1.webp",
+            "link": "https://www.youtube.com/shorts/EeXbNcxK_Kk",
+            "button_label": ""
+          }
+        },
         "entry_qRXYfc": {
           "type": "entry",
           "settings": {
@@ -260,6 +288,8 @@
         }
       },
       "block_order": [
+        "entry_UQrPrB",
+        "entry_hYPncc",
         "entry_qRXYfc",
         "entry_46EUpe",
         "entry_Q7xY4p",
