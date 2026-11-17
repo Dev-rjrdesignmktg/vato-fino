@@ -34,6 +34,76 @@
             "button_label": ""
           }
         },
+        "entry_3HXMfJ": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Imparcial RD",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-14",
+            "headline": "Brothers in Arms MX x PE conquista la CDMX y abre nuevos caminos para la escena urbana peruana en México",
+            "excerpt": "",
+            "image": "shopify://shop_images/Brother_in_Arms_House_of_Vans.webp",
+            "link": "https://www.imparcialrd.com/2026/10/brothers-in-arms-mx-x-pe-conquista-la.html?m=1&utm_source=chatgpt.com",
+            "button_label": ""
+          }
+        },
+        "entry_cd9bL3": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Magazine PR",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-14",
+            "headline": "Brothers in Arms MX x PE conquista la CDMX y abre nuevos caminos para la escena urbana peruana en México.",
+            "excerpt": "",
+            "image": "shopify://shop_images/BROTHERS-IN-ARMS-22.webp",
+            "link": "https://magazine-pr.com/brothers-in-arms-mx-x-pe-conquista-la-cdmx-y-abre-nuevos-caminos-para-la-escenas-urbana-peruana-en-mexico/?utm_source=chatgpt.com",
+            "button_label": ""
+          }
+        },
+        "entry_pfcfHq": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": " DeQueruza – Argentina",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-13",
+            "headline": "Brothers in Arms MX x PE conquista la CDMX y abre nuevos caminos para la escena urbana peruana en México.",
+            "excerpt": "",
+            "image": "shopify://shop_images/House_of_Vans_BIA.webp",
+            "link": "https://dequeruza.ar/brothers-in-arms-mx-x-pe-conquista-la-cdmx-y-abre-nuevos-caminos-para-la-escena-urbana-peruana-en-mexico/",
+            "button_label": ""
+          }
+        },
+        "entry_Pz7rrP": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Portada Nacional",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-12",
+            "headline": "Brothers in Arms MX x PE reúne a 600 personas en México y proyecta una segunda edición para 2027.",
+            "excerpt": "",
+            "image": "shopify://shop_images/Brothers_in_Arms_Medios.webp",
+            "link": "https://www.portadanacional.com/2026/10/12/brothers-in-arms-mx-x-pe-reune-a-600-personas-en-mexico-y-proyecta-una-segunda-edicion-para-2027/",
+            "button_label": ""
+          }
+        },
+        "entry_76eAJW": {
+          "type": "entry",
+          "settings": {
+            "kind": "digital",
+            "outlet": "Tijuana Informativo",
+            "date": "Octubre 2026",
+            "date_iso": "2026-10-12",
+            "headline": "Brothers in Arms MX x PE conquista la CDMX y abre nuevos caminos para la escena urbana peruana en México.",
+            "excerpt": "",
+            "image": "shopify://shop_images/PAGINA_5.webp",
+            "link": "https://tijuanainformativo.info/index.php/noticias-cultura-y-espectaculos-de-tijuana-y-baja-california-y-mexico/item/231396-brothers-in-arms-mx-x-pe-conquista-la-cdmx-y-abre-nuevos-caminos-para-la-escena-urbana-peruana-en-mexico",
+            "button_label": ""
+          }
+        },
         "entry_KcLXck": {
           "type": "entry",
           "settings": {
@@ -135,6 +205,11 @@
       },
       "block_order": [
         "entry_NxcKBt",
+        "entry_3HXMfJ",
+        "entry_cd9bL3",
+        "entry_pfcfHq",
+        "entry_Pz7rrP",
+        "entry_76eAJW",
         "entry_KcLXck",
         "entry_PBY9XR",
         "entry_L3rAjm",
@@ -151,7 +226,7 @@
         "batch_size": 6,
         "columns": "3",
         "image_ratio_mobile": "4 / 5",
-        "image_ratio": "4 / 5",
+        "image_ratio": "1 / 1",
         "enable_filter": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
