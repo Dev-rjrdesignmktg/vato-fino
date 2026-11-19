@@ -105,7 +105,7 @@
         "heading_WMkHJQ": {
           "type": "heading",
           "settings": {
-            "text": "La Lealtad no se Devalua",
+            "text": "La Lealtad no se Devalúa",
             "tag": "h2",
             "font_source": "brand_csclaes",
             "custom_font": "playfair_display_n4",
@@ -260,7 +260,7 @@
           "type": "button",
           "settings": {
             "link": "",
-            "text": "About us",
+            "text": "Sobre nosotros",
             "style": "solid"
           }
         }
