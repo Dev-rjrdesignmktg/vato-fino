@@ -19,12 +19,14 @@
           "settings": {
             "text_1": "Diseño amigable",
             "text_2": "Diseñado en México",
-            "text_3": "Envios Internacionales"
+            "text_3": "Envios Internacionales",
+            "text_4": "Diseñado en California",
+            "text_5": "Envios"
           }
         },
         "collapsible-tabs": {
           "settings": {
-            "heading_1": "Envios"
+            "heading_1": "Producción"
           }
         }
       }
