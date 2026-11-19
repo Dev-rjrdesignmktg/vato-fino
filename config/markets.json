@@ -17,6 +17,9 @@
     },
     "mexico": {
       "parent": "@default"
+    },
+    "us": {
+      "parent": "@default"
     }
   }
 }
