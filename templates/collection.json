@@ -14,7 +14,7 @@
       "name": "Image with text overlay",
       "settings": {
         "image": "shopify://shop_images/DSCN5291_1.jpg",
-        "title": "Vive Bajo tus Propios Terminos",
+        "title": "Vive Bajo tus Propios Términos",
         "mobile_text_scale": 3,
         "desktop_text_scale": 6,
         "text": "",
@@ -89,7 +89,7 @@
         "text_CKFyCy": {
           "type": "text",
           "settings": {
-            "text": "<p><strong>Un Mantra para los que caminan con propósito. </strong>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios terminos.</p>",
+            "text": "<p><strong>Un Mantra para los que caminan con propósito. </strong>Armaduras de algodón, construidas en blanco y negro. Hechas para quienes viven bajo sus propios términos.</p>",
             "drop_cap": true,
             "columns": "1",
             "font_source": "body",
