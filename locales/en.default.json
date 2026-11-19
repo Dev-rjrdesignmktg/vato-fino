@@ -771,6 +771,9 @@
           },
           "cannot_ship_description": {
             "many": "These items are sold out at the selected pickup location and cannot be shipped."
+          },
+          "cannot_ship_bundle_description": {
+            "many": "These items are sold out at the selected pickup location and cannot be shipped. The items will also be removed from the package."
           }
         },
         "stock_details_banner": {
@@ -885,6 +888,14 @@
         },
         "items_count": {
           "many": "%{count} items"
+        },
+        "delivery_updated_toast": {
+          "shipping": {
+            "many": "{{count}} items were transferred to shipping."
+          },
+          "removal": {
+            "many": "{{count}} items were removed."
+          }
         }
       },
       "merchandise_unavailable_in_buyer_location": {
@@ -961,6 +972,25 @@
         "items": {
           "many": "{{count}} items"
         }
+      },
+      "buy_again_review": {
+        "unavailable_in_market": {
+          "body": {
+            "many": "These products were not added to your cart because they are not available in your country or region."
+          },
+          "none_body": {
+            "many": "These products are not available in your country or region."
+          },
+          "heading": {
+            "many": "Products not available"
+          }
+        },
+        "quantity_added": {
+          "many": "{{added}} of {{count}} items added"
+        },
+        "item_count": {
+          "many": "{{count}} items"
+        }
       }
     },
     "B2B": {
@@ -1011,6 +1041,9 @@
       "image_gallery": {
         "load_more_items": {
           "many": "Load {{count}} more items"
+        },
+        "additional_items": {
+          "many": "+ {{count}} additional items"
         }
       },
       "subtotal_label_with_quantity": {
@@ -1018,6 +1051,11 @@
       },
       "discount_order_stacking": {
         "many": "Order Discounts"
+      },
+      "edit_summary": {
+        "updated_count": {
+          "many": "The order was updated {{count}} times"
+        }
       }
     },
     "errors": {
@@ -1046,6 +1084,31 @@
     "navigation_and_structure": {
       "store_credit_multi_currency_accessibility_label": {
         "many": "{{formattedBalance}} in store credit and in {{count}} more currencies"
+      }
+    },
+    "returns_and_cancellations": {
+      "request_withdrawal_page": {
+        "review_changes_modal": {
+          "items_to_cancel": {
+            "many": "{{count}} items to cancel"
+          },
+          "items_to_return": {
+            "many": "{{count}} items to return"
+          }
+        },
+        "line_items": {
+          "ineligible_items": {
+            "many": "{{count}} items are not eligible"
+          }
+        }
+      },
+      "estimated_refund_summary_card": {
+        "subtotal_with_count": {
+          "many": "Subtotal · {{count}} items"
+        },
+        "item_selected": {
+          "many": "{{count}} items"
+        }
       }
     }
   }
