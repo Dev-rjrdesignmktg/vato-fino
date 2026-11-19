@@ -85,13 +85,13 @@
             "text_color": "text",
             "text_1": "{{ product.metafields.custom.cut_t_shirt.value }}",
             "icon_1": "shirt",
-            "text_2": "Premium fabrics",
+            "text_2": "Telas premium",
             "icon_2": "check-mark",
             "text_3": "{{ product.metafields.custom.product_printing_method.value }}",
             "icon_3": "check-mark",
-            "text_4": "Designed in California",
+            "text_4": "Diseñado en California",
             "icon_4": "map-pin",
-            "text_5": "Ships worldwide",
+            "text_5": "Envíos a todo el mundo",
             "icon_5": "globe"
           }
         },
@@ -99,18 +99,18 @@
           "type": "collapsible_tabs",
           "settings": {
             "show_borders_above_and_below_tabs": true,
-            "heading_1": "Production",
-            "content_1": "<p>Made to order. 3-5 Days Lead Time.</p>",
+            "heading_1": "Producción",
+            "content_1": "<p>Hecho bajo pedido. Tiempo de producción de 3 a 5 días.</p>",
             "page_1": "",
             "icon_1": "none",
             "enable_2": true,
-            "heading_2": "Shipping",
-            "content_2": "<p>We deliver worldwide.&nbsp;</p>",
+            "heading_2": "Envío",
+            "content_2": "<p>Enviamos a todo el mundo.</p>",
             "page_2": "",
             "icon_2": "none",
             "enable_3": true,
-            "heading_3": "Returns",
-            "content_3": "<p>See our return policy</p>",
+            "heading_3": "Devoluciones",
+            "content_3": "<p>Consulta nuestra política de devoluciones</p>",
             "page_3": "",
             "icon_3": "none",
             "enable_4": false,
@@ -128,7 +128,7 @@
         "complementary": {
           "type": "complementary",
           "settings": {
-            "block_heading": "Pairs well with",
+            "block_heading": "Combina bien con",
             "text_size": "text-heading-scheme2",
             "product_list_limit": 10
           }
@@ -166,7 +166,7 @@
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "product_recommendations_heading": "Productos que te Podrian Gustar",
+        "product_recommendations_heading": "Productos que te Podrían Gustar",
         "max_products": "4",
         "enable_mobile_carousel": true,
         "enable_desktop_carousel": true,
