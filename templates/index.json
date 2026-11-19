@@ -304,6 +304,15 @@
     "custom_artist_showcase_eJbHKA": {
       "type": "custom-artist-showcase",
       "blocks": {
+        "artist_qYAfRQ": {
+          "type": "artist",
+          "settings": {
+            "image": "shopify://shop_images/Vicem_x_VF.webp",
+            "artist_name": "",
+            "link": "",
+            "richtext": ""
+          }
+        },
         "artist_cibQcM": {
           "type": "artist",
           "settings": {
@@ -333,6 +342,7 @@
         }
       },
       "block_order": [
+        "artist_qYAfRQ",
         "artist_cibQcM",
         "artist_C69Akf",
         "artist_tVtjAQ"
@@ -345,7 +355,7 @@
         "cta_link": "",
         "cta_label": "",
         "enable_mobile_carousel": true,
-        "enable_desktop_carousel": false,
+        "enable_desktop_carousel": true,
         "color_scheme": "scheme4",
         "disable_color_transition": false,
         "remove_top_padding": false,
